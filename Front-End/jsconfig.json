@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".", // This sets the base directory for relative paths
+        "paths": {
+            "@/*": [
+                "src/*"
+            ] // This sets an alias "@" to refer to the "src" directory
+        }
+    },
+    "include": [
+        "src/**/*" // This includes all files in the "src" directory for the JavaScript service
+    ],
+    "exclude": [
+        "node_modules", // Generally exclude the node_modules directory
+        "**/node_modules/*"
+    ]
+}

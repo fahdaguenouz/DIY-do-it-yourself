@@ -1,0 +1,24 @@
+# Use an official Node runtime as a parent image
+FROM node:21.2.0
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install any needed packages
+RUN npm install
+
+# Bundle app source inside Docker image
+COPY . .
+
+# Build your app
+RUN npm run build
+
+# Use serve to serve the app on port 3000
+RUN npm install -g serve
+CMD ["serve", "-s", "build", "-l", "3000"]
+
+# Inform Docker the container listens on port 3000
+EXPOSE 3000
