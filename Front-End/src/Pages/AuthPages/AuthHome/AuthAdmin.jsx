@@ -1,8 +1,9 @@
 import { Usercontext } from '@/Context/AuthProvider';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const AuthAdmin = () => {
-     const {user}=Usercontext()
+    const { user, authenticated, loading } = useSelector(state => state.auth);
     
     
 

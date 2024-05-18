@@ -1,7 +1,7 @@
 // DynamicRouter.jsx
 
 import React, { Suspense, useEffect, useMemo, useState } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import GuestLayout from "../Layouts/GuestLayouts/GuestLayout";
 import UserLayout from "../Layouts/UsersLayouts/UserLayout";
@@ -24,28 +24,30 @@ import ModeratorLayout from "@/Layouts/UsersLayouts/ModeratorLayout";
 import CreatorLayout from "@/Layouts/UsersLayouts/CreatorLayout";
 import StandarLayout from "@/Layouts/UsersLayouts/StandarLayout";
 import NotFoundPage from "@/Pages/GuestPages/NotFound/NotFoundPage";
-
+import { useDispatch, useSelector } from "react-redux";
 
  const DynamicRouter = () => {
 //   const { user,setUser } = Usercontext();
   // const storedUser = JSON.parse(localStorage.getItem('user')) || null;
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
+//   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
+const dispatch = useDispatch();
+const user = useSelector(state => state.auth.user);
 
-  useEffect(() => {
+useEffect(() => {
     const checkUser = async () => {
       const fetchedUser = JSON.parse(localStorage.getItem('user'));
       if (!user && fetchedUser) {
-          setUser(fetchedUser);
+        dispatch(setUser(fetchedUser));
       }
-  };
+    };
 
-  checkUser();
-}, []);
+    checkUser();
+  }, [dispatch, user]);
 
 console.log('this is the user from router '+user);
 
 
-  const router = useMemo(() => {
+
   const getRoleBasedRoutes = (role_id) => {
     switch (role_id) {
         case 1: // Admin
@@ -168,15 +170,18 @@ console.log('this is the user from router '+user);
 
 //   ]);
 // },[user]);
-const routes = [
-  user ? getRoleBasedRoutes(user.role_id) : { path: '/', element: <GuestLayout />, children: [{ path: '/', element: <Home /> }] },
-  { path: '/login', element: <LoginLayouts />, children: [{ path: '', element: <Login /> }] },
-  { path: '*', element: <NotFoundPage /> }
-];
+const routes = useMemo(() => [
+    user ? getRoleBasedRoutes(user.role_id) : { path: '/', element: <GuestLayout />, children: [{ path: '/', element: <Home /> }] },
+    { path: '/login', element: <LoginLayouts />, children: [{ path: '', element: <Login /> }] },
+    { path: '*', element: <NotFoundPage /> }
+  ], [user]);
 
-return createBrowserRouter(routes);
-}, [user]);
-console.log('this is the router'+router);
-return router
-};
+  const router = useMemo(() => createBrowserRouter(routes), [routes]);
+
+  return <RouterProvider router={router} />;
+}
+
+
+
+
 export default DynamicRouter;

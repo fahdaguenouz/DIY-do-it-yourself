@@ -4,20 +4,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css"
 import React from 'react';
 
-
-import DynamicRouter from './Router/index.jsx';
 import { RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './Context/AuthProvider.jsx';
-
+import store from './Redux/Store';
+import { Provider } from 'react-redux';
+import DynamicRouter from './Router';
 function App() {
-  const router = DynamicRouter();
-  if (!router) {
-    return <div>Loading router configuration...</div>;
-  }
+  
   return (
-    <AuthProvider>
-      <RouterProvider router={router}/>
-    </AuthProvider>
+    <Provider store={store}>
+      <DynamicRouter/>
+    </Provider>
   );
 }
 
