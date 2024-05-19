@@ -9,12 +9,17 @@ import { AuthProvider } from './Context/AuthProvider.jsx';
 import store from './Redux/Store';
 import { Provider } from 'react-redux';
 import DynamicRouter from './Router';
+import ThemeCustomization from './themes';
 function App() {
   
   return (
+    <ThemeCustomization>
+
+    
     <Provider store={store}>
       <DynamicRouter/>
     </Provider>
+    </ThemeCustomization>
   );
 }
 
