@@ -4,21 +4,21 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import GuestLayout from "../Layouts/GuestLayouts/GuestLayout";
-import UserLayout from "../Layouts/UsersLayouts/UserLayout";
+// import UserLayout from "../Layouts/UsersLayouts/UserLayout";
 // import AboutUs from "../Pages/AboutUs";
 
 import LoginLayouts from "../Layouts/GuestLayouts/LoginLayouts";
-import Login from "../Pages/Login/Login";
-import AuthHome from './../Pages/AuthPages/AuthHome/AuthHome';
-import Contact from './../Pages/GuestPages/contact/Contact';
-import Blog from './../Pages/GuestPages/blog/Blog';
-import Pricing from './../Pages/GuestPages/pricing/Pricing';
-import Team from './../Pages/GuestPages/team/Team';
-import CourseHome from './../Pages/GuestPages/allcourses/CourseHome';
-import About from './../Pages/GuestPages/about/About';
+// import Login from "../Pages/Login/Login";
+// import AuthHome from './../Pages/AuthPages/AuthHome/AuthHome';
+// import Contact from './../Pages/GuestPages/contact/Contact';
+// import Blog from './../Pages/GuestPages/blog/Blog';
+// import Pricing from './../Pages/GuestPages/pricing/Pricing';
+// import Team from './../Pages/GuestPages/team/Team';
+// import CourseHome from './../Pages/GuestPages/allcourses/CourseHome';
+// import About from './../Pages/GuestPages/about/About';
 import Home from './../Pages/GuestPages/home/Home';
 import AuthAdmin from "@/Pages/AuthPages/AuthHome/AuthAdmin";
-import { Usercontext } from "@/Context/AuthProvider";
+// import { Usercontext } from "@/Context/AuthProvider";
 import AdminLayout from "@/Layouts/UsersLayouts/AdminLayout";
 import ModeratorLayout from "@/Layouts/UsersLayouts/ModeratorLayout";
 import CreatorLayout from "@/Layouts/UsersLayouts/CreatorLayout";
@@ -27,6 +27,8 @@ import NotFoundPage from "@/Pages/GuestPages/NotFound/NotFoundPage";
 import { useDispatch, useSelector } from "react-redux";
 import Dashboard from "@/Pages/AuthPages/ADMIN/Pages/Dashboard";
 import GestUsers from "@/Pages/AuthPages/ADMIN/Pages/GestUsers";
+import Login from "@/Pages/authentication/login";
+// import AuthLogin from "@/Pages/authentication/login";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -58,6 +60,10 @@ const DynamicRouter = () => {
                     children: [
                         {
                             path: '/admin',
+                            element: <Dashboard />
+                        },
+                        {
+                            path: '/admin/dashboard',
                             element: <Dashboard />
                         },
                         {
@@ -180,8 +186,19 @@ const DynamicRouter = () => {
     //   ]);
     // },[user]);
     const routes = useMemo(() => [
-        user ? getRoleBasedRoutes(user.role_id) : { path: '/', element: <GuestLayout />, children: [{ path: '/', element: <Home /> }] },
-        { path: '/login', element: <LoginLayouts />, children: [{ path: '', element: <Login /> }] },
+        user ? getRoleBasedRoutes(user.role_id) : { 
+            path: '/', 
+            element: <GuestLayout />, 
+            children: [
+                { path: '/', element: <Home /> }
+            ] 
+        },
+        { 
+            path: '/login', 
+            element: <LoginLayouts />,
+             children: [
+                { path: '', element: <Login /> }]
+             },
         { path: '*', element: <NotFoundPage /> }
     ], [user]);
 

@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
-import Login from './../../Pages/Login/Login.jsx';
+// import Login from './../../Pages/Login/Login.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Usercontext } from '@/Context/AuthProvider.jsx';
+import Login from '@/Pages/authentication/login';
+// import AuthLogin from '@/Pages/authentication/login';
 
 const LoginLayouts = () => {
     const navigate=useNavigate()
