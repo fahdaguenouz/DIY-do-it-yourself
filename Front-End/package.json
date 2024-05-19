@@ -32,6 +32,7 @@
     "bootstrap": "^5.3.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "formik": "^2.4.6",
     "framer-motion": "^11.0.28",
     "ldrs": "^1.0.1",
     "lucide-react": "^0.378.0",
@@ -54,7 +55,8 @@
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "twin.macro": "^3.4.1",
-    "web-vitals": "^3.5.2"
+    "web-vitals": "^3.5.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
