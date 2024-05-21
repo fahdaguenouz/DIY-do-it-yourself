@@ -7,9 +7,13 @@ const UserApi={
         return axiosClient.post('/login', { email, password });
       },
 
-      // getUserData:()=>{
-      //   return axiosClient.get('/user');
-      // }
+      logout: async () => {
+        return await axiosClient.post('/logout')
+      },
+
+      getUsers: async () => {
+        return await axiosClient.get('/get-users')
+      },
      
 }
 export default UserApi;

@@ -3,15 +3,21 @@ const initialState = {
     token: localStorage.getItem('token') || null,
     authenticated: localStorage.getItem('AUTHENTICATED') === 'true',
     loading: false,
+    users: [],
   };
   
   function authReducer(state = initialState, action) {
     switch (action.type) {
-      case 'SET_USER':
+      case 'SET_USERS':
         return {
           ...state,
-          user: action.payload,
-          authenticated: true
+          users: action.payload,
+          error: null  // Clear any previous errors
+        };
+      case 'FETCH_USERS_FAILURE':
+        return {
+          ...state,
+          error: action.error  // Store the error
         };
       case 'LOGIN_SUCCESS':
         return {

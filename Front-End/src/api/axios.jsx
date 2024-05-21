@@ -12,8 +12,9 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(function (config) {
     const token = localStorage.getItem('token');
+    console.log("Sending Token: ", token);
     if (token) {
-        config.headers.Authorization = 'Bearer ' + token;
+        config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
 });

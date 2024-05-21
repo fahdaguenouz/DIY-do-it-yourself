@@ -24,7 +24,7 @@ const Sidebar = () => {
 
 
                     <div className="user">
-                        <div className="icon">
+                        <div className="iconn">
                             <i className="fa-solid fa-video"></i>
                             <i className="fa-solid fa-grip"></i>
                             <i className="fa-solid fa-bell"></i>

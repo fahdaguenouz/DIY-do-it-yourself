@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import  Box  from '@mui/material/Box';
 import  Toolbar  from '@mui/material/Toolbar';
-
+import 'ldrs/quantum'
 const AdminLayout = () => {
     const navigate = useNavigate()
     const downXL = useMediaQuery((theme) => theme.breakpoints.down('xl'));
@@ -21,7 +21,17 @@ const AdminLayout = () => {
             navigate('/login')
         }
     }, [authenticated,downXL])
+// if (!loading) {
+//         return <div className="text-center text-primary" >
 
+
+//             <l-quantum
+//                 size="45"
+//                 speed="1.75"
+//                 color="#039ee3"
+//             ></l-quantum>
+//         </div>;
+//     }
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
 

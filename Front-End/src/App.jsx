@@ -14,8 +14,6 @@ function App() {
   
   return (
     <ThemeCustomization>
-
-    
     <Provider store={store}>
       <DynamicRouter/>
     </Provider>

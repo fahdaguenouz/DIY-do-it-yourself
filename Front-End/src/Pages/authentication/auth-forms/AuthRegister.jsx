@@ -20,12 +20,14 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project import
-import AnimateButton from 'components/@extended/AnimateButton';
-import { strengthColor, strengthIndicator } from 'utils/password-strength';
+import AnimateButton from '@/Pages/AuthPages/ADMIN/AnimateButton';
+
 
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
+import { strengthIndicator } from '@/utils/password-strength';
+import { strengthColor } from './../../../utils/password-strength';
 
 // ============================|| JWT - REGISTER ||============================ //
 
