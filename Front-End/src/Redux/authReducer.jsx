@@ -4,6 +4,9 @@ const initialState = {
     authenticated: localStorage.getItem('AUTHENTICATED') === 'true',
     loading: false,
     users: [],
+    levels: [],
+    roles: [],
+
   };
   
   function authReducer(state = initialState, action) {
@@ -44,6 +47,18 @@ const initialState = {
         user: action.payload,
         authenticated: true,
       };
+      case 'SET_LEVELS':
+        return {
+          ...state,
+          levels: action.payload,
+          error: null  // Clear any previous errors
+        };
+        case 'SET_ROLES':
+        return {
+          ...state,
+          roles: action.payload,
+          error: null  // Clear any previous errors
+        };
       default:
         return state;
     }

@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
+use App\Http\Controllers\LevelController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,12 +14,19 @@ Route::get('/test-csnrf', function () {
 });
 
 Route::get('/user',[UserController::class,"getUserData"]);
+Route::get('/get-users', [UserController::class, 'index']);
+Route::get('/get-levels', [LevelController::class, 'index']);
+Route::get('/get-roles', [RoleController::class, 'index']);
+
+
+
+
+
+
 
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/register', [RegisteredUserController::class, 'store']);
-
-
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
-Route::get('/get-users', [UserController::class, 'index']);
+

@@ -35,6 +35,7 @@
     "bootstrap": "^5.3.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.0.28",
     "ldrs": "^1.0.1",

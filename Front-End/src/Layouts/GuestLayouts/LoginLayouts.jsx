@@ -15,6 +15,7 @@ const LoginLayouts = () => {
     },[authenticated, navigate])
     return (
         <div>
+          
             <Outlet/>
         </div>
     );

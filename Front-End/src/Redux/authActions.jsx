@@ -67,7 +67,7 @@ export const logout = () => async dispatch => {
         payload: response.data
       });
     } catch (error) {
-      console.error("Error fetching users", error);
+      console.error("Error fetching users:", error);
       // You might want to handle errors, for example, showing an error message
       dispatch({ type: 'FETCH_USERS_FAILURE', error });
     } finally {
@@ -80,3 +80,33 @@ export const logout = () => async dispatch => {
       payload: user
     };
   };
+
+  export const getLevels = () => async dispatch  => { 
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.getLevels(); // Ensure UserApi.getUsers() is correctly implemented
+      dispatch({
+        type: 'SET_LEVELS',
+        payload: response.data
+      });
+    } catch (error) {
+      console.error("Error fetching Levels :", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }
+
+  export const getRoles = () => async dispatch  => { 
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.getRoles(); // Ensure UserApi.getUsers() is correctly implemented
+      dispatch({
+        type: 'SET_ROLES',
+        payload: response.data
+      });
+    } catch (error) {
+      console.error("Error fetching ROLES :", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }

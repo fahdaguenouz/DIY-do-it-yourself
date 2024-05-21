@@ -14,6 +14,12 @@ const UserApi={
       getUsers: async () => {
         return await axiosClient.get('/get-users')
       },
+      getLevels: async () => {
+        return await axiosClient.get('/get-levels')
+      },
+      getRoles: async () => {
+        return await axiosClient.get('/get-roles')
+      },
      
 }
 export default UserApi;

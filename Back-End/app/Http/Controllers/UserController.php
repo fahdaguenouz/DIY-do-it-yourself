@@ -10,10 +10,9 @@ class UserController extends Controller
 {
     public function index()
     {
-        // Retrieve all users or implement your own logic for which users to retrieve
-        $users = User::all();
+        // Fetch all users with their role and level information
+        $users = User::with(['role', 'level'])->get();
 
-        // Return the list of users
         return response()->json($users);
     }
     public function getUserData(Request $request)

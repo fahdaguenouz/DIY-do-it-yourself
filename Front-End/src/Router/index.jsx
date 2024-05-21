@@ -29,6 +29,7 @@ import Dashboard from "@/Pages/AuthPages/ADMIN/Pages/Dashboard";
 import GestUsers from "@/Pages/AuthPages/ADMIN/Pages/GestUsers";
 import Login from "@/Pages/authentication/login";
 import Register from "@/Pages/authentication/register";
+import AjouterUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/AjouterUser";
 // import AuthLogin from "@/Pages/authentication/login";
 // import Register from './../Pages/authentication/register';
 
@@ -71,6 +72,10 @@ const DynamicRouter = () => {
                         {
                             path: '/admin/gestion-users',
                             element: <GestUsers />
+                        },
+                        {
+                            path: '/admin/gestion-users/ajouter-user',
+                            element: <AjouterUser />
                         },
                         // Other admin-specific routes
                     ]
