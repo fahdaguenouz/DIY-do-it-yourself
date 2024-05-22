@@ -1,5 +1,6 @@
 import { axiosClient } from '@/api/axios';
 import UserApi from '../Service/api/UserApi';
+import toast from 'react-hot-toast';
 
 export const login = (email, password) => async dispatch => {
   try {
@@ -20,7 +21,25 @@ export const login = (email, password) => async dispatch => {
     throw error;
   }
 };
+export const register = (data) => async dispatch => {
+  try {
+    const response = await UserApi.register(data);
+    const { token, user } = response.data;
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
+    localStorage.setItem('AUTHENTICATED', 'true');
 
+    dispatch({
+      type: 'REGISTER_SUCCESS',
+      payload: { token, user }
+    });
+    toast.success('Registration successfully!');
+  } catch (error) {
+    console.error("Registration error", error);
+    toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+    throw error;  // Re-throw error to catch in component and handle appropriately
+  }
+};
 // export const fetchCSRFToken = async () => {
 //   await axios.get('/sanctum/csrf-cookie', {
 //       baseURL: import.meta.env.VITE_BACKEND_URL  // Ensure this is correct
@@ -106,6 +125,31 @@ export const logout = () => async dispatch => {
       });
     } catch (error) {
       console.error("Error fetching ROLES :", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }
+
+
+  export const AddUser = (UserData,onSuccess) => async dispatch  => { 
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.Add_User(UserData);
+      // dispatch({
+      //   type: 'ADD_USERE',
+      //   payload: response.data
+      // });
+      toast.success('User added successfully!');
+      if (onSuccess) {
+          onSuccess(); 
+          
+            dispatch(getUsers());
+           // Reset form on success
+      }
+      
+    } catch (error) {
+      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+      console.error("Error fetching ADDING USERS :", error);
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }

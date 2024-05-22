@@ -19,7 +19,12 @@ Route::get('/get-levels', [LevelController::class, 'index']);
 Route::get('/get-roles', [RoleController::class, 'index']);
 
 
+// Route::post('/add-user', [UserController::class, 'store']);
 
+
+Route::apiResources([
+    'add-user' => UserController::class ,
+]);
 
 
 

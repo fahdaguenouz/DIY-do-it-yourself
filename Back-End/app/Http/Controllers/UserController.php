@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     public function index()
@@ -24,5 +27,34 @@ class UserController extends Controller
         } else {
             return response()->json(['error' => 'No authenticated user'], 401);
         }
+    }
+
+
+    public function store(UserRequest $request)
+    {
+        $validated = $request->validated();
+
+        // Handle the profile picture upload
+        // Handle the profile picture upload or set the default image path
+        $imagePath = $request->hasFile('profile_picture')
+            ? $request->file('profile_picture')->store('storage/profile_pictures', 'public')
+            : 'storage/profile_pictures/default.png'; // Set default path if no file uploaded
+
+
+        // Create the user with the profile picture
+        $user = User::create([
+            'nom' => $validated['nom'],
+            'prenom' => $validated['prenom'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'adresse' => $validated['adresse'],
+            'role_id' => $validated['role_id'],
+            'level_id' => $validated['level_id'],
+            'profile_picture' => $imagePath, // Store the image path
+        ]);
+
+        $user->load('role', 'level');
+
+        return new UserResource($user);
     }
 }

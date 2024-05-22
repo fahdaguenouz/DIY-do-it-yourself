@@ -19,14 +19,15 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getLevels, getRoles } from '@/Redux/authActions';
+import { AddUser, getLevels, getRoles, getUsers } from '@/Redux/authActions';
+import { Toaster } from 'react-hot-toast';
 
 const AjouterUser = ({ onClose }) => {
   const { levels, roles, authenticated, loading } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     nom: '',
     prenom: '',
     adresse: '',
@@ -35,14 +36,15 @@ const AjouterUser = ({ onClose }) => {
     password: '',
     role_id: '',
     level_id: '',
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    dispatch(getLevels());
-    dispatch(getRoles());
-  }, [dispatch]);
+  
+  
+
 
   const handleChange = (e) => {
     setFormData({
@@ -53,9 +55,11 @@ const AjouterUser = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addUser(formData));
-    if (onClose) onClose();
-  };
+    dispatch(AddUser(formData, () => {
+        setFormData(initialFormData);  // Reset the form only after successful addition
+        if (onClose) onClose();
+    }));
+};
 
   const handleBack = () => {
     navigate('/admin/gestion-users');
@@ -68,9 +72,13 @@ const AjouterUser = ({ onClose }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+  const handleCancel = () => {
+    setFormData(initialFormData); // Clear form data
+    if (onClose) onClose(); // If there is a close function, call it
+  };
   return (
     <Container maxWidth="lg">
+        <Toaster position="top-center" reverseOrder={false} />
     <Grid container justifyContent="left">
       <Button
         variant="outlined"
@@ -93,7 +101,7 @@ const AjouterUser = ({ onClose }) => {
           <Typography variant="h4" align="center" gutterBottom>
             Add New User
           </Typography>
-          {(!levels.length || !roles.length) ? (
+          {(!levels|| !roles) ? (
               <Grid
                 container
                 direction="column"
@@ -138,26 +146,6 @@ const AjouterUser = ({ onClose }) => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Address"
-                    name="adresse"
-                    value={formData.adresse}
-                    onChange={handleChange}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
                   <FormControl fullWidth required variant="outlined">
                     <InputLabel>Password</InputLabel>
                     <OutlinedInput
@@ -173,7 +161,7 @@ const AjouterUser = ({ onClose }) => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <Visibility /> :  <VisibilityOff />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -181,6 +169,17 @@ const AjouterUser = ({ onClose }) => {
                     />
                   </FormControl>
                 </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    name="adresse"
+                    value={formData.adresse}
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+                
                 <Grid item xs={6}>
                   <FormControl fullWidth required>
                     <InputLabel>Role</InputLabel>
@@ -219,8 +218,9 @@ const AjouterUser = ({ onClose }) => {
                     fullWidth
                     variant="contained"
                     color="primary"
+                    
                   >
-                    Submit
+                    submit
                   </Button>
                 </Grid>
                 <Grid item xs={6}>
@@ -228,7 +228,7 @@ const AjouterUser = ({ onClose }) => {
                     fullWidth
                     variant="outlined"
                     color="secondary"
-                    onClick={onClose}
+                    onClick={handleCancel}
                   >
                     Cancel
                   </Button>

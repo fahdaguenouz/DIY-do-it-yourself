@@ -27,6 +27,7 @@ class users extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'remember_token' => Str::random(10),
+                'profile_picture' => 'storage/profile_pictures/Fahd.png',
             ]
         ];
 

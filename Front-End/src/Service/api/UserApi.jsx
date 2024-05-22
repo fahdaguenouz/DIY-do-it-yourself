@@ -11,6 +11,10 @@ const UserApi={
         return await axiosClient.post('/logout')
       },
 
+      register: async (Data) => {
+        return await axiosClient.post('/register',Data)
+      },
+
       getUsers: async () => {
         return await axiosClient.get('/get-users')
       },
@@ -19,6 +23,10 @@ const UserApi={
       },
       getRoles: async () => {
         return await axiosClient.get('/get-roles')
+      },
+
+      Add_User: async (UserData) => {
+        return axiosClient.post('/add-user', UserData);
       },
      
 }

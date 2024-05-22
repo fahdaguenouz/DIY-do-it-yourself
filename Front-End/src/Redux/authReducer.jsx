@@ -6,7 +6,7 @@ const initialState = {
     users: [],
     levels: [],
     roles: [],
-
+    baseUrl: 'http://localhost:8000/'
   };
   
   function authReducer(state = initialState, action) {
@@ -27,7 +27,14 @@ const initialState = {
           ...state,
           token: action.payload.token,
           user: action.payload.user,
-          authenticated: true
+          authenticated: true,
+        };
+        case 'REGISTER_SUCCESS':
+        return {
+          ...state,
+          token: action.payload.token,
+          user: action.payload.user,
+          authenticated: true,
         };
       case 'LOGOUT':
         return {

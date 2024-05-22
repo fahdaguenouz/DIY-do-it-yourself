@@ -19,10 +19,8 @@ const roles = [
 
 const GestUsers = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
-
+  
+  
   const { users, authenticated, loading } = useSelector(state => state.auth);
   const [details, setDetails] = useState([]);
   const navigate=useNavigate()
@@ -99,7 +97,7 @@ const HandleAjouter=()=>{
   return (
 
     <>
-      {loading || !users || users.length === 0 ? (
+      {loading  ? (
         <div className="text-center">
           <CSpinner color="primary" />
         </div>
@@ -159,7 +157,7 @@ const HandleAjouter=()=>{
                     <CCardBody className="p-1">
                       <h4>{item.name}</h4>
                       <p className="text-muted">User since: {item.createdAt}</p>
-                      <CButton size="sm" color="info">
+                      <CButton size="sm" color="info" onClick={() => navigate(`/admin/gestion-users/update-user/${item.id}`)}>
                         Update
                       </CButton>
                       <CButton size="sm" color="danger" className="ml-1">
