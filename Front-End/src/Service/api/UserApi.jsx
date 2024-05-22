@@ -7,9 +7,27 @@ const UserApi={
         return axiosClient.post('/login', { email, password });
       },
 
-      // getUserData:()=>{
-      //   return axiosClient.get('/user');
-      // }
+      logout: async () => {
+        return await axiosClient.post('/logout')
+      },
+
+      register: async (Data) => {
+        return await axiosClient.post('/register',Data)
+      },
+
+      getUsers: async () => {
+        return await axiosClient.get('/get-users')
+      },
+      getLevels: async () => {
+        return await axiosClient.get('/get-levels')
+      },
+      getRoles: async () => {
+        return await axiosClient.get('/get-roles')
+      },
+
+      Add_User: async (UserData) => {
+        return axiosClient.post('/add-user', UserData);
+      },
      
 }
 export default UserApi;

@@ -25,9 +25,9 @@ const Footer = () => {
             <span>Break It , Fix It , Flex It </span>
             <p>Self-learning is the key to unlocking the autonomy to fix things and conquer any challenge.</p>
 
-            <i className='fab fa-facebook-f icon'></i>
-            <i className='fab fa-twitter icon'></i>
-            <i className='fab fa-instagram icon'></i>
+            <i className='fab fa-facebook-f iconn'></i>
+            <i className='fab fa-twitter iconn'></i>
+            <i className='fab fa-instagram iconn'></i>
           </div>
           <div className='box link'>
             <h3>Explore</h3>

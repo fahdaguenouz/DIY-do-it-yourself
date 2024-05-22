@@ -28,7 +28,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Dashboard from "@/Pages/AuthPages/ADMIN/Pages/Dashboard";
 import GestUsers from "@/Pages/AuthPages/ADMIN/Pages/GestUsers";
 import Login from "@/Pages/authentication/login";
+import Register from "@/Pages/authentication/register";
+import AjouterUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/AjouterUser";
+import UpdateUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/UpdateUser";
 // import AuthLogin from "@/Pages/authentication/login";
+// import Register from './../Pages/authentication/register';
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -36,7 +40,7 @@ const DynamicRouter = () => {
     //   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-
+    const [router, setRouter] = useState(null);
     useEffect(() => {
         const checkUser = async () => {
             const fetchedUser = JSON.parse(localStorage.getItem('user'));
@@ -69,6 +73,14 @@ const DynamicRouter = () => {
                         {
                             path: '/admin/gestion-users',
                             element: <GestUsers />
+                        },
+                        {
+                            path: '/admin/gestion-users/ajouter-user',
+                            element: <AjouterUser />
+                        },
+                        {
+                            path: '/admin/gestion-users/update-user/:userId',
+                            element: <UpdateUser />
                         },
                         // Other admin-specific routes
                     ]
@@ -193,18 +205,30 @@ const DynamicRouter = () => {
                 { path: '/', element: <Home /> }
             ] 
         },
-        { 
+        {
             path: '/login', 
             element: <LoginLayouts />,
-             children: [
-                { path: '', element: <Login /> }]
-             },
+            children: [
+                { path: '', element: <Login /> }
+            ]
+        },
+        {
+            path: '/register', 
+            element: <LoginLayouts />,
+            children: [
+                { path: '', element: <Register /> }
+            ]
+        },
         { path: '*', element: <NotFoundPage /> }
     ], [user]);
+    useEffect(() => {
+        // Recreate the router every time routes change
+        setRouter(createBrowserRouter(routes));
+    }, [routes]);
+    // const router = useMemo(() => createBrowserRouter(routes), [routes]);
 
-    const router = useMemo(() => createBrowserRouter(routes), [routes]);
-
-    return <RouterProvider router={router} />;
+    // return <RouterProvider router={router} />;
+    return router ? <RouterProvider router={router} /> : null;
 }
 
 

@@ -1,9 +1,10 @@
 import { Usercontext } from '@/Context/AuthProvider';
 import React, { useEffect, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 
 const AuthAdmin = () => {
-    const { user, authenticated, loading } = useSelector(state => state.auth);
+    const { baseUrl,user, authenticated, loading } = useSelector(state => state.auth);
     
     
 
@@ -14,6 +15,7 @@ const AuthAdmin = () => {
     return (
         <div>
              
+             <Toaster position="top-center" reverseOrder={false} />
 
              {user ? (
                 <div>
@@ -23,6 +25,8 @@ const AuthAdmin = () => {
                     <p>Address: {user.adresse}</p>
                     <p>role: {user.role_id}</p>
                     <p>level: {user.level_id}</p>
+                        {user.profile_picture}
+                    <img src={user.profile_picture} alt={`${user.nom}'s Profile`} />
 
                     
                 </div>
