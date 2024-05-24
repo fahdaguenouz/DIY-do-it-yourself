@@ -10,12 +10,15 @@ import store from './Redux/Store';
 import { Provider } from 'react-redux';
 import DynamicRouter from './Router';
 import ThemeCustomization from './themes';
+import { Toaster } from 'react-hot-toast';
 function App() {
   
   return (
+    
     <ThemeCustomization>
     <Provider store={store}>
       <DynamicRouter/>
+      <Toaster position="top-center" reverseOrder={false} />
     </Provider>
     </ThemeCustomization>
   );

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   TextField,
   Button,
@@ -20,14 +20,15 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AddUser, getLevels, getRoles } from '@/Redux/authActions';
-import { Toaster } from 'react-hot-toast';
+import { AddUser, getLevels, getRoles, updateUser } from '@/Redux/authActions';
+import toast, { Toaster } from 'react-hot-toast';
 
 const UpdateUser = () => {
     const {users, levels, roles, authenticated, loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userId } = useParams();
+    const originalData = useRef({});
     const initialFormData = {
       nom: '',
       prenom: '',
@@ -44,21 +45,22 @@ const UpdateUser = () => {
     const [showPassword, setShowPassword] = useState(false);
   
     useEffect(() => {
-        const user = users.find(user => user.id.toString() === userId); // Assuming `id` is a number and `userId` is a string
-        if (user) {
-            setFormData({
-                nom: user.nom || '',
-                prenom: user.prenom || '',
-                adresse: user.adresse || '',
-                email: user.email || '',
-                phone: user.phone || '',
-                password: '', // You probably won't be able to fetch the password
-                role_id: user.role_id || '',
-                level_id: user.level_id || '',
-            });
-        } 
-        
-    }, [userId, users]);
+      const user = users.find(user => user.id.toString() === userId);
+    if (user) {
+      const userData = {
+        nom: user.nom || '',
+        prenom: user.prenom || '',
+        adresse: user.adresse || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        password: '',  // Not displayed for security
+        role_id: user.role_id || '',
+        level_id: user.level_id || '',
+      };
+      setFormData(userData);
+      originalData.current = userData;  // Store original data for later comparison
+    }
+  }, [userId, users]);
   
     const handleChange = (e) => {
       setFormData({
@@ -69,11 +71,14 @@ const UpdateUser = () => {
   
     const handleSubmit = (e) => {
       e.preventDefault();
-      dispatch(AddUser(formData, () => {
-          setFormData(initialFormData);  // Reset the form only after successful addition
-          if (onClose) onClose();
+      if (JSON.stringify(originalData.current) === JSON.stringify(formData)) {
+        toast("Nothing to update", { icon: '🤷‍♂️' });
+        return;
+      }
+      dispatch(updateUser(userId, formData, () => {
+        navigate('/admin/gestion-users'); // Navigate back to users list on success
       }));
-  };
+    };
   
     const handleBack = () => {
       navigate('/admin/gestion-users');
@@ -160,7 +165,7 @@ const UpdateUser = () => {
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <FormControl fullWidth required variant="outlined">
+                    <FormControl fullWidth  variant="outlined">
                       <InputLabel>Password</InputLabel>
                       <OutlinedInput
                         name="password"

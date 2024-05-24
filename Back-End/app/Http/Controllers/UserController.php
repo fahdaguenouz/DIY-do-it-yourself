@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdatUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -57,4 +58,32 @@ class UserController extends Controller
 
         return new UserResource($user);
     }
+
+
+    public function update(UpdatUserRequest $request, User $user)
+{
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
+    }
+    
+    $data = $request->validated();
+
+    // Handle the profile picture upload
+    if ($request->hasFile('profile_picture')) {
+        $data['profile_picture'] = $request->file('profile_picture')->store('storage/profile_pictures', 'public');
+    }
+
+
+     // Check if password was provided and hash it
+     if (!empty($data['password'])) {
+        $data['password'] = Hash::make($data['password']);
+    } else {
+        unset($data['password']); // Ensure no null password is set
+    }
+
+    // Update user with possibly modified data
+    $user->update($data);
+
+    return new UserResource($user);
+}
 }

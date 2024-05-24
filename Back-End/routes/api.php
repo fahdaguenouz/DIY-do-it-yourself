@@ -13,6 +13,16 @@ Route::get('/test-csnrf', function () {
     return response()->json(['csrf' => csrf_token()]);
 });
 
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+
+
+
+
+
+
 Route::get('/user',[UserController::class,"getUserData"]);
 Route::get('/get-users', [UserController::class, 'index']);
 Route::get('/get-levels', [LevelController::class, 'index']);
@@ -28,10 +38,7 @@ Route::apiResources([
 
 
 
+Route::put('/users/update-user/{user}', [UserController::class, 'update']);
 
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-Route::post('/register', [RegisteredUserController::class, 'store']);
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 

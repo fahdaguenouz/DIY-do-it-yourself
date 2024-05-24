@@ -29,5 +29,10 @@ const UserApi={
         return axiosClient.post('/add-user', UserData);
       },
      
+
+
+      updateUser: async (userId, userData) => {
+        return axiosClient.put(`/users/update-user/${userId}`, userData);
+      },
 }
 export default UserApi;
