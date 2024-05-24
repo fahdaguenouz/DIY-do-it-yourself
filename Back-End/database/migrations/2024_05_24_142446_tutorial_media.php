@@ -10,13 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('tutorials', function (Blueprint $table) {
+        Schema::create('tutorial_media', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->unsignedBigInteger('Sub_Categorie_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('cover')->nullable();
+            $table->unsignedBigInteger('tutorial_id');
+            $table->string('media_type'); // 'video' or 'photo'
+            $table->string('media_url'); // path to the media file
             $table->text('description');
+            $table->integer('order'); // to maintain the order of media items
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('tutorials');
+        //
     }
 };
