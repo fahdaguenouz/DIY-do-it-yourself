@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('titre');
             $table->unsignedBigInteger('Sub_Categorie_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('media');
+            $table->string('cover')->nullable();
             $table->text('description');
             $table->timestamps();
         });

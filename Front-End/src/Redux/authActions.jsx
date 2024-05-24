@@ -16,6 +16,36 @@ export const login = (email, password) => async dispatch => {
       type: 'LOGIN_SUCCESS',
       payload: { token, user }
     });
+
+    if (user.role_id === 1) { 
+      // Assuming role is accessible directly and is named as such
+      toast.success('Welcome Again  '+user.prenom,{
+        style: {
+          fontSize: '18px',
+          padding: '16px 24px',
+          borderRadius: '8px',
+        }
+      });
+      dispatch(getUsers());
+        dispatch(getLevels())
+        dispatch(getRoles());
+     // Fetch all users if the logged in user is an admin
+    }
+    if (user.role_id === 3) { 
+      // Assuming role is accessible directly and is named as such
+      toast.success('Welcome Again  '+user.prenom,{
+        style: {
+          fontSize: '18px',
+          padding: '16px 24px',
+          borderRadius: '8px',
+        }
+      });
+      // dispatch(getUsers());
+      //   dispatch(getLevels())
+      //   dispatch(getRoles());
+     // Fetch all users if the logged in user is an admin
+    }
+
   } catch (error) {
     console.error("Login error", error);
     throw error;
@@ -154,3 +184,21 @@ export const logout = () => async dispatch => {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
   }
+
+  export const updateUser = (userId, userData, onSuccess) => async dispatch => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.updateUser(userId, userData);
+      toast.success('User updated successfully!');
+      if (onSuccess) {
+          onSuccess();
+          dispatch(getUsers()); // Fetch updated list of users
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+      console.error("Error updating user:", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  };
+  

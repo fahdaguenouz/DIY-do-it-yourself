@@ -25,14 +25,23 @@ import CreatorLayout from "@/Layouts/UsersLayouts/CreatorLayout";
 import StandarLayout from "@/Layouts/UsersLayouts/StandarLayout";
 import NotFoundPage from "@/Pages/GuestPages/NotFound/NotFoundPage";
 import { useDispatch, useSelector } from "react-redux";
-import Dashboard from "@/Pages/AuthPages/ADMIN/Pages/Dashboard";
 import GestUsers from "@/Pages/AuthPages/ADMIN/Pages/GestUsers";
 import Login from "@/Pages/authentication/login";
 import Register from "@/Pages/authentication/register";
 import AjouterUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/AjouterUser";
 import UpdateUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/UpdateUser";
+import About from "@/Pages/GuestPages/about/About";
+import CourseHome from "@/Pages/GuestPages/allcourses/CourseHome";
+import Team from "@/Pages/GuestPages/team/Team";
+import Pricing from "@/Pages/GuestPages/pricing/Pricing";
+import Blog from "@/Pages/GuestPages/blog/Blog";
+import Contact from "@/Pages/GuestPages/contact/Contact";
+import Tutorials from "@/Pages/AuthPages/CREATOR/Pages/Tutorials";
+import AjouterTutorial from "@/Pages/AuthPages/CREATOR/Pages/Forms/AjouterTutorial";
 // import AuthLogin from "@/Pages/authentication/login";
 // import Register from './../Pages/authentication/register';
+import AdminDashboard from "@/Pages/AuthPages/ADMIN/Pages/AdminDashboard";
+import CreatorDashboard from "../Pages/AuthPages/CREATOR/Pages/CreatorDashboard";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -64,11 +73,11 @@ const DynamicRouter = () => {
                     children: [
                         {
                             path: '/admin',
-                            element: <Dashboard />
+                            element: <AdminDashboard />
                         },
                         {
                             path: '/admin/dashboard',
-                            element: <Dashboard />
+                            element: <AdminDashboard />
                         },
                         {
                             path: '/admin/gestion-users',
@@ -97,7 +106,15 @@ const DynamicRouter = () => {
                 return {
                     element: <CreatorLayout />,
                     children: [
-                        { path: '/creator', element: <AuthAdmin /> }
+                        { path: '/creator', element: <CreatorDashboard /> },
+                        {
+                            path: '/creator/dashboard',
+                            element: <CreatorDashboard />
+                        },
+                        { path: '/creator/gestion-tutorials', element: <Tutorials /> },
+                        { path: '/creator/add-tutorial', element: <AjouterTutorial /> }
+
+
                         // Other creator-specific routes
                     ]
                 };
@@ -114,6 +131,30 @@ const DynamicRouter = () => {
                     element: <GuestLayout />,
                     children: [
                         { path: '/', element: <Home /> },
+                        {
+                            path: '/about',
+                            element: <About />
+                        },
+                        {
+                            path: '/tutorials',
+                            element: <CourseHome />
+                        },
+                        {
+                            path: '/team',
+                            element: <Team />
+                        },
+                        {
+                            path: '/pricing',
+                            element: <Pricing />
+                        },
+                        {
+                            path: '/blog',
+                            element: <Blog />
+                        },
+                        {
+                            path: '/contact',
+                            element: <Contact />
+                        },
                         // Other guest accessible routes
                     ]
                 };
@@ -198,22 +239,46 @@ const DynamicRouter = () => {
     //   ]);
     // },[user]);
     const routes = useMemo(() => [
-        user ? getRoleBasedRoutes(user.role_id) : { 
-            path: '/', 
-            element: <GuestLayout />, 
+        user ? getRoleBasedRoutes(user.role_id) : {
+            path: '/',
+            element: <GuestLayout />,
             children: [
-                { path: '/', element: <Home /> }
-            ] 
+                { path: '/', element: <Home /> },
+                {
+                    path: '/about',
+                    element: <About />
+                },
+                {
+                    path: '/tutorials',
+                    element: <CourseHome />
+                },
+                {
+                    path: '/team',
+                    element: <Team />
+                },
+                {
+                    path: '/pricing',
+                    element: <Pricing />
+                },
+                {
+                    path: '/blog',
+                    element: <Blog />
+                },
+                {
+                    path: '/contact',
+                    element: <Contact />
+                },
+            ]
         },
         {
-            path: '/login', 
+            path: '/login',
             element: <LoginLayouts />,
             children: [
                 { path: '', element: <Login /> }
             ]
         },
         {
-            path: '/register', 
+            path: '/register',
             element: <LoginLayouts />,
             children: [
                 { path: '', element: <Register /> }
