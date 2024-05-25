@@ -6,7 +6,8 @@ const initialState = {
     users: [],
     levels: [],
     roles: [],
-    baseUrl: 'http://localhost:8000/'
+    baseUrl: 'http://localhost:8000/',
+    categories:[]
   };
   
   function authReducer(state = initialState, action) {
@@ -15,6 +16,12 @@ const initialState = {
         return {
           ...state,
           users: action.payload,
+          error: null  // Clear any previous errors
+        };
+        case 'SET_CATEGORY':
+        return {
+          ...state,
+          categories: action.payload,
           error: null  // Clear any previous errors
         };
       case 'FETCH_USERS_FAILURE':

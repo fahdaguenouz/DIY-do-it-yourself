@@ -26,7 +26,7 @@ const CreatorDashboard = () => {
                     <p>role: {user.role_id}</p>
                     <p>level: {user.level_id}</p>
                         {user.profile_picture}
-                    <img src={user.profile_picture} alt={`${user.nom}'s Profile`} />
+                    <img src={`${baseUrl}${user.profile_picture}`} alt={`${user.nom}'s Profile`} />
 
                     
                 </div>

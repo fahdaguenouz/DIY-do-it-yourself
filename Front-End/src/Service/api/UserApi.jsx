@@ -24,6 +24,10 @@ const UserApi = {
   getRoles: async () => {
     return await axiosClient.get('/get-roles')
   },
+  getCategory: async () => {
+    return await axiosClient.get('/get-categories')
+  },
+  
 
   Add_User: async (UserData) => {
     // Create FormData instance
@@ -36,7 +40,15 @@ const UserApi = {
     });
   },
 
-
+  addTutorial : async (formData) => {
+  
+        return  await axiosClient.post(`/add-tutorial`, formData, {
+            headers: {
+                
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+},
 
   updateUser: async (userId, userData) => {
     return axiosClient.put(`/users/update-user/${userId}`, userData);

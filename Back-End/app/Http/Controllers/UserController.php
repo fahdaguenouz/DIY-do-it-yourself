@@ -70,7 +70,7 @@ class UserController extends Controller
 
     // Handle the profile picture upload
     if ($request->hasFile('profile_picture')) {
-        $data['profile_picture'] = $request->file('profile_picture')->store('storage/profile_pictures', 'public');
+        $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
     }
 
 
