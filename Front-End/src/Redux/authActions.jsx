@@ -33,16 +33,16 @@ export const login = (email, password) => async dispatch => {
     }
     if (user.role_id === 3) { 
       // Assuming role is accessible directly and is named as such
-      toast.success('Welcome Again'+user.prenom,{
+      toast.success('Welcome Again ' + user.prenom,{
         style: {
           fontSize: '18px',
           padding: '16px 24px',
           borderRadius: '8px',
         }
       });
-      // dispatch(getUsers());
-      //   dispatch(getLevels())
-      //   dispatch(getRoles());
+      dispatch(getCategory());
+        // dispatch(getLevels())
+        // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
     }
 
@@ -202,3 +202,45 @@ export const logout = () => async dispatch => {
     }
   };
   
+
+  export const getCategory = () => async dispatch => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.getCategory(); // Ensure UserApi.getUsers() is correctly implemented
+      dispatch({
+        type: 'SET_CATEGORY',
+        payload: response.data
+      });
+    } catch (error) {
+      console.error("Error fetching CATEGORY:", error);
+      // You might want to handle errors, for example, showing an error message
+      dispatch({ type: 'FETCH_CATEGORY_FAILURE', error });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  };
+
+
+  export const AddTutorial = (UserData,onSuccess) => async dispatch  => { 
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.addTutorial(UserData);
+      // dispatch({
+      //   type: 'ADD_USERE',
+      //   payload: response.data
+      // });
+      toast.success('Tutorial added successfully!');
+      if (onSuccess) {
+          onSuccess(); 
+          
+            // dispatch(getUsers());
+           // Reset form on success
+      }
+      
+    } catch (error) {
+      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+      console.error("Error fetching ADDING Tutorials :", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }

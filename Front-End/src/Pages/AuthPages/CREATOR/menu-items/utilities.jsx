@@ -29,7 +29,7 @@ const utilities = {
   children: [
     {
       id: 'Tutorials',
-      title: 'Tutorials',
+      title: 'My Tutorials',
       type: 'item',
       url: '/creator/gestion-tutorials',
       icon: icons.TeamOutlined
@@ -43,9 +43,9 @@ const utilities = {
     },
     {
       id: 'SubCategory',
-      title: 'SubCategory',
+      title: 'Analytics',
       type: 'item',
-      url: '/admin/gestion-sub-category',
+      url: '/creator/creator-analytics',
       icon: icons.ClusterOutlined
     }
   ]

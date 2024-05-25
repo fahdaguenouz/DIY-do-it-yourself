@@ -42,6 +42,9 @@ import AjouterTutorial from "@/Pages/AuthPages/CREATOR/Pages/Forms/AjouterTutori
 // import Register from './../Pages/authentication/register';
 import AdminDashboard from "@/Pages/AuthPages/ADMIN/Pages/AdminDashboard";
 import CreatorDashboard from "../Pages/AuthPages/CREATOR/Pages/CreatorDashboard";
+import CreatorAnalytics from "@/Pages/AuthPages/CREATOR/Pages/CreatorAnalytics";
+import CreatorLikesTuto from "@/Pages/AuthPages/CREATOR/Pages/CreatorLikesTuto";
+import CreatorCategory from "@/Pages/AuthPages/CREATOR/Pages/CreatorCategory";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -112,7 +115,13 @@ const DynamicRouter = () => {
                             element: <CreatorDashboard />
                         },
                         { path: '/creator/gestion-tutorials', element: <Tutorials /> },
-                        { path: '/creator/add-tutorial', element: <AjouterTutorial /> }
+                        { path: '/creator/add-tutorial', element: <AjouterTutorial /> },
+                        { path: '/creator/creator-analytics', element: <CreatorAnalytics /> },
+                        { path: '/creator/creator-tutorials-likes', element: <CreatorLikesTuto /> },
+                        { path: '/creator/category', element: <CreatorCategory /> },
+
+
+
 
 
                         // Other creator-specific routes

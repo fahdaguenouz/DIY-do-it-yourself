@@ -15,10 +15,18 @@ const pages = {
   type: 'group',
   children: [
     {
+      id: 'category',
+      title: 'category',
+      type: 'item',
+      url: '/creator/category',
+      icon: icons.HeartOutlined,
+      target: true
+    },
+    {
       id: 'Likes',
       title: 'like',
       type: 'item',
-      url: '/tutorials/mylikes',
+      url: '/creator/creator-tutorials-likes',
       icon: icons.HeartOutlined,
       target: true
     },

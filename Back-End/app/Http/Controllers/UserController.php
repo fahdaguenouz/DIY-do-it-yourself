@@ -65,12 +65,12 @@ class UserController extends Controller
     if (!$user) {
         return response()->json(['message' => 'User not found'], 404);
     }
-    
+
     $data = $request->validated();
 
     // Handle the profile picture upload
     if ($request->hasFile('profile_picture')) {
-        $data['profile_picture'] = $request->file('profile_picture')->store('storage/profile_pictures', 'public');
+        $data['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
     }
 
 
