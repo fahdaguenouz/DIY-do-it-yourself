@@ -9,6 +9,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 class TutorialController extends Controller
 {
+
+    // Method to get all tutorials
+    public function index()
+    {
+        // Get all tutorials with related media, user, and subcategory
+        $tutorials = Tutorial::with(['media', 'user', 'subCategory'])->get();
+
+        // Return the tutorials as a JSON response
+        return response()->json($tutorials);
+    }
+
+
+    
     public function store(StoreTutorialRequest $request)
 {
     // Create the tutorial

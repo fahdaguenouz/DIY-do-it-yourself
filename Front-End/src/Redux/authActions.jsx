@@ -27,8 +27,10 @@ export const login = (email, password) => async dispatch => {
         }
       });
       dispatch(getUsers());
-        dispatch(getLevels())
-        dispatch(getRoles());
+      dispatch(getLevels())
+      dispatch(getRoles());
+      dispatch(getTutorials())
+
      // Fetch all users if the logged in user is an admin
     }
     if (user.role_id === 3) { 
@@ -41,7 +43,7 @@ export const login = (email, password) => async dispatch => {
         }
       });
       dispatch(getCategory());
-        // dispatch(getLevels())
+        dispatch(getTutorials())
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
     }
@@ -155,6 +157,20 @@ export const logout = () => async dispatch => {
       });
     } catch (error) {
       console.error("Error fetching ROLES :", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }
+  export const getTutorials = () => async dispatch  => { 
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.getTutorials(); // Ensure UserApi.getUsers() is correctly implemented
+      dispatch({
+        type: 'SET_TUTORIALS',
+        payload: response.data
+      });
+    } catch (error) {
+      console.error("Error fetching TUTORIALS :", error);
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }

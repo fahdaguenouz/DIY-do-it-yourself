@@ -27,6 +27,9 @@ const UserApi = {
   getCategory: async () => {
     return await axiosClient.get('/get-categories')
   },
+  getTutorials: async () => {
+    return await axiosClient.get('/get-tutorials')
+  },
   
 
   Add_User: async (UserData) => {

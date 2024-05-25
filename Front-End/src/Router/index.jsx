@@ -45,6 +45,7 @@ import CreatorDashboard from "../Pages/AuthPages/CREATOR/Pages/CreatorDashboard"
 import CreatorAnalytics from "@/Pages/AuthPages/CREATOR/Pages/CreatorAnalytics";
 import CreatorLikesTuto from "@/Pages/AuthPages/CREATOR/Pages/CreatorLikesTuto";
 import CreatorCategory from "@/Pages/AuthPages/CREATOR/Pages/CreatorCategory";
+import TutorialDetails from "@/Pages/AuthPages/CREATOR/Pages/TutorialDetails";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -119,6 +120,8 @@ const DynamicRouter = () => {
                         { path: '/creator/creator-analytics', element: <CreatorAnalytics /> },
                         { path: '/creator/creator-tutorials-likes', element: <CreatorLikesTuto /> },
                         { path: '/creator/category', element: <CreatorCategory /> },
+                        { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
+
 
 
 

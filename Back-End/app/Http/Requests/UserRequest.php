@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
             'password' => 'required|string|min:8',
             'role_id' => 'required|integer|exists:roles,id',
             'level_id' => 'required|integer|exists:levels,id',
-            'profile_picture' => 'image|nullable|max:2048|mimes:jpeg,png,jpg,svg',
+            'profile_picture' => 'image|nullable|max:2048|mimes:jpeg,png,gif,jpg,svg',
         ];
     }
 }

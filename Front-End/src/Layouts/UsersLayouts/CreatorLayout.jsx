@@ -13,7 +13,7 @@ const CreatorLayout = () => {
     const { user, authenticated, loading } = useSelector(state => state.auth);
     useEffect(() => {
         dispatch(getCategory());
-     
+        
       }, [dispatch]);
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
