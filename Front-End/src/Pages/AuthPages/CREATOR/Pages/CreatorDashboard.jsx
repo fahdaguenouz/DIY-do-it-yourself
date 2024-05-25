@@ -1,13 +1,17 @@
 import { Usercontext } from '@/Context/AuthProvider';
+import { getTutorials } from '@/Redux/authActions';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const CreatorDashboard = () => {
     const { baseUrl,user, authenticated, loading } = useSelector(state => state.auth);
+    const dispatch=useDispatch()
     
-    
+        useEffect(()=>{
+            dispatch(getTutorials())
 
+        },[dispatch])
 
 
     console.log('the loged in user is '+ user);

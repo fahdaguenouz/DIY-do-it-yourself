@@ -7,7 +7,8 @@ const initialState = {
     levels: [],
     roles: [],
     baseUrl: 'http://localhost:8000/',
-    categories:[]
+    categories:[],
+    tutorials:[]
   };
   
   function authReducer(state = initialState, action) {
@@ -65,6 +66,12 @@ const initialState = {
         return {
           ...state,
           levels: action.payload,
+          error: null  // Clear any previous errors
+        };
+        case 'SET_TUTORIALS':
+        return {
+          ...state,
+          tutorials: action.payload,
           error: null  // Clear any previous errors
         };
         case 'SET_ROLES':

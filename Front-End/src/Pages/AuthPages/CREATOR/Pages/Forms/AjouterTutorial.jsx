@@ -6,7 +6,7 @@ import { Add, Delete } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddTutorial } from '@/Redux/authActions';
+import { AddTutorial, getTutorials } from '@/Redux/authActions';
 import toast from 'react-hot-toast';
 
 const AjouterTutorial = () => {
@@ -99,8 +99,8 @@ const AjouterTutorial = () => {
         }
     
     
-        try {
-            await Dispatch(AddTutorial(formData));
+        Dispatch(AddTutorial(formData))
+        .then(() => {
             settitre('');
             setDescription('');
             setSelectedCategory('');
@@ -108,10 +108,11 @@ const AjouterTutorial = () => {
             setCover(null);
             setCoverPreview(null);
             setMedia([{ file: null, description: '', preview: null }]);
-            // navigate('/creator/gestion-tutorials');
-        } catch (error) {
-            toast.error('Failed to create tutorial');
-        }
+            Dispatch(getTutorials());
+        })
+        .catch((error) => {
+            console.error('Error creating tutorial:', error);
+        });
     };
     
     return (

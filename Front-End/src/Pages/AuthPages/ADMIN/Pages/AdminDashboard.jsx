@@ -1,11 +1,15 @@
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AnalyticEcommerce from './AnalyticEcommerce';
+import { getTutorials } from '@/Redux/authActions';
 
 const AdminDashboard = () => {
-    const { baseUrl,users, user, authenticated, loading } = useSelector(state => state.auth);
-
+    const { baseUrl,users,tutorials, user, authenticated, loading } = useSelector(state => state.auth);
+    const dispatch = useDispatch()
+    useEffect(()=>{
+      dispatch(getTutorials())
+    },[dispatch])
     if (loading) {
         return <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
@@ -22,7 +26,7 @@ const AdminDashboard = () => {
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Tutorials" count="4,42,236" percentage={59.3} extra="35,000" />
+                <AnalyticEcommerce title="Total Tutorials" count={tutorials.length.toString()} percentage={59.3} extra={tutorials.length.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <AnalyticEcommerce title="Total Users" count={users.length.toString()} percentage={70.5} extra={users.length.toString()} />

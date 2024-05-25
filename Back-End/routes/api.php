@@ -31,7 +31,7 @@ Route::get('/get-users', [UserController::class, 'index']);
 Route::get('/get-levels', [LevelController::class, 'index']);
 Route::get('/get-roles', [RoleController::class, 'index']);
 Route::get('/get-categories', [CategoryController::class, 'index']);
-
+Route::get('/get-tutorials', [TutorialController::class, 'index']);
 
 
 // Route::post('/add-user', [UserController::class, 'store']);
