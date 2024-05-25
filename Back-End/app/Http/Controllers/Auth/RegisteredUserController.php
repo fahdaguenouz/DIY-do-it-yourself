@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
     {
         try {
             // Set the default image path
-            $defaultImagePath = 'profile_pictures/default.png';
+            $defaultImagePath = 'storage/profile_pictures/default.png';
 
             $user = User::create([
                 'nom' => $request->nom,

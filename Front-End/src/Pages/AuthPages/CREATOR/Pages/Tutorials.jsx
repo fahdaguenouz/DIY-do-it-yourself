@@ -65,7 +65,16 @@ const Tutorials = () => {
                             }}>
                                 <Typography variant="h6" color="primary">{val.priceAll}</Typography>
                             </Box>
-                            <Button variant="outlined">Visit Now!</Button>
+                            <Button 
+                      variant="outlined"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: '#039ee3',
+                          color: '#fff',
+                          borderColor: '#039ee3',
+                        }
+                      }}
+                    >Visit Now!</Button>
                         </CardContent>
                     </Card>
                 </Grid>

@@ -6,28 +6,46 @@ import { useNavigate } from 'react-router-dom';
 
 const AjouterTutorial = () => {
     const [cover, setCover] = useState(null);
-    const [media, setMedia] = useState([{ file: null, description: '' }]);
-const navigate=useNavigate()
+    const [coverPreview, setCoverPreview] = useState(null);
+    const [media, setMedia] = useState([{ file: null, description: '', preview: null }]);
+    const navigate = useNavigate();
+
     const handleCoverChange = (event) => {
-        setCover(event.target.files[0]);
+        const file = event.target.files[0];
+        setCover(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => setCoverPreview(e.target.result);
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleMediaChange = (index, event) => {
         const newMedia = [...media];
         if (event.target.name === 'file') {
-            newMedia[index].file = event.target.files[0];
+            const file = event.target.files[0];
+            newMedia[index].file = file;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    newMedia[index].preview = e.target.result;
+                    setMedia(newMedia);
+                };
+                reader.readAsDataURL(file);
+            }
         } else {
             newMedia[index].description = event.target.value;
+            setMedia(newMedia);
         }
-        setMedia(newMedia);
     };
 
     const handleAddMedia = () => {
-        setMedia([...media, { file: null, description: '' }]);
+        setMedia([...media, { file: null, description: '', preview: null }]);
     };
+
     const handleBack = () => {
         navigate('/creator/gestion-tutorials');
-      };
+    };
 
     const handleRemoveMedia = (index) => {
         const newMedia = media.filter((_, i) => i !== index);
@@ -42,15 +60,15 @@ const navigate=useNavigate()
     return (
         <Container maxWidth="md">
             <Grid container justifyContent="left">
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={handleBack}
-        startIcon={<ArrowBackIcon />}
-      >
-        Retour
-      </Button>
-    </Grid>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleBack}
+                    startIcon={<ArrowBackIcon />}
+                >
+                    Retour
+                </Button>
+            </Grid>
             <Typography variant="h4" component="h1" gutterBottom>
                 Add New Tutorial
             </Typography>
@@ -76,10 +94,10 @@ const navigate=useNavigate()
                         onChange={handleCoverChange}
                         style={{ marginTop: 8 }}
                     />
-                    {cover && (
-                        <Typography variant="subtitle1" style={{ marginTop: 8 }}>
-                            {cover.name}
-                        </Typography>
+                    {coverPreview && (
+                        <Box mt={2}>
+                            <img src={coverPreview} alt="Cover Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                        </Box>
                     )}
                 </Box>
                 <TextField
@@ -91,18 +109,14 @@ const navigate=useNavigate()
                 />
                 <FormControl variant="outlined" fullWidth margin="normal" required>
                     <InputLabel>Category</InputLabel>
-                    <Select
-                        label="Category"
-                    >
+                    <Select label="Category">
                         <MenuItem value="category1">Category 1</MenuItem>
                         <MenuItem value="category2">Category 2</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl variant="outlined" fullWidth margin="normal" required>
                     <InputLabel>Subcategory</InputLabel>
-                    <Select
-                        label="Subcategory"
-                    >
+                    <Select label="Subcategory">
                         <MenuItem value="subcategory1">Subcategory 1</MenuItem>
                         <MenuItem value="subcategory2">Subcategory 2</MenuItem>
                     </Select>
@@ -117,7 +131,7 @@ const navigate=useNavigate()
                     multiline
                 />
                 {media.map((m, index) => (
-                    <Box padding="16px" border="1px dashed #ccc" borderRadius="8px" key={index} mb={2} display="flex" alignItems="center" >
+                    <Box padding="16px" border="1px dashed #ccc" borderRadius="8px" key={index} mb={2} display="flex" alignItems="center">
                         <input
                             accept="image/*,video/*"
                             type="file"
@@ -125,6 +139,15 @@ const navigate=useNavigate()
                             onChange={(event) => handleMediaChange(index, event)}
                             style={{ marginRight: 16 }}
                         />
+                        {m.preview && (
+                            <Box mr={3}>
+                                {m.file.type.startsWith('image/') ? (
+                                    <img src={m.preview} alt="Media Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                                ) : (
+                                    <video src={m.preview} controls style={{ maxWidth: '200px', maxHeight: '100px' }} />
+                                )}
+                            </Box>
+                        )}
                         <TextField
                             label="Media Description"
                             variant="outlined"
@@ -135,8 +158,8 @@ const navigate=useNavigate()
                             rows={4}
                             style={{ marginRight: 16, flex: 1 }}
                         />
-                        <IconButton sx={{ color:'red' }} onClick={() => handleRemoveMedia(index)}>
-                            <Delete/>
+                        <IconButton sx={{ color: 'red' }} onClick={() => handleRemoveMedia(index)}>
+                            <Delete />
                         </IconButton>
                     </Box>
                 ))}

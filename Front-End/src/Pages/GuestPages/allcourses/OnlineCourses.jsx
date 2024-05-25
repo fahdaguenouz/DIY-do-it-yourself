@@ -1,8 +1,8 @@
 import React from "react"
-import "./courses.css"
-import { online } from "./../../../dummydata"
+import { Box, Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
+import { online } from "@/dummydata";
 import Heading from "../common/heading/Heading"
-
+import '../allcourses/courses.css'
 const OnlineCourses = () => {
   return (
     <>

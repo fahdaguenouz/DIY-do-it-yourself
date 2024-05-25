@@ -1,69 +1,71 @@
-import React , { Fragment } from "react"
-import OnlineCourses from "../allcourses/OnlineCourses"
-import Heading from "../common/heading/Heading"
-import "../allcourses/courses.css"
-import { coursesCard } from "@/dummydata"
+import React, { Fragment } from "react";
+import { Box, Card, CardContent, CardMedia, Typography, Grid, Avatar, Button } from '@mui/material';
+import OnlineCourses from "../allcourses/OnlineCourses";
+import Heading from "../common/heading/Heading";
+import { coursesCard } from "@/dummydata";
 
 const HAbout = () => {
   return (
     <>
       <section className='homeAbout'>
-        <div className='containerr'>
-          <Heading subtitle='our Tutoriels' title='explore our popular Tutoriels' />
-
-          <div className='coursesCard'>
-            {/* copy code form  coursesCard */}
-            <div className='grid2'>
-              {coursesCard.slice(0, 3).map((val,index) => (
-                <div className='items' key={index}>
-                  <div className='content flex'>
-                    <div className='left'>
-                      <div className='img'>
-                        <img src={val.cover} alt='' />
-                      </div>
-                    </div>
-                    <div className='text'>
-                      <h1>{val.coursesName}</h1>
-                      <div className='rate'>
-                        <i className='fa fa-star'></i>
-                        <i className='fa fa-star'></i>
-                        <i className='fa fa-star'></i>
-                        <i className='fa fa-star'></i>
-                        <i className='fa fa-star'></i>
-                        <label htmlFor=''>(5.0)</label>
-                      </div>
-                      <div className='details'>
-                        {val.courTeacher.map((details,innerIndex) => (
-                          <Fragment key={innerIndex}>
-                            <div className='box'>
-                              <div className='dimg'>
-                                <img src={details.dcover} alt='' />
-                              </div>
-                              <div className='para'>
-                                <h4>{details.name}</h4>
-                              </div>
-                            </div>
-                            <span>{details.totalTime}</span>
-                          </Fragment>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className='price'>
-                    <h3>
-                      {val.priceAll}
-                    </h3>
-                  </div>
-                  <button className='outline-btn'>ENROLL NOW !</button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <Box sx={{ padding: '0 50px' }}>
+          <Heading subtitle='Our Tutorials' title='Explore Our Popular Tutorials' />
+          <Grid container spacing={3}>
+            {coursesCard.slice(0, 3).map((val, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card sx={{
+                  textAlign: 'center',
+                  padding: 3,
+                  backgroundColor: '#fff'
+                }}>
+                  <Box sx={{ width: '100%', height: 200, position: 'relative', backgroundColor: '#039ee3' }}>
+                    <CardMedia
+                      component="img"
+                      image={val.cover}
+                      alt={val.coursesName}
+                      sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </Box>
+                  <CardContent>
+                    <Typography variant="h5" component="div">{val.coursesName}</Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, color: '#039ee3' }}>
+                      {[...Array(5)].map((_, i) => (
+                        <i key={i} className="fa fa-star" />
+                      ))}
+                      <Typography component="label" sx={{ ml: 0.5 }}>(5.0)</Typography>
+                    </Box>
+                    {val.courTeacher.map((detail, i) => (
+                      <Box key={i} sx={{ display: 'flex', alignItems: 'center', color: 'grey', margin: '20px 0' }}>
+                        <Avatar src={detail.dcover} alt={detail.name} sx={{ width: 50, height: 50, mr: 2 }} />
+                        <Typography variant="body1">{detail.name}</Typography>
+                        <Typography sx={{ color: '#039ee3', fontWeight: '500', fontSize: '14px', ml: 2 }}>{detail.totalTime}</Typography>
+                      </Box>
+                    ))}
+                    <Box sx={{ backgroundColor: '#f8f8f8', padding: 1, margin: '30px 0' }}>
+                      <Typography variant="h6" color="primary">{val.priceAll}</Typography>
+                    </Box>
+                    <Button 
+                      variant="outlined"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: '#039ee3',
+                          color: '#fff',
+                          borderColor: '#039ee3',
+                        }
+                      }}
+                    >
+                      VISIT NOW!
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
         <OnlineCourses />
       </section>
     </>
-  )
-}
+  );
+};
 
-export default HAbout
+export default HAbout;
