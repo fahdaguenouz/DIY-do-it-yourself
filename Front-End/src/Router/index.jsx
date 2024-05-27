@@ -46,6 +46,12 @@ import CreatorAnalytics from "@/Pages/AuthPages/CREATOR/Pages/CreatorAnalytics";
 import CreatorLikesTuto from "@/Pages/AuthPages/CREATOR/Pages/CreatorLikesTuto";
 import CreatorCategory from "@/Pages/AuthPages/CREATOR/Pages/CreatorCategory";
 import TutorialDetails from "@/Pages/AuthPages/CREATOR/Pages/TutorialDetails";
+import AdminProfile from "@/Pages/AuthPages/ADMIN/Pages/AdminProfile";
+import AdminCategory from "@/Pages/AuthPages/ADMIN/Pages/AdminCategory";
+import AdminEdit from "@/Pages/AuthPages/ADMIN/Pages/AdminEdit";
+import GestAdminCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminCategory";
+import AddCategory from "@/Pages/AuthPages/ADMIN/Pages/Forms/AddCategory";
+import UpdateTutorials from "@/Pages/AuthPages/CREATOR/Pages/Forms/UpdateTutorials";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -95,6 +101,26 @@ const DynamicRouter = () => {
                             path: '/admin/gestion-users/update-user/:userId',
                             element: <UpdateUser />
                         },
+                        {
+                            path: '/admin/admin-profile',
+                            element: <AdminProfile />
+                        },
+                        {
+                            path: '/admin/gestion-category',
+                            element: <AdminCategory />
+                        },
+                        {
+                            path: '/admin/edit-profile',
+                            element: <AdminEdit />
+                        },
+                        {
+                            path: '/admin/gestion-sub-category',
+                            element: <GestAdminCategory />
+                        },
+                        {
+                            path: '/admin/gestion-category/add-category',
+                            element: <AddCategory />
+                        },
                         // Other admin-specific routes
                     ]
                 };
@@ -121,6 +147,8 @@ const DynamicRouter = () => {
                         { path: '/creator/creator-tutorials-likes', element: <CreatorLikesTuto /> },
                         { path: '/creator/category', element: <CreatorCategory /> },
                         { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
+                        { path: '/creator/update-tutorial/:id', element: <UpdateTutorials /> },
+
 
 
 

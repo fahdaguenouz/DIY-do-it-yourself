@@ -40,7 +40,7 @@ Route::get('/get-tutorials', [TutorialController::class, 'index']);
 Route::apiResources([
     'add-user' => UserController::class ,
     'add-tutorial' => TutorialController::class ,
-
+    'add-category' =>CategoryController::class,
 ]);
 
 

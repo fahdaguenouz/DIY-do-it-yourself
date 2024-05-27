@@ -53,8 +53,40 @@ const UserApi = {
         });
 },
 
+
+addCategory : async (formData) => {
+  
+  return  await axiosClient.post(`/add-category`, formData, {
+      headers: {
+          
+          'Content-Type': 'multipart/form-data',
+      },
+  });
+},
+
+updateTutorial : async (tutorialId,formData) => {
+  
+  return  await axiosClient.put(`/update-tutorial/${tutorialId}`, formData, {
+      headers: {
+          
+          'Content-Type': 'multipart/form-data',
+      },
+  });
+},
+
+
+
+
+
+
+
   updateUser: async (userId, userData) => {
-    return axiosClient.put(`/users/update-user/${userId}`, userData);
+    return axiosClient.put(`/users/update-user/${userId}`, userData,{
+      headers: {
+          
+          'Content-Type': 'multipart/form-data',
+      },
+  });
   },
 }
 export default UserApi;

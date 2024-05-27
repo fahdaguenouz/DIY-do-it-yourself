@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Box, Typography, Card, CardMedia, CardContent, CircularProgress, Grid, Rating, TextField, Button } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTutorials } from '@/Redux/authActions';
 
 const TutorialDetails = () => {
     const dispatch=useDispatch()
+    const navigate=useNavigate()
     
     useEffect(()=>{
         dispatch(getTutorials())
@@ -16,7 +17,9 @@ const TutorialDetails = () => {
     const { id } = useParams();
 
     const tutorial = tutorials.find(t => t.id === parseInt(id));
-
+    const handleUpdate = () => {
+        navigate(`/creator/update-tutorial/${id}`);
+    };
     if (!tutorial) {
         return <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
         <CircularProgress />
@@ -29,6 +32,9 @@ const TutorialDetails = () => {
                 <Grid item xs={12}>
                     <Typography variant="h4" align="center">{tutorial.titre}</Typography>
                 </Grid>
+                <Button variant="contained" color="primary" onClick={handleUpdate}>
+                        Update
+                    </Button>
                 <Grid item xs={8}>
                     <Box display="flex" justifyContent="flex-start">
                         <CardMedia
