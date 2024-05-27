@@ -5,26 +5,70 @@ import { online } from "@/dummydata";
 import { useDispatch, useSelector } from "react-redux";
 import { AddCategory, getCategory } from "@/Redux/authActions";
 
-const CreatorCategory = () => {
- 
+const AdminCategory = () => {
+  const [open, setOpen] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [description, setDescription] = useState("");
+  const [picture, setPicture] = useState(null);
+  const [preview, setPreview] = useState(null);
   const dispatch = useDispatch();
   const { loading } = useSelector(state => state.auth);
 
- 
+  const handleAjouter = () => {
+    setOpen(true);
+  };
 
-  
+  const handleClose = () => {
+    setOpen(false);
+    setCategoryName("");
+    setDescription("");
+    setPicture(null);
+    setPreview(null);
+  };
 
-  
+  const handleSave = () => {
+    const formData = new FormData();
+    formData.append('name', categoryName);
+    formData.append('description', description);
+    if (picture) {
+      formData.append('Category_picture', picture);
+    }
+
+    dispatch(AddCategory(formData))
+      .then(() => {
+        setOpen(false);
+        setCategoryName("");
+        setDescription("");
+        setPicture(null);
+        setPreview(null);
+        dispatch(getCategory());
+      })
+      .catch((error) => {
+        console.error('Error creating category:', error);
+      });
+  };
+
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPicture(file);
+      setPreview(URL.createObjectURL(file));
+    } else {
+      setPicture(null);
+      setPreview(null);
+    }
+  };
 
   return (
     <>
-      
+      <Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
+        <Button variant="outlined" color="primary" onClick={handleAjouter}>
+          Ajouter
+        </Button>
+      </Box>
       <Box sx={{ textAlign: 'center', py: 2 }}>
         <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} color='primary'>
-          Categories
-        </Typography>
-        <Typography variant="h5" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} color='primary'>
-          Choose Category to conttinue
+          Category Management
         </Typography>
         <Box sx={{ textAlign: 'center', mt: 4 }}>
           <Grid container spacing={3}>
@@ -100,9 +144,44 @@ const CreatorCategory = () => {
         </Box>
       </Box>
 
-      
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Category</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Category Name"
+            fullWidth
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            fullWidth
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <Button variant="outlined" component="label" sx={{ mt: 2 }}>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePictureChange}
+            />
+            {preview && <img src={preview} alt="Preview" style={{ maxWidth: "100px", marginTop: "10px" }} />}
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSave} color="primary" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
 
-export default CreatorCategory;
+export default AdminCategory;

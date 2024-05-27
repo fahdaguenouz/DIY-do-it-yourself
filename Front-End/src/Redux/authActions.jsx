@@ -237,10 +237,10 @@ export const logout = () => async dispatch => {
   };
 
 
-  export const AddTutorial = (UserData,onSuccess) => async dispatch  => { 
+  export const AddTutorial = (TutoData,onSuccess) => async dispatch  => { 
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await UserApi.addTutorial(UserData);
+      const response = await UserApi.addTutorial(TutoData);
       // dispatch({
       //   type: 'ADD_USERE',
       //   payload: response.data
@@ -260,3 +260,45 @@ export const logout = () => async dispatch => {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
   }
+
+
+  export const AddCategory = (CategoryData,onSuccess) => async dispatch  => { 
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.addCategory(CategoryData);
+      // dispatch({
+      //   type: 'ADD_USERE',
+      //   payload: response.data
+      // });
+      toast.success('Category added successfully!');
+      if (onSuccess) {
+          onSuccess(); 
+          
+            // dispatch(getUsers());
+           // Reset form on success
+      }
+      
+    } catch (error) {
+      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+      console.error("Error fetching ADDING CATEGORY :", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }
+
+  export const updateTutorial = (TutoId, TutoData, onSuccess) => async dispatch => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await UserApi.updateTutorial(TutoId, TutoData);
+      toast.success('Tutorial updated successfully!');
+      if (onSuccess) {
+          onSuccess();
+          dispatch(getTutorials()); // Fetch updated list of users
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+      console.error("Error updating Tutorial:", error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  };

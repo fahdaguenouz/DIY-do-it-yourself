@@ -4,8 +4,13 @@ import { Box, Card, CardContent, CardMedia, Typography, Button, Stack, Avatar, C
 import React from 'react';
 
 import { coursesCard } from '@/dummydata';
+import { useNavigate } from 'react-router-dom';
 
 const CoursesCard = () => {
+    const navigate=useNavigate()
+    const handleButtonClick = () => {
+        navigate('/login');
+      };
   return (
     <>
       <Grid container spacing={3} sx={{ padding: '0 50px' }}>
@@ -56,6 +61,7 @@ const CoursesCard = () => {
                             </Box>
                             <Button 
                       variant="outlined"
+                      onClick={handleButtonClick}
                       sx={{
                         '&:hover': {
                           backgroundColor: '#039ee3',

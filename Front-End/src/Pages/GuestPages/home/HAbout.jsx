@@ -1,10 +1,17 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Box, Card, CardContent, CardMedia, Typography, Grid, Avatar, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import OnlineCourses from "../allcourses/OnlineCourses";
 import Heading from "../common/heading/Heading";
 import { coursesCard } from "@/dummydata";
 
 const HAbout = () => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/login');
+  };
+
   return (
     <>
       <section className='homeAbout'>
@@ -44,8 +51,9 @@ const HAbout = () => {
                     <Box sx={{ backgroundColor: '#f8f8f8', padding: 1, margin: '30px 0' }}>
                       <Typography variant="h6" color="primary">{val.priceAll}</Typography>
                     </Box>
-                    <Button 
+                    <Button
                       variant="outlined"
+                      onClick={handleButtonClick}
                       sx={{
                         '&:hover': {
                           backgroundColor: '#039ee3',
