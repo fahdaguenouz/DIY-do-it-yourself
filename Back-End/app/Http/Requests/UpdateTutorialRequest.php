@@ -22,15 +22,15 @@ class UpdateTutorialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre' => 'sometimes|string|max:255',
-            'Sub_Category_id' => 'sometimes|exists:subcategories,id',
-            'user_id' => 'sometimes|exists:users,id',
-            'cover' => 'nullables|image',
-            'description' => 'sometimes|string',
-            'media' => 'array',
-            'media.*.file' => 'sometimes|file|mimes:jpeg,png,jpg,gif,svg,mp4,mov,avi,flv|max:20480', // Adjust max size as needed
-            'media.*.description' => 'sometimes|string',
-            'media.*.order' => 'sometimes|integer',
+            'titre' => 'nullable|string|max:255',
+            'Sub_Category_id' => 'nullable|exists:subcategories,id',
+            'user_id' => 'nullable|exists:users,id',
+            'cover' => 'nullable|image',
+            'description' => 'nullable|string',
+            'media' => 'nullable|array',
+            'media.*.file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,mp4,mov,avi,flv|max:20480', // Adjust max size as needed
+            'media.*.description' => 'nullable|string',
+            'media.*.order' => 'nullable|integer',
         ];
     }
 }

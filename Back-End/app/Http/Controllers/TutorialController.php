@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTutorialRequest;
+use App\Http\Requests\UpdateTutorialRequest;
 use App\Models\Tutorial;
 use App\Models\TutorialMedia;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class TutorialController extends Controller
     }
 
 
-    
+
     public function store(StoreTutorialRequest $request)
 {
     // Create the tutorial
@@ -48,4 +49,57 @@ class TutorialController extends Controller
 
     return response()->json(['message' => 'Tutorial created successfully'], 201);
 }
+
+public function update(UpdateTutorialRequest $request, $id)
+    {
+        $tutorial = Tutorial::findOrFail($id);
+
+        $dataToUpdate = $request->only([
+            'titre', 'Sub_Category_id', 'user_id', 'description'
+        ]);
+
+        // Remove null values from dataToUpdate
+        $dataToUpdate = array_filter($dataToUpdate, fn($value) => !is_null($value));
+
+        // Check if there is any change
+        if (empty($dataToUpdate) && !$request->hasFile('cover') && empty($request->media)) {
+            return response()->json(['message' => 'Nothing to update'], 200);
+        }
+
+        // Update tutorial attributes
+        $tutorial->update($dataToUpdate);
+
+        // Handle cover image update
+        if ($request->hasFile('cover')) {
+            // Delete old cover image if exists
+            if ($tutorial->cover) {
+                Storage::disk('public')->delete($tutorial->cover);
+            }
+            $tutorial->cover = $request->file('cover')->store('covers', 'public');
+            $tutorial->save();
+        }
+
+        // Handle media update
+        if ($request->media) {
+            foreach ($request->media as $mediaItem) {
+                if (isset($mediaItem['file'])) {
+                    $filePath = $mediaItem['file']->store('media', 'public');
+                    TutorialMedia::updateOrCreate(
+                        ['tutorial_id' => $tutorial->id, 'order' => $mediaItem['order']],
+                        [
+                            'media_type' => $mediaItem['file']->getClientOriginalExtension() == 'mp4' ? 'video' : 'photo',
+                            'media_url' => $filePath,
+                            'description' => $mediaItem['description']
+                        ]
+                    );
+                } elseif (isset($mediaItem['description'])) {
+                    TutorialMedia::where('tutorial_id', $tutorial->id)
+                        ->where('order', $mediaItem['order'])
+                        ->update(['description' => $mediaItem['description']]);
+                }
+            }
+        }
+
+        return response()->json(['message' => 'Tutorial updated successfully'], 200);
+    }
 }

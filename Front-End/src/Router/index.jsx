@@ -148,6 +148,8 @@ const DynamicRouter = () => {
                         { path: '/creator/category', element: <CreatorCategory /> },
                         { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
                         { path: '/creator/update-tutorial/:id', element: <UpdateTutorials /> },
+                        { path: '/creator/category', element: <CreatorCategory /> },
+
 
 
 

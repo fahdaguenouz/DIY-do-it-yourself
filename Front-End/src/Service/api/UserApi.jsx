@@ -66,7 +66,7 @@ addCategory : async (formData) => {
 
 updateTutorial : async (tutorialId,formData) => {
   
-  return  await axiosClient.put(`/update-tutorial/${tutorialId}`, formData, {
+  return  await axiosClient.put(`/tutorials/update-tutorial/${tutorialId}`, formData, {
       headers: {
           
           'Content-Type': 'multipart/form-data',

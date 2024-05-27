@@ -46,6 +46,8 @@ Route::apiResources([
 
 
 Route::put('/users/update-user/{user}', [UserController::class, 'update']);
+Route::put('/tutorials/update-tutorial/{tutorialId}', [TutorialController::class, 'update']);
+
 
 
 

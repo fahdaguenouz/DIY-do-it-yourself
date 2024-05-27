@@ -7,27 +7,34 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTutorials, updateTutorial } from '@/Redux/authActions';
+import toast from 'react-hot-toast';
 
-const UpdateTutorials = () => {
+const UpdateTutorial = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { baseUrl,tutorials, user, categories, loading } = useSelector(state => state.auth);
+    const { baseUrl, tutorials, categories, loading } = useSelector(state => state.auth);
 
     const tutorial = tutorials.find(t => t.id === parseInt(id));
-    console.log(tutorial);
-    const [cover, setCover] = useState(tutorial?.cover || null);
-    const [coverPreview, setCoverPreview] = useState(tutorial ? `${baseUrl}storage/${tutorial.cover}` : null);
-    const [media, setMedia] = useState(tutorial?.media || [{ file: null, description: '', preview: null }]);
+    
+    const [titre, setTitre] = useState(tutorial?.titre || '');
     const [selectedCategory, setSelectedCategory] = useState(tutorial?.sub_category?.category_id || '');
-    const [selectedSubcategory, setSelectedSubcategory] = useState(tutorial?.sub_category?.id || '');
-    const [titre, settitre] = useState(tutorial?.titre || '');
+    const [selectedSubcategory, setSelectedSubcategory] = useState(tutorial?.sub_category_id || '');
     const [description, setDescription] = useState(tutorial?.description || '');
+    const [cover, setCover] = useState(null);
+    const [coverPreview, setCoverPreview] = useState(tutorial ? `${baseUrl}storage/${tutorial.cover}` : null);
+    const [media, setMedia] = useState(tutorial?.media.map(m => ({
+        file: null,
+        description: m.description,
+        preview: `${baseUrl}storage/${m.media_url}`
+    })) || []);
     const [filteredSubcategories, setFilteredSubcategories] = useState([]);
 
     useEffect(() => {
-        dispatch(getTutorials());
-    }, [dispatch]);
+        if (!tutorial) {
+            dispatch(getTutorials());
+        }
+    }, [dispatch, tutorial]);
 
     useEffect(() => {
         if (selectedCategory) {
@@ -71,38 +78,48 @@ const UpdateTutorials = () => {
         setMedia([...media, { file: null, description: '', preview: null }]);
     };
 
+    const handleBack = () => {
+        navigate('/creator/gestion-tutorials');
+    };
+
     const handleRemoveMedia = (index) => {
         const newMedia = media.filter((_, i) => i !== index);
         setMedia(newMedia);
     };
 
-    const handleBack = () => {
-        navigate('/creator/gestion-tutorials');
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (titre === tutorial.titre && selectedSubcategory === tutorial.sub_category_id && description === tutorial.description && cover === null && JSON.stringify(media) === JSON.stringify(tutorial.media.map(m => ({
+            file: null,
+            description: m.description,
+            preview: `${baseUrl}storage/${m.media_url}`
+        })))) {
+            toast.error("Nothing to update");
+            return;
+        }
+        
         const formData = new FormData();
         formData.append('titre', titre);
         formData.append('Sub_Category_id', selectedSubcategory);
-        formData.append('user_id', user.id);
+        formData.append('user_id', tutorial.user.id);
         formData.append('description', description);
-
-        if (cover && cover !== tutorial.cover) {
+    
+        if (cover) {
             formData.append('cover', cover);
         }
-
+    
         media.forEach((m, index) => {
-            if (m.file && m.file !== tutorial.media[index]?.file) {
+            if (m.file) {
                 formData.append(`media[${index}][file]`, m.file);
                 formData.append(`media[${index}][description]`, m.description);
                 formData.append(`media[${index}][order]`, index);
             }
         });
-
+    
         dispatch(updateTutorial(id, formData))
             .then(() => {
-                navigate('/creator/gestion-tutorials');
+                dispatch(getTutorials())
+                navigate(`/creator/gestion-tutorials`);
             })
             .catch((error) => {
                 console.error('Error updating tutorial:', error);
@@ -133,7 +150,7 @@ const UpdateTutorials = () => {
                     <TextField
                         label="Titre"
                         value={titre}
-                        onChange={(e) => settitre(e.target.value)}
+                        onChange={(e) => setTitre(e.target.value)}
                         fullWidth
                         margin="normal"
                     />
@@ -189,11 +206,11 @@ const UpdateTutorials = () => {
                             />
                             {m.preview && (
                                 <Box mt={1}>
-                                    {m.file && m.file.type.startsWith('image') ? (
+                                    {m.file && m.file.media_type.startsWith('photo') ? (
                                         <img src={m.preview} alt={`Preview ${index}`} style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }} />
                                     ) : (
                                         <video controls style={{ width: '100%', maxHeight: '300px' }}>
-                                            <source src={m.preview} type={m.file.type} />
+                                            <source src={m.preview} type="video/mp4" />
                                             Your browser does not support the video tag.
                                         </video>
                                     )}
@@ -224,4 +241,4 @@ const UpdateTutorials = () => {
     );
 };
 
-export default UpdateTutorials;
+export default UpdateTutorial;
