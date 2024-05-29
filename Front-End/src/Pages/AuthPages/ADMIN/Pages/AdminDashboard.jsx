@@ -1,13 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
-import AnalyticEcommerce from './AnalyticEcommerce';
+import { Bar, Pie } from 'react-chartjs-2';
 import { getTutorials, getUsers } from '@/Redux/authActions';
+import AnalyticEcommerce from './AnalyticEcommerce';
+import Chart from 'chart.js/auto';
+
+const prepareBarChartData = (categories, tutorials) => {
+    const categoryData = categories.map(category => {
+        const subcategories = category.subcategories.map(subcategory => {
+            const tutorialCount = tutorials.filter(tutorial => tutorial.Sub_Categorie_id === subcategory.id).length;
+            return { name: subcategory.name, count: tutorialCount };
+        });
+        return { name: category.name, subcategories };
+    });
+
+    return {
+        labels: categoryData.flatMap(category => category.subcategories.map(sub => `${category.name} - ${sub.name}`)),
+        datasets: [{
+            label: 'Number of Tutorials',
+            data: categoryData.flatMap(category => category.subcategories.map(sub => sub.count)),
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+};
+
+const preparePieChartData = (tutorials) => {
+    const tutorialCreators = tutorials.reduce((acc, tutorial) => {
+        const creatorId = tutorial.user.id;
+        if (!acc[creatorId]) {
+            acc[creatorId] = { ...tutorial.user, tutorialCount: 0 };
+        }
+        acc[creatorId].tutorialCount++;
+        return acc;
+    }, {});
+
+    const topCreators = Object.values(tutorialCreators).sort((a, b) => b.tutorialCount - a.tutorialCount);
+
+    return {
+        labels: topCreators.map(creator => `${creator.nom} ${creator.prenom}`),
+        datasets: [{
+            data: topCreators.map(creator => creator.tutorialCount),
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+        }]
+    };
+};
 
 const AdminDashboard = () => {
-    const { baseUrl, users, tutorials,categories ,user, loading } = useSelector(state => state.auth);
+    const { baseUrl, users, tutorials, categories, user, loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    console.log(categories);
+
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getUsers());
@@ -31,16 +76,8 @@ const AdminDashboard = () => {
         </Box>;
     }
 
-    const tutorialCreators = tutorials.reduce((acc, tutorial) => {
-        const creatorId = tutorial.user.id;
-        if (!acc[creatorId]) {
-            acc[creatorId] = { ...tutorial.user, tutorialCount: 0 };
-        }
-        acc[creatorId].tutorialCount++;
-        return acc;
-    }, {});
-
-    const topCreators = Object.values(tutorialCreators).sort((a, b) => b.tutorialCount - a.tutorialCount);
+    const barChartData = prepareBarChartData(categories, tutorials);
+    const pieChartData = preparePieChartData(tutorials);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -58,6 +95,16 @@ const AdminDashboard = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <AnalyticEcommerce title="Total Blogs" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+                <Typography variant="h6">Tutorials by Category and Subcategory</Typography>
+                <Bar data={barChartData} />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+                <Typography variant="h6">Top Creators</Typography>
+                <Pie data={pieChartData} />
             </Grid>
 
             <Grid item xs={12}>
@@ -109,7 +156,7 @@ const AdminDashboard = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {topCreators.slice(creatorsPage * rowsPerPage, creatorsPage * rowsPerPage + rowsPerPage).map((creator) => (
+                                    {Object.values(tutorialCreators).slice(creatorsPage * rowsPerPage, creatorsPage * rowsPerPage + rowsPerPage).map((creator) => (
                                         <TableRow key={creator.id}>
                                             <TableCell>{creator.id}</TableCell>
                                             <TableCell>{creator.nom} {creator.prenom}</TableCell>
@@ -123,7 +170,7 @@ const AdminDashboard = () => {
                         <TablePagination
                             rowsPerPageOptions={[5]}
                             component="div"
-                            count={topCreators.length}
+                            count={Object.values(tutorialCreators).length}
                             rowsPerPage={rowsPerPage}
                             page={creatorsPage}
                             onPageChange={handleCreatorsPageChange}
