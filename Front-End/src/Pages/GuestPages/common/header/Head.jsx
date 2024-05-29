@@ -16,10 +16,10 @@ const Head = () => {
           <div className='social'>
             
             <i><TranslationWidget/></i>
-            <i className='fab fa-facebook-f icon'></i>
-            <i className='fab fa-instagram icon'></i>
-            <i className='fab fa-twitter icon'></i>
-            <i className='fab fa-youtube icon'></i>
+            <i className='fab fa-facebook-f iconn'></i>
+            <i className='fab fa-instagram iconn'></i>
+            <i className='fab fa-twitter iconn'></i>
+            <i className='fab fa-youtube iconn'></i>
           </div>
         </div>
       </section>

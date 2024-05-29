@@ -1,7 +1,12 @@
 import React from "react"
 import { price } from "@/dummydata"
+import { useNavigate } from "react-router-dom";
 
 const PriceCard = () => {
+  const navigate=useNavigate()
+  const handleButtonClick = () => {
+    navigate('/login');
+  };
   return (
     <>
       {price.map((val,index) => (
@@ -12,7 +17,7 @@ const PriceCard = () => {
             {val.price}
           </h1>
           <p>{val.desc}</p>
-          <button className='outline-btn'>GET STARTED</button>
+          <button className='outline-btn' onClick={handleButtonClick}>GET STARTED</button>
         </div>
       ))}
     </>

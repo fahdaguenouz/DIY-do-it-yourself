@@ -23,6 +23,9 @@ class RegisteredUserController extends Controller
     public function store(RegisterRequest $request)
     {
         try {
+            // Set the default image path
+            $defaultImagePath = 'storage/profile_pictures/default.png';
+
             $user = User::create([
                 'nom' => $request->nom,
                 'prenom' => $request->prenom,
@@ -31,6 +34,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'role_id' => $request->role_id,
                 'level_id' => $request->level_id,
+                'profile_picture' => $defaultImagePath, // Assign the default profile picture
             ]);
 
             event(new Registered($user));
@@ -47,7 +51,7 @@ class RegisteredUserController extends Controller
                 'token' => $token
             ], 200);
 
-            
+
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

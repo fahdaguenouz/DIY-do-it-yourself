@@ -13,9 +13,9 @@ return new class extends Migration {
         Schema::create('tutorials', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
-            $table->unsignedBigInteger('categorie_id');
+            $table->unsignedBigInteger('Sub_Categorie_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('media');
+            $table->string('cover')->nullable();
             $table->text('description');
             $table->timestamps();
         });

@@ -6,14 +6,16 @@ export const axiosClient = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
     },
 
 })
 
 axiosClient.interceptors.request.use(function (config) {
     const token = localStorage.getItem('token');
+    console.log("Sending Token: ", token);
     if (token) {
-        config.headers.Authorization = 'Bearer ' + token;
+        config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
 });

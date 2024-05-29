@@ -4,29 +4,54 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import GuestLayout from "../Layouts/GuestLayouts/GuestLayout";
-import UserLayout from "../Layouts/UsersLayouts/UserLayout";
+// import UserLayout from "../Layouts/UsersLayouts/UserLayout";
 // import AboutUs from "../Pages/AboutUs";
 
 import LoginLayouts from "../Layouts/GuestLayouts/LoginLayouts";
-import Login from "../Pages/Login/Login";
-import AuthHome from './../Pages/AuthPages/AuthHome/AuthHome';
-import Contact from './../Pages/GuestPages/contact/Contact';
-import Blog from './../Pages/GuestPages/blog/Blog';
-import Pricing from './../Pages/GuestPages/pricing/Pricing';
-import Team from './../Pages/GuestPages/team/Team';
-import CourseHome from './../Pages/GuestPages/allcourses/CourseHome';
-import About from './../Pages/GuestPages/about/About';
+// import Login from "../Pages/Login/Login";
+// import AuthHome from './../Pages/AuthPages/AuthHome/AuthHome';
+// import Contact from './../Pages/GuestPages/contact/Contact';
+// import Blog from './../Pages/GuestPages/blog/Blog';
+// import Pricing from './../Pages/GuestPages/pricing/Pricing';
+// import Team from './../Pages/GuestPages/team/Team';
+// import CourseHome from './../Pages/GuestPages/allcourses/CourseHome';
+// import About from './../Pages/GuestPages/about/About';
 import Home from './../Pages/GuestPages/home/Home';
 import AuthAdmin from "@/Pages/AuthPages/AuthHome/AuthAdmin";
-import { Usercontext } from "@/Context/AuthProvider";
+// import { Usercontext } from "@/Context/AuthProvider";
 import AdminLayout from "@/Layouts/UsersLayouts/AdminLayout";
 import ModeratorLayout from "@/Layouts/UsersLayouts/ModeratorLayout";
 import CreatorLayout from "@/Layouts/UsersLayouts/CreatorLayout";
 import StandarLayout from "@/Layouts/UsersLayouts/StandarLayout";
 import NotFoundPage from "@/Pages/GuestPages/NotFound/NotFoundPage";
 import { useDispatch, useSelector } from "react-redux";
-import Dashboard from "@/Pages/AuthPages/ADMIN/Pages/Dashboard";
 import GestUsers from "@/Pages/AuthPages/ADMIN/Pages/GestUsers";
+import Login from "@/Pages/authentication/login";
+import Register from "@/Pages/authentication/register";
+import AjouterUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/AjouterUser";
+import UpdateUser from "@/Pages/AuthPages/ADMIN/Pages/Forms/UpdateUser";
+import About from "@/Pages/GuestPages/about/About";
+import CourseHome from "@/Pages/GuestPages/allcourses/CourseHome";
+import Team from "@/Pages/GuestPages/team/Team";
+import Pricing from "@/Pages/GuestPages/pricing/Pricing";
+import Blog from "@/Pages/GuestPages/blog/Blog";
+import Contact from "@/Pages/GuestPages/contact/Contact";
+import Tutorials from "@/Pages/AuthPages/CREATOR/Pages/Tutorials";
+import AjouterTutorial from "@/Pages/AuthPages/CREATOR/Pages/Forms/AjouterTutorial";
+// import AuthLogin from "@/Pages/authentication/login";
+// import Register from './../Pages/authentication/register';
+import AdminDashboard from "@/Pages/AuthPages/ADMIN/Pages/AdminDashboard";
+import CreatorDashboard from "../Pages/AuthPages/CREATOR/Pages/CreatorDashboard";
+import CreatorAnalytics from "@/Pages/AuthPages/CREATOR/Pages/CreatorAnalytics";
+import CreatorLikesTuto from "@/Pages/AuthPages/CREATOR/Pages/CreatorLikesTuto";
+import CreatorCategory from "@/Pages/AuthPages/CREATOR/Pages/CreatorCategory";
+import TutorialDetails from "@/Pages/AuthPages/CREATOR/Pages/TutorialDetails";
+import AdminProfile from "@/Pages/AuthPages/ADMIN/Pages/AdminProfile";
+import AdminCategory from "@/Pages/AuthPages/ADMIN/Pages/AdminCategory";
+import AdminEdit from "@/Pages/AuthPages/ADMIN/Pages/AdminEdit";
+import GestAdminCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminCategory";
+import UpdateTutorials from "@/Pages/AuthPages/CREATOR/Pages/Forms/UpdateTutorials";
+import GestAdminSubCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminSubCategory";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -34,7 +59,7 @@ const DynamicRouter = () => {
     //   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-
+    const [router, setRouter] = useState(null);
     useEffect(() => {
         const checkUser = async () => {
             const fetchedUser = JSON.parse(localStorage.getItem('user'));
@@ -58,12 +83,45 @@ const DynamicRouter = () => {
                     children: [
                         {
                             path: '/admin',
-                            element: <Dashboard />
+                            element: <AdminDashboard />
+                        },
+                        {
+                            path: '/admin/dashboard',
+                            element: <AdminDashboard />
                         },
                         {
                             path: '/admin/gestion-users',
                             element: <GestUsers />
                         },
+                        {
+                            path: '/admin/gestion-users/ajouter-user',
+                            element: <AjouterUser />
+                        },
+                        {
+                            path: '/admin/gestion-users/update-user/:userId',
+                            element: <UpdateUser />
+                        },
+                        {
+                            path: '/admin/admin-profile',
+                            element: <AdminProfile />
+                        },
+                        {
+                            path: '/admin/gestion-category',
+                            element: <AdminCategory />
+                        },
+                        {
+                            path: '/admin/edit-profile',
+                            element: <AdminEdit />
+                        },
+                        {
+                            path: '/admin/gestion-sub-category',
+                            element: <GestAdminCategory />
+                        },
+                        {
+                            path: '/admin/gestion-sub-category/:id',
+                            element: <GestAdminSubCategory />
+                        },
+                       
                         // Other admin-specific routes
                     ]
                 };
@@ -79,7 +137,27 @@ const DynamicRouter = () => {
                 return {
                     element: <CreatorLayout />,
                     children: [
-                        { path: '/creator', element: <AuthAdmin /> }
+                        { path: '/creator', element: <CreatorDashboard /> },
+                        {
+                            path: '/creator/dashboard',
+                            element: <CreatorDashboard />
+                        },
+                        { path: '/creator/gestion-tutorials', element: <Tutorials /> },
+                        { path: '/creator/add-tutorial', element: <AjouterTutorial /> },
+                        { path: '/creator/creator-analytics', element: <CreatorAnalytics /> },
+                        { path: '/creator/creator-tutorials-likes', element: <CreatorLikesTuto /> },
+                        { path: '/creator/category', element: <CreatorCategory /> },
+                        { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
+                        { path: '/creator/update-tutorial/:id', element: <UpdateTutorials /> },
+                        { path: '/creator/category', element: <CreatorCategory /> },
+
+
+
+
+
+
+
+
                         // Other creator-specific routes
                     ]
                 };
@@ -96,6 +174,30 @@ const DynamicRouter = () => {
                     element: <GuestLayout />,
                     children: [
                         { path: '/', element: <Home /> },
+                        {
+                            path: '/about',
+                            element: <About />
+                        },
+                        {
+                            path: '/tutorials',
+                            element: <CourseHome />
+                        },
+                        {
+                            path: '/team',
+                            element: <Team />
+                        },
+                        {
+                            path: '/pricing',
+                            element: <Pricing />
+                        },
+                        {
+                            path: '/blog',
+                            element: <Blog />
+                        },
+                        {
+                            path: '/contact',
+                            element: <Contact />
+                        },
                         // Other guest accessible routes
                     ]
                 };
@@ -180,14 +282,61 @@ const DynamicRouter = () => {
     //   ]);
     // },[user]);
     const routes = useMemo(() => [
-        user ? getRoleBasedRoutes(user.role_id) : { path: '/', element: <GuestLayout />, children: [{ path: '/', element: <Home /> }] },
-        { path: '/login', element: <LoginLayouts />, children: [{ path: '', element: <Login /> }] },
+        user ? getRoleBasedRoutes(user.role_id) : {
+            path: '/',
+            element: <GuestLayout />,
+            children: [
+                { path: '/', element: <Home /> },
+                {
+                    path: '/about',
+                    element: <About />
+                },
+                {
+                    path: '/tutorials',
+                    element: <CourseHome />
+                },
+                {
+                    path: '/team',
+                    element: <Team />
+                },
+                {
+                    path: '/pricing',
+                    element: <Pricing />
+                },
+                {
+                    path: '/blog',
+                    element: <Blog />
+                },
+                {
+                    path: '/contact',
+                    element: <Contact />
+                },
+            ]
+        },
+        {
+            path: '/login',
+            element: <LoginLayouts />,
+            children: [
+                { path: '', element: <Login /> }
+            ]
+        },
+        {
+            path: '/register',
+            element: <LoginLayouts />,
+            children: [
+                { path: '', element: <Register /> }
+            ]
+        },
         { path: '*', element: <NotFoundPage /> }
     ], [user]);
+    useEffect(() => {
+        // Recreate the router every time routes change
+        setRouter(createBrowserRouter(routes));
+    }, [routes]);
+    // const router = useMemo(() => createBrowserRouter(routes), [routes]);
 
-    const router = useMemo(() => createBrowserRouter(routes), [routes]);
-
-    return <RouterProvider router={router} />;
+    // return <RouterProvider router={router} />;
+    return router ? <RouterProvider router={router} /> : null;
 }
 
 

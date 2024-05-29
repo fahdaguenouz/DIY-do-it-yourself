@@ -9,10 +9,10 @@ const TeamCard = () => {
           <div className='img'>
             <img src={val.cover} alt='' />
             <div className='overlay'>
-              <i className='fab fa-facebook-f icon'></i>
-              <i className='fab fa-twitter icon'></i>
-              <i className='fab fa-instagram icon'></i>
-              <i className='fab fa-tiktok icon'></i>
+              <i className='fab fa-facebook-f iconn'></i>
+              <i className='fab fa-twitter iconn'></i>
+              <i className='fab fa-instagram iconn'></i>
+              <i className='fab fa-tiktok iconn'></i>
             </div>
           </div>
           <div className='details'>

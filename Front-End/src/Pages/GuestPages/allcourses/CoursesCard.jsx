@@ -1,53 +1,80 @@
-import './courses.css';
+// import './courses.css';
+import { Box, Card, CardContent, CardMedia, Typography, Button, Stack, Avatar, Chip, Grid } from '@mui/material';
 
 import React from 'react';
 
-import { coursesCard } from './../../../dummydata';
+import { coursesCard } from '@/dummydata';
+import { useNavigate } from 'react-router-dom';
 
 const CoursesCard = () => {
+    const navigate=useNavigate()
+    const handleButtonClick = () => {
+        navigate('/login');
+      };
   return (
     <>
-      <section className='coursesCard'>
-        <div className='containerr grid2'>
-          {coursesCard.map((val) => (
-      <div className='items'>
-        <div className='content flex'>
-          <div className='img'>
-            <img src={val.cover} alt='' />
-          </div>
-          <div className='text'>
-            <h1>{val.coursesName}</h1>
-            <div className='rate'>
-              <i className='fa fa-star'></i>
-              <i className='fa fa-star'></i>
-              <i className='fa fa-star'></i>
-              <i className='fa fa-star'></i>
-              <i className='fa fa-star'></i>
-              <label htmlFor=''>(5.0)</label>
-            </div>
-            <div className='details'>
-              {val.courTeacher.map((details) => (
-                <div className='box'>
-                  <div className='dimg'>
-                    <img src={details.dcover} alt='' />
-                  </div>
-                  <div className='para'>
-                    <h4>{details.name}</h4>
-                  </div>
-                  <span>{details.totalTime}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className='price'>
-          <h3>{val.priceAll}</h3>
-        </div>
-        <button className='outline-btn'>ENROLL NOW !</button>
-      </div>
-    ))}
-        </div>
-      </section>
+      <Grid container spacing={3} sx={{ padding: '0 50px' }}>
+            {coursesCard.map((val, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Card sx={{
+                        textAlign: 'center',
+                        padding: 3,
+                        backgroundColor: '#fff'
+                    }}>
+                        <CardMedia
+                            component="img"
+                            height="200"
+                            image={val.cover}
+                            alt=""
+                            sx={{ backgroundColor: '#039ee3' }}
+                        />
+                        <CardContent>
+                            <Typography variant="h5" component="div">{val.coursesName}</Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, color: '#039ee3' }}>
+                                {[...Array(5)].map((_, i) => (
+                                    <i key={i} className="fa fa-star" />
+                                ))}
+                                <Typography component="label" sx={{ ml: 0.5 }}>(5.0)</Typography>
+                            </Box>
+                            {val.courTeacher.map((detail, i) => (
+                                <Box key={i} sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    color: 'grey',
+                                    margin: '20px 0'
+                                }}>
+                                    <Avatar src={detail.dcover} alt={detail.name} sx={{
+                                        width: 50,
+                                        height: 50,
+                                        mr: 2
+                                    }} />
+                                    <Typography variant="body1">{detail.name}</Typography>
+                                    <Typography sx={{ color: '#039ee3', fontWeight: '500', fontSize: '14px', ml: 2 }}>{detail.totalTime}</Typography>
+                                </Box>
+                            ))}
+                            <Box sx={{
+                                backgroundColor: '#f8f8f8',
+                                padding: 1,
+                                margin: '30px 0'
+                            }}>
+                                <Typography variant="h6" color="primary">{val.priceAll}</Typography>
+                            </Box>
+                            <Button 
+                      variant="outlined"
+                      onClick={handleButtonClick}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: '#039ee3',
+                          color: '#fff',
+                          borderColor: '#039ee3',
+                        }
+                      }}
+                    >Visit Now!</Button>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            ))}
+        </Grid>
     </>
   )
 }

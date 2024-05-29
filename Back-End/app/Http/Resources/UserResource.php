@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'adresse' => $this->adresse,
             'role_id' => $this->role_id,
             'level_id' => $this->level_id,
+            'profile_picture' => $this->profile_picture ? asset('storage/' . $this->profile_picture) : asset('storage/profile_pictures/default.png'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             // You might want to also include any relationships, like role details

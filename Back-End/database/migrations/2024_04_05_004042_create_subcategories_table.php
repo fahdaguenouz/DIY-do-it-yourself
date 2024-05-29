@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('categorie_id');
             $table->string('name');
             $table->text('description');
+            $table->string('SubCategory_picture')->nullable();
+
             $table->timestamps();
         });
     }
