@@ -15,6 +15,14 @@ const pages = {
   type: 'group',
   children: [
     {
+      id: 'tutorials',
+      title: 'tutorials',
+      type: 'item',
+      url: '/category',
+      icon: icons.HeartOutlined,
+      target: true
+    },
+    {
       id: 'Likes',
       title: 'like',
       type: 'item',

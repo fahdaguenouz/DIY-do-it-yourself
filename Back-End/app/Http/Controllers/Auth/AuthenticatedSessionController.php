@@ -17,18 +17,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request)
-    {
+     public function store(LoginRequest $request)
+     {
         $credentials = $request->only('email', 'password');
 
-        // Find the user by email
-        $user = User::where('email', $credentials['email'])->first();
+        // Attempt to log in the user using the Auth facade
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
 
-        // Check if user exists and password is correct
-        if ($user && Hash::check($credentials['password'], $user->password)) {
             // Generate new token
             $token = $user->createToken('DIY_Token')->plainTextToken;
             $request->session()->regenerate();
+
             return response()->json([
                 'user' => $user,
                 'token' => $token,
@@ -38,6 +38,27 @@ class AuthenticatedSessionController extends Controller
         // If authentication fails, return error response
         return response()->json(['error' => 'The provided credentials do not match our records.'], 401);
     }
+    // public function store(LoginRequest $request)
+    // {
+    //     $credentials = $request->only('email', 'password');
+
+    //     // Find the user by email
+    //     $user = User::where('email', $credentials['email'])->first();
+
+    //     // Check if user exists and password is correct
+    //     if ($user && Hash::check($credentials['password'], $user->password)) {
+    //         // Generate new token
+    //         $token = $user->createToken('DIY_Token')->plainTextToken;
+    //         $request->session()->regenerate();
+    //         return response()->json([
+    //             'user' => $user,
+    //             'token' => $token,
+    //         ]);
+    //     }
+
+    //     // If authentication fails, return error response
+    //     return response()->json(['error' => 'The provided credentials do not match our records.'], 401);
+    // }
 
     /**
      * Destroy an authenticated session.

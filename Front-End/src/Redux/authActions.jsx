@@ -95,7 +95,7 @@ export const logout = () => async dispatch => {
   dispatch({ type: 'SET_LOADING', payload: true });
   try{
     await axiosClient.post('/logout');
-    console.log('Logout successful', response);
+    console.log('Logout successful');
   }catch (error) {
     console.error("Logout error", error);
   }finally{
@@ -289,16 +289,77 @@ export const logout = () => async dispatch => {
   export const updateTutorial = (TutoId, TutoData, onSuccess) => async dispatch => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await UserApi.updateTutorial(TutoId, TutoData);
-      toast.success('Tutorial updated successfully!');
+        const response = await UserApi.updateTutorial(TutoId, TutoData);
+        toast.success('Tutorial updated successfully!');
+        if (onSuccess) {
+            onSuccess();
+            dispatch(getTutorials()); // Fetch updated list of tutorials
+        }
+    } catch (error) {
+        toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+        console.error("Error updating tutorial:", error);
+    } finally {
+        dispatch({ type: 'SET_LOADING', payload: false });
+    }
+};
+
+export const UpdateCategory = (CategId, CategData, onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+      const response = await UserApi.update_Category(CategId, CategData);
+      toast.success('Category updated successfully!');
       if (onSuccess) {
           onSuccess();
-          dispatch(getTutorials()); // Fetch updated list of users
+          dispatch(getCategory()); // Fetch updated list of tutorials
+           // Fetch updated list of tutorials
       }
-    } catch (error) {
+  } catch (error) {
       toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
-      console.error("Error updating Tutorial:", error);
-    } finally {
+      console.error("Error updating category:", error);
+  } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const UpdateSubCategory = (SubCategId, SubCategData, onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+      const response = await UserApi.update_SubCategory(SubCategId, SubCategData);
+      toast.success('SubCategory updated successfully!');
+      if (onSuccess) {
+          onSuccess();
+          dispatch(getCategory());
+           // Fetch updated list of tutorials
+           // Fetch updated list of tutorials
+      }
+  } catch (error) {
+      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+      console.error("Error updating SubCategory:", error);
+  } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const AddSubCategory = (SubCategoryData,onSuccess) => async dispatch  => { 
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.addSubCategory(SubCategoryData);
+    // dispatch({
+    //   type: 'ADD_USERE',
+    //   payload: response.data
+    // });
+    toast.success('SubCategory added successfully!');
+    if (onSuccess) {
+        onSuccess(); 
+        
+         dispatch(getCategory());
+         // Reset form on success
     }
-  };
+    
+  } catch (error) {
+    toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+    console.error("Error fetching ADDING SUBCATEGORY :", error);
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+}

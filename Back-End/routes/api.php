@@ -41,12 +41,18 @@ Route::apiResources([
     'add-user' => UserController::class ,
     'add-tutorial' => TutorialController::class ,
     'add-category' =>CategoryController::class,
+    'add-subcategory' =>SubCategoryController::class,
+
 ]);
 
 
 
 Route::put('/users/update-user/{user}', [UserController::class, 'update']);
 Route::put('/tutorials/update-tutorial/{tutorialId}', [TutorialController::class, 'update']);
+Route::put('/category/update-category/{CategoryId}', [CategoryController::class, 'update']);
+Route::put('/subcategory/update-subcategory/{CategoryId}', [SubCategoryController::class, 'update']);
+
+
 
 
 

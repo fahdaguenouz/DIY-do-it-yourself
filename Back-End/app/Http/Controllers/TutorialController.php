@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTutorialRequest;
 use App\Models\Tutorial;
 use App\Models\TutorialMedia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 class TutorialController extends Controller
 {
@@ -52,54 +53,60 @@ class TutorialController extends Controller
 
 public function update(UpdateTutorialRequest $request, $id)
     {
-        $tutorial = Tutorial::findOrFail($id);
-
-        $dataToUpdate = $request->only([
-            'titre', 'Sub_Category_id', 'user_id', 'description'
-        ]);
-
-        // Remove null values from dataToUpdate
-        $dataToUpdate = array_filter($dataToUpdate, fn($value) => !is_null($value));
-
-        // Check if there is any change
-        if (empty($dataToUpdate) && !$request->hasFile('cover') && empty($request->media)) {
-            return response()->json(['message' => 'Nothing to update'], 200);
+        Log::info($request->all());
+        $tutorial = Tutorial::find($id);
+        if (!$tutorial) {
+            return response()->json(['message' => 'Tutorial not found'], 404);
         }
 
-        // Update tutorial attributes
-        $tutorial->update($dataToUpdate);
+        $tutorial->titre = $request->titre;
+        $tutorial->Sub_Categorie_id = $request->Sub_Categorie_id;
+        $tutorial->description = $request->description;
 
-        // Handle cover image update
         if ($request->hasFile('cover')) {
-            // Delete old cover image if exists
             if ($tutorial->cover) {
-                Storage::disk('public')->delete($tutorial->cover);
+                Storage::delete($tutorial->cover);
             }
-            $tutorial->cover = $request->file('cover')->store('covers', 'public');
-            $tutorial->save();
+            $tutorial->cover = $request->file('cover')->store('covers');
         }
 
-        // Handle media update
-        if ($request->media) {
-            foreach ($request->media as $mediaItem) {
-                if (isset($mediaItem['file'])) {
-                    $filePath = $mediaItem['file']->store('media', 'public');
-                    TutorialMedia::updateOrCreate(
-                        ['tutorial_id' => $tutorial->id, 'order' => $mediaItem['order']],
-                        [
-                            'media_type' => $mediaItem['file']->getClientOriginalExtension() == 'mp4' ? 'video' : 'photo',
-                            'media_url' => $filePath,
-                            'description' => $mediaItem['description']
-                        ]
-                    );
-                } elseif (isset($mediaItem['description'])) {
-                    TutorialMedia::where('tutorial_id', $tutorial->id)
-                        ->where('order', $mediaItem['order'])
-                        ->update(['description' => $mediaItem['description']]);
+        $tutorial->save();
+
+        // Update media
+        $mediaData = collect($request->input('media', []));
+        $existingMedia = $tutorial->media;
+
+        // Remove media that are not present in the request
+        foreach ($existingMedia as $existing) {
+            if (!$mediaData->contains('order', $existing->order)) {
+                Storage::delete($existing->media_url);
+                $existing->delete();
+            }
+        }
+
+        // Update or create media
+        foreach ($mediaData as $media) {
+            $existingMediaItem = $existingMedia->firstWhere('order', $media['order']);
+
+            if ($existingMediaItem) {
+                $existingMediaItem->description = $media['description'];
+                if (isset($media['file'])) {
+                    Storage::delete($existingMediaItem->media_url);
+                    $existingMediaItem->media_url = $media['file']->store('media');
                 }
+                $existingMediaItem->save();
+            } else {
+                $newMedia = new TutorialMedia();
+                $newMedia->tutorial_id = $tutorial->id;
+                $newMedia->description = $media['description'];
+                $newMedia->order = $media['order'];
+                if (isset($media['file'])) {
+                    $newMedia->media_url = $media['file']->store('media');
+                }
+                $newMedia->save();
             }
         }
 
-        return response()->json(['message' => 'Tutorial updated successfully'], 200);
+        return response()->json(['message' => 'Tutorial updated successfully']);
     }
 }

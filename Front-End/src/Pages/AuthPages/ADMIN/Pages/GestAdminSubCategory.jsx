@@ -1,31 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Box, Grid, Typography, Button, Dialog, DialogActions,
   DialogContent, DialogTitle, TextField, CircularProgress
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { AddCategory, UpdateCategory, getCategory } from "@/Redux/authActions";
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AddSubCategory, UpdateSubCategory, getCategory } from "@/Redux/authActions";
 import toast from "react-hot-toast";
 
-const AdminCategory = () => {
+const GestAdminSubCategory = () => {
+  const { id } = useParams();
+  const { categories, baseUrl, loading } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categoryName, setCategoryName] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [subCategoryName, setSubCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [originalValues, setOriginalValues] = useState({});
-  const dispatch = useDispatch();
-  const { loading, categories, baseUrl } = useSelector(state => state.auth);
 
   useEffect(() => {
     dispatch(getCategory());
   }, [dispatch]);
 
+  const category = categories.find(cat => cat.id === parseInt(id));
+
   const handleAjouter = () => {
     setIsEdit(false);
-    setSelectedCategory(null);
+    setSelectedSubCategory(null);
     setOpen(true);
   };
 
@@ -35,11 +38,10 @@ const AdminCategory = () => {
   };
 
   const resetForm = () => {
-    setCategoryName("");
+    setSubCategoryName("");
     setDescription("");
     setPicture(null);
     setPreview(null);
-    setOriginalValues({});
   };
 
   const handleSave = async () => {
@@ -47,62 +49,39 @@ const AdminCategory = () => {
       toast.error("At least one field must be updated.");
       return;
     }
-
+  
     const formData = new FormData();
-    formData.append('name', categoryName);
+    formData.append('name', subCategoryName);
     formData.append('description', description);
+    formData.append('categorie_id', id);
     if (picture) {
-      formData.append('Category_picture', picture);
+      formData.append('SubCategory_picture', picture);
     }
-
+    console.log('Form Data:', Object.fromEntries(formData.entries()));
     try {
       if (isEdit) {
-        if (Object.keys(getChangedFields()).length > 0) {
-          await dispatch(UpdateCategory(selectedCategory.id, formData));
-        } else {
-          toast.error("At least one field must be updated.");
-          return;
-        }
+        await dispatch(UpdateSubCategory(selectedSubCategory.id, formData));
       } else {
-        await dispatch(AddCategory(formData));
+        await dispatch(AddSubCategory(formData));
       }
       setOpen(false);
       resetForm();
       dispatch(getCategory());
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || "Error updating SubCategory");
     }
   };
-
   const hasChanges = () => {
-    if (selectedCategory) {
+    if (selectedSubCategory) {
       return (
-        categoryName !== selectedCategory.name ||
-        description !== selectedCategory.description ||
+        subCategoryName !== selectedSubCategory.name ||
+        description !== selectedSubCategory.description ||
         picture !== null
       );
     }
-    return categoryName || description || picture;
+    return subCategoryName || description || picture;
   };
 
-  const getChangedFields = () => {
-    const changedFields = {};
-    if (selectedCategory) {
-      if (categoryName !== selectedCategory.name) {
-        changedFields.name = categoryName;
-      }
-      if (description !== selectedCategory.description) {
-        changedFields.description = description;
-      }
-      if (picture !== null) {
-        changedFields.Category_picture = picture;
-      }
-    }
-    return changedFields;
-  };
-console.log(
-  categories
-);
   const handlePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -114,49 +93,44 @@ console.log(
     }
   };
 
-  const handleCategoryClick = (category) => {
-    alert(`Category: ${category.name}\nDescription: ${category.description} \n url:${baseUrl}${category.Category_picture} `);
-  };
-
-  const handleEditClick = (category) => {
+  const handleEditClick = (sub) => {
     setIsEdit(true);
-    setSelectedCategory(category);
-    setCategoryName(category.name);
-    setDescription(category.description);
+    setSelectedSubCategory(sub);
+    setSubCategoryName(sub.name);
+    setDescription(sub.description);
     setPicture(null);
-    setPreview(category.Category_picture);
-    setOriginalValues({
-      name: category.name,
-      description: category.description,
-      Category_picture: category.Category_picture
-    });
+    setPreview(sub.SubCategory_picture);
     setOpen(true);
   };
-if (!categories){
-  return(
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
-    </Box>
-  )
-}
+
+  if (!category){
+    return(
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <CircularProgress />
+      </Box>
+    )
+  }
+
   return (
-    <>
+    <Box sx={{ textAlign: 'center', py: 2 }}>
+      <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} color='primary'>
+        Subcategories of {category.name}
+      </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
         <Button variant="outlined" color="primary" onClick={handleAjouter}>
-          Ajouter
+          Add Subcategory
         </Button>
       </Box>
-      <Box sx={{ textAlign: 'center', py: 2 }}>
-        <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} color='primary'>
-          Category Management
-        </Typography>
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Grid container spacing={3}>
-            {categories.map((val) => (
-              
-              <Grid item xs={12} sm={6} md={3} lg={2} key={val.name}>
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Grid container spacing={3}>
+          {category.subcategories.length === 0 ? (
+            <Typography variant="h5" component="h2" sx={{ mt: 4, mx: 'auto' }}>
+              {category.name} has no subcategory
+            </Typography>
+          ) : (
+            category.subcategories.map(sub => (
+              <Grid item xs={12} sm={6} md={3} lg={2} key={sub.id}>
                 <Box
-                  onClick={() => handleCategoryClick(val)}
                   sx={{
                     boxShadow: '0 5px 25px -2px rgb(0 0 0 / 6%)',
                     backgroundColor: '#fff',
@@ -179,15 +153,14 @@ if (!categories){
                   <Box sx={{ position: 'relative', width: 80, height: 80, margin: 'auto' }}>
                     <Box
                       component="img"
-                      src={`${baseUrl}storage/${val.Category_picture}`} 
-                      alt={val.name}
+                      src={`${baseUrl}storage/${sub.SubCategory_picture}`}
+                      alt={sub.name}
                       sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
-                    
                     <Box
                       component="img"
-                      src={`${baseUrl}storage/${val.Category_picture}`} 
-                      alt={val.name}
+                      src={`${baseUrl}storage/${sub.SubCategory_picture}`}
+                      alt={sub.name}
                       className='imgHover'
                       sx={{
                         position: 'absolute',
@@ -202,7 +175,7 @@ if (!categories){
                     />
                   </Box>
                   <Typography variant='h6' sx={{ fontWeight: 500, fontSize: '20px', mt: 2 }}>
-                    {val.name}
+                    {sub.name}
                   </Typography>
                   <Typography
                     variant='subtitle2'
@@ -216,28 +189,28 @@ if (!categories){
                       mt: 1,
                     }}
                   >
-                    {val.description}
+                    {sub.description}
                   </Typography>
-                  <Button onClick={(e) => { e.stopPropagation(); handleEditClick(val); }} sx={{ mt: 1 }}>
+                  <Button onClick={(e) => { e.stopPropagation(); handleEditClick(sub); }} sx={{ mt: 1 }}>
                     Edit
                   </Button>
                 </Box>
               </Grid>
-            ))}
-          </Grid>
-        </Box>
+            ))
+          )}
+        </Grid>
       </Box>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{isEdit ? "Edit Category" : "Add New Category"}</DialogTitle>
+        <DialogTitle>{isEdit ? "Edit Subcategory" : "Add New Subcategory"}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Category Name"
+            label="Subcategory Name"
             fullWidth
-            value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
+            value={subCategoryName}
+            onChange={(e) => setSubCategoryName(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -268,8 +241,8 @@ if (!categories){
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Box>
   );
 };
 
-export default AdminCategory;
+export default GestAdminSubCategory;

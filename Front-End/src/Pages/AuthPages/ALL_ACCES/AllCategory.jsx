@@ -3,7 +3,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const GestAdminCategory = () => {
+const Allcategory = () => {
   const { loading, categories, baseUrl } = useSelector((state) => state.auth);
 
   return (
@@ -19,7 +19,7 @@ const GestAdminCategory = () => {
           <Grid container spacing={3}>
             {categories.map((val) => (
               <Grid item xs={12} sm={6} md={3} lg={2} key={val.name}>
-                <Link to={`/admin/gestion-sub-category/${val.id}`} style={{ textDecoration: 'none' }}>
+                <Link to={`/all/category/subcategory/${val.id}`} style={{ textDecoration: 'none' }}>
                   <Box
                     sx={{
                       boxShadow: '0 5px 25px -2px rgb(0 0 0 / 6%)',
@@ -92,4 +92,4 @@ const GestAdminCategory = () => {
   );
 }
 
-export default GestAdminCategory;
+export default Allcategory;

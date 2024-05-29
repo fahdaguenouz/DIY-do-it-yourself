@@ -50,8 +50,8 @@ import AdminProfile from "@/Pages/AuthPages/ADMIN/Pages/AdminProfile";
 import AdminCategory from "@/Pages/AuthPages/ADMIN/Pages/AdminCategory";
 import AdminEdit from "@/Pages/AuthPages/ADMIN/Pages/AdminEdit";
 import GestAdminCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminCategory";
-import AddCategory from "@/Pages/AuthPages/ADMIN/Pages/Forms/AddCategory";
 import UpdateTutorials from "@/Pages/AuthPages/CREATOR/Pages/Forms/UpdateTutorials";
+import GestAdminSubCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminSubCategory";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -118,9 +118,10 @@ const DynamicRouter = () => {
                             element: <GestAdminCategory />
                         },
                         {
-                            path: '/admin/gestion-category/add-category',
-                            element: <AddCategory />
+                            path: '/admin/gestion-sub-category/:id',
+                            element: <GestAdminSubCategory />
                         },
+                       
                         // Other admin-specific routes
                     ]
                 };

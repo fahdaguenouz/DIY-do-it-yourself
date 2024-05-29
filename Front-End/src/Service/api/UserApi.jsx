@@ -64,9 +64,39 @@ addCategory : async (formData) => {
   });
 },
 
-updateTutorial : async (tutorialId,formData) => {
+updateTutorial: async (tutorialId, formData) => {
+  try {
+    const response = await axiosClient.put(
+      `/tutorials/update-tutorial/${tutorialId}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating tutorial:', error);
+    throw error; // Re-throw the error to be handled by the caller
+  }
+},
+
+update_Category: async (CategoId, formData) => {
+    return  await axiosClient.put(`/category/update-category/${CategoId}`,formData
   
-  return  await axiosClient.put(`/tutorials/update-tutorial/${tutorialId}`, formData, {
+
+    );
+ 
+},
+
+update_SubCategory: async (subCategoryId, formData) => {
+  return await axiosClient.put(`/subcategory/update-subcategory/${subCategoryId}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+},
+
+
+addSubCategory : async (formData) => {
+  
+  return  await axiosClient.post(`/add-subcategory`, formData, {
       headers: {
           
           'Content-Type': 'multipart/form-data',
@@ -78,15 +108,8 @@ updateTutorial : async (tutorialId,formData) => {
 
 
 
-
-
   updateUser: async (userId, userData) => {
-    return axiosClient.put(`/users/update-user/${userId}`, userData,{
-      headers: {
-          
-          'Content-Type': 'multipart/form-data',
-      },
-  });
+    return axiosClient.put(`/users/update-user/${userId}`, userData,)
   },
 }
 export default UserApi;
