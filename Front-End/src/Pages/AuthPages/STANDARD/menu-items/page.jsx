@@ -26,7 +26,7 @@ const pages = {
       id: 'Likes',
       title: 'like',
       type: 'item',
-      url: '/tutorials/mylikes',
+      url: '/standard/tutorials/mylikes',
       icon: icons.HeartOutlined,
       target: true
     },
@@ -34,7 +34,7 @@ const pages = {
       id: 'comments',
       title: 'Comments',
       type: 'item',
-      url: '/register',
+      url: '/standard/tutorials/mycomment',
       icon: icons.ProfileOutlined,
       target: true
     }
