@@ -116,6 +116,9 @@ const GestAdminSubCategory = () => {
       <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} color='primary'>
         Subcategories of {category.name}
       </Typography>
+      <Typography variant="h5" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} >
+        {category.description}
+      </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
         <Button variant="outlined" color="primary" onClick={handleAjouter}>
           Add Subcategory

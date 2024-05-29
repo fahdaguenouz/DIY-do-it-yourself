@@ -1,10 +1,11 @@
 // assets
-import { HeartOutlined, ProfileOutlined } from '@ant-design/icons';
+import { HeartOutlined, ProfileOutlined,BookOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
   HeartOutlined,
-  ProfileOutlined
+  ProfileOutlined,
+  BookOutlined
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
@@ -18,8 +19,8 @@ const pages = {
       id: 'tutorials',
       title: 'tutorials',
       type: 'item',
-      url: '/category',
-      icon: icons.HeartOutlined,
+      url: '/all/category',
+      icon: icons.BookOutlined,
       target: true
     },
     {

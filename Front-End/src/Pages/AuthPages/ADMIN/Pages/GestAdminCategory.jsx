@@ -79,7 +79,7 @@ const GestAdminCategory = () => {
                         mt: 1,
                       }}
                     >
-                      {val.description}
+                      SubCategories : {val.subcategories.length}
                     </Typography>
                   </Box>
                 </Link>

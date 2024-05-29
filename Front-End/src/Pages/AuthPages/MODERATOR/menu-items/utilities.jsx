@@ -28,26 +28,13 @@ const utilities = {
   type: 'group',
   children: [
     {
-      id: 'gestion-users',
-      title: 'Users',
+      id: 'Signals',
+      title: 'Signals',
       type: 'item',
-      url: '/admin/gestion-users',
+      url: '/moderator/signals',
       icon: icons.TeamOutlined
     },
-    {
-      id: 'Category',
-      title: 'Category',
-      type: 'item',
-      url: '/admin/gestion-category',
-      icon: icons.AppstoreAddOutlined
-    },
-    {
-      id: 'SubCategory',
-      title: 'SubCategory',
-      type: 'item',
-      url: '/admin/gestion-sub-category',
-      icon: icons.ClusterOutlined
-    }
+    
   ]
 };
 

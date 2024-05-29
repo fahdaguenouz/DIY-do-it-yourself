@@ -14,10 +14,10 @@ const dashboard = {
   type: 'group',
   children: [
     {
-      id: 'Main',
-      title: 'Main',
+      id: 'dashboard',
+      title: 'Dashboard',
       type: 'item',
-      url: '/moderator/Main',
+      url: '/moderator/dashboard',
       icon: icons.DashboardOutlined,
       breadcrumbs: false
     }

@@ -1,25 +1,25 @@
 import React, { useEffect } from 'react';
-import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid } from '@mui/material';
+import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTutorials } from '@/Redux/authActions';
- 
-const TutorialDetails = () => {
+
+const AllTutorialDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
- 
+
     useEffect(() => {
         dispatch(getTutorials());
     }, [dispatch]);
- 
+
     const { tutorials, baseUrl } = useSelector(state => state.auth);
     const tutorial = tutorials.find(t => t.id === parseInt(id));
- 
+
     const handleUpdate = () => {
         navigate(`/creator/update-tutorial/${id}`);
     };
- 
+
     if (!tutorial) {
         return (
             <Container style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
@@ -27,7 +27,7 @@ const TutorialDetails = () => {
             </Container>
         );
     }
- 
+
     return (
         <Container>
             <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ marginBottom: "20px" }}>
@@ -41,15 +41,11 @@ const TutorialDetails = () => {
                         <img alt={tutorial.titre} src={`${baseUrl}storage/${tutorial.cover}`} style={{ width: "100%", height: "auto", borderRadius: "8px", maxHeight: "300px", objectFit: "cover" }} />
                     </Grid>
                     <Grid item xs={12} md={7} style={{ padding: "20px" }}>
-                        <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+                        <Box sx={{ textAlign: { xs: 'center', md: 'center' } }}>
                             <Typography variant="h5" gutterBottom>Category: {tutorial.sub_category.name}</Typography>
                             <Typography variant="h5" gutterBottom>Subcategory: {tutorial.sub_category.name}</Typography>
                             <Typography variant="body1" gutterBottom>Description: {tutorial.description}</Typography>
-                            <Box display="flex" justifyContent={{ xs: 'center', md: 'center' }} marginTop="20px">
-                                <Button variant="contained" color="primary" onClick={handleUpdate}>
-                                    Update Tutorial
-                                </Button>
-                            </Box>
+        
                         </Box>
                     </Grid>
                 </Grid>
@@ -93,5 +89,5 @@ const TutorialDetails = () => {
         </Container>
     );
 };
- 
-export default TutorialDetails;
+
+export default AllTutorialDetails;

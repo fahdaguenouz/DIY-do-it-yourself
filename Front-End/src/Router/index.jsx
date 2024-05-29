@@ -61,6 +61,8 @@ import ModerateurDashboard from "@/Pages/AuthPages/MODERATOR/Pages/ModerateurDas
 import SignaledTutorials from "@/Pages/AuthPages/MODERATOR/Pages/SignaledTutorials";
 import AdminLikes from "@/Pages/AuthPages/ADMIN/Pages/AdminLikes";
 import AdminComments from "@/Pages/AuthPages/ADMIN/Pages/AdminComments";
+import AllTutorials from "@/Pages/AuthPages/ALL_ACCES/AllTutorials";
+import AllTutorialDetails from "@/Pages/AuthPages/ALL_ACCES/AllTutorialDetails";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -130,10 +132,14 @@ const DynamicRouter = () => {
                             path: '/admin/gestion-sub-category/:id',
                             element: <GestAdminSubCategory />
                         },
-                        { path: '/admin/allcategory', element: <Allcategory /> },
-                        { path: '/admin/category/subcategory', element: <AllSubCategory /> },
+                        { path: 'all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
                         { path: '/admin/tutorials/mylikes', element: <AdminLikes /> },
                         { path: '/admin/tutorials/mycomments', element: <AdminComments /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
 
                         // Other admin-specific routes
                     ]
@@ -145,10 +151,14 @@ const DynamicRouter = () => {
                         { path: '/moderator', element: <ModerateurDashboard /> },
                         { path: '/moderator/dashboard', element: <ModerateurDashboard /> },
                         { path: '/moderator/signals', element: <SignaledTutorials /> },
-                        { path: '/moderator/allcategory', element: <Allcategory /> },
-                        { path: '/moderator/category/subcategory', element: <AllSubCategory /> },
+                        { path: '/all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
                         { path: '/moderator/tutorials/mylikes', element: <AllSubCategory /> },
                         { path: '/moderator/tutorials/mycomments', element: <AllSubCategory /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
 
 
                         // Other moderator-specific routes
@@ -170,8 +180,12 @@ const DynamicRouter = () => {
                         { path: '/creator/category', element: <CreatorCategory /> },
                         { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
                         { path: '/creator/update-tutorial/:id', element: <UpdateTutorials /> },
-                        { path: '/creator/allcategory', element: <Allcategory /> },
-                        { path: '/creator/category/subcategory', element: <AllSubCategory /> },
+                        { path: '/all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
 
 
 
@@ -191,8 +205,12 @@ const DynamicRouter = () => {
                         { path: '/standard/dashboard', element: <StandardDashboard /> },
                         { path: '/standard/tutorials/mylikes', element: <StandardLikes /> },
                         { path: '/standard/tutorials/mycomment', element: <StandardComments /> },
-                        { path: '/standard/category', element: <Allcategory /> },
-                        { path: '/standard/category/subcategory', element: <AllSubCategory /> },
+                        { path: '/all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
 
                         // Other standard user-specific routes
                     ]

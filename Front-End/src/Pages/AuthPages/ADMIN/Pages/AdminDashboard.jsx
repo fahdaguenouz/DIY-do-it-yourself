@@ -4,7 +4,7 @@ import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, T
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import AnalyticEcommerce from './AnalyticEcommerce';
-import { getTutorials, getUsers, getCategories } from '@/Redux/authActions';
+import { getTutorials, getUsers,  getCategory } from '@/Redux/authActions';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -12,11 +12,11 @@ const AdminDashboard = () => {
     const { baseUrl, users, tutorials, categories, user, loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getTutorials());
-        dispatch(getUsers());
-        dispatch(getCategories());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getTutorials());
+    //     dispatch(getUsers());
+    //     dispatch(getCategory());
+    // }, [dispatch]);
 
     const [tutorialsPage, setTutorialsPage] = useState(0);
     const [creatorsPage, setCreatorsPage] = useState(0);
@@ -56,6 +56,9 @@ const AdminDashboard = () => {
         return {
             label: category.name,
             data: subCategoryData,
+            backgroundColor: 'rgba(33, 150, 243, 0.6)', // Primary blue background color
+            borderColor: 'rgba(33, 150, 243, 1)', // Primary blue border color
+            borderWidth: 1,
         };
     });
 

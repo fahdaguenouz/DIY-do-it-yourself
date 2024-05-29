@@ -79,7 +79,7 @@ const Allcategory = () => {
                         mt: 1,
                       }}
                     >
-                      {val.description}
+                      SubCategory : {val.subcategories.length}
                     </Typography>
                   </Box>
                 </Link>

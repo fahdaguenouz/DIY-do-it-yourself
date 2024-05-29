@@ -17,18 +17,16 @@ import { handlerActiveItem, useGetMenuMaster } from '../../../menu';
 export default function NavItem({ item, level }) {
   const theme = useTheme();
 
-const { menuMaster } = useGetMenuMaster();
+  const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster ? menuMaster.isDashboardDrawerOpened : false;
+  const openItem = menuMaster ? menuMaster.openedItem : false;
 
-  const openItem = menuMaster ? menuMaster.openedItem:false;
+  let listItemProps = {
+    component: forwardRef((props, ref) => <Link ref={ref} {...props} to={item.url} target="_self" />)
+  };
 
-  let itemTarget = '_self';
-  if (item.target) {
-    itemTarget = '_blank';
-  }
-  let listItemProps = { component: forwardRef((props, ref) => <Link ref={ref} {...props} to={item.url} target={itemTarget} />) };
   if (item?.external) {
-    listItemProps = { component: 'a', href: item.url, target: itemTarget };
+    listItemProps = { component: 'a', href: item.url, target: '_self' };
   }
 
   const Icon = item.icon;
