@@ -17,11 +17,11 @@ const AdminLayout = () => {
     const { user, authenticated, loading } = useSelector(state => state.auth);
    
 
-    useEffect(() => {
-        dispatch(getLevels());
-        dispatch(getUsers());
-        dispatch(getRoles());
-      }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getLevels());
+    //     dispatch(getUsers());
+    //     dispatch(getRoles());
+    //   }, [dispatch]);
 
 // if (!loading) {
 //         return <div className="text-center text-primary" >

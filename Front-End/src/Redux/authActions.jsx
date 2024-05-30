@@ -30,6 +30,7 @@ export const login = (email, password) => async dispatch => {
       dispatch(getLevels())
       dispatch(getRoles());
       dispatch(getTutorials())
+      dispatch(getCategory());
 
      // Fetch all users if the logged in user is an admin
     }
@@ -44,6 +45,43 @@ export const login = (email, password) => async dispatch => {
       });
       dispatch(getCategory());
         dispatch(getTutorials())
+        dispatch(getCategory());
+      dispatch(getTutorials())
+
+        // dispatch(getRoles());
+     // Fetch all users if the logged in user is an admin
+    }
+    if (user.role_id === 2) { 
+      // Assuming role is accessible directly and is named as such
+      toast.success('Welcome Again ' + user.prenom,{
+        style: {
+          fontSize: '18px',
+          padding: '16px 24px',
+          borderRadius: '8px',
+        }
+      });
+      dispatch(getCategory());
+        dispatch(getTutorials())
+        dispatch(getCategory());
+      dispatch(getTutorials())
+
+        // dispatch(getRoles());
+     // Fetch all users if the logged in user is an admin
+    }
+    if (user.role_id === 4) { 
+      // Assuming role is accessible directly and is named as such
+      toast.success('Welcome Again ' + user.prenom,{
+        style: {
+          fontSize: '18px',
+          padding: '16px 24px',
+          borderRadius: '8px',
+        }
+      });
+      dispatch(getCategory());
+        dispatch(getTutorials())
+        dispatch(getCategory());
+      dispatch(getTutorials())
+
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
     }

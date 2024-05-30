@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategory, getTutorials } from "@/Redux/authActions";
 
 const Allcategory = () => {
+  const dispatch=useDispatch()
   const { loading, categories, baseUrl } = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(getCategory());
+    dispatch(getTutorials());
 
+  }, [dispatch]);
   return (
     <>
       <Box sx={{ textAlign: 'center', py: 2 }}>
@@ -79,7 +85,7 @@ const Allcategory = () => {
                         mt: 1,
                       }}
                     >
-                      {val.description}
+                      SubCategory : {val.subcategories.length}
                     </Typography>
                   </Box>
                 </Link>

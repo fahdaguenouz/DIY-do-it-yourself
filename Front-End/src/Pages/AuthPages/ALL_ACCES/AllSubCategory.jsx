@@ -1,41 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Grid, Typography, Button, Dialog, DialogActions,
-  DialogContent, DialogTitle, TextField, CircularProgress
+  Box, Grid, Typography, Button, CircularProgress
 } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddSubCategory, UpdateSubCategory, getCategory } from "@/Redux/authActions";
-import toast from "react-hot-toast";
+import { getCategory } from "@/Redux/authActions";
 
 const AllSubCategory = () => {
   const { id } = useParams();
-  const { categories, baseUrl, loading } = useSelector(state => state.auth);
+  const { categories, baseUrl, loading, tutorials } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [filteredTutorials, setFilteredTutorials] = useState([]);
 
-const navigate =useNavigate()
   useEffect(() => {
     dispatch(getCategory());
   }, [dispatch]);
 
   const category = categories.find(cat => cat.id === parseInt(id));
 
-const handleReturn=()=>{
-    navigate('/all/category')
+  const handleReturn = () => {
+    navigate('/all/category');
+  };
 
-}
+  const handleSubcategoryClick = (subId) => {
+    const filtered = tutorials.filter(tutorial => tutorial.subcategoryId === subId);
+    setFilteredTutorials(filtered);
+    navigate(`/all/category/subcategory/tutorials/${subId}`); // Navigate to the route displaying tutorials of the selected subcategory
+  };
 
-
- 
-
- 
-
-  if (!category){
-    return(
+  if (!category) {
+    return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-          <CircularProgress />
+        <CircularProgress />
       </Box>
-    )
+    );
   }
 
   return (
@@ -43,9 +42,12 @@ const handleReturn=()=>{
       <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} color='primary'>
         Subcategories of {category.name}
       </Typography>
+      <Typography variant="h5" component="h1" sx={{ fontWeight: 'bold', mb: 4 }} >
+         {category.description}
+      </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'start', mb: 2 }}>
         <Button variant="outlined" color="primary" onClick={handleReturn}>
-          return
+          Return
         </Button>
       </Box>
       <Box sx={{ textAlign: 'center', mt: 4 }}>
@@ -76,6 +78,7 @@ const handleReturn=()=>{
                       color: '#fff',
                     },
                   }}
+                  onClick={() => handleSubcategoryClick(sub.id)}
                 >
                   <Box sx={{ position: 'relative', width: 80, height: 80, margin: 'auto' }}>
                     <Box
@@ -127,8 +130,6 @@ const handleReturn=()=>{
           )}
         </Grid>
       </Box>
-
-      
     </Box>
   );
 };

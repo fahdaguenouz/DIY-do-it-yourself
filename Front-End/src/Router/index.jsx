@@ -52,6 +52,17 @@ import AdminEdit from "@/Pages/AuthPages/ADMIN/Pages/AdminEdit";
 import GestAdminCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminCategory";
 import UpdateTutorials from "@/Pages/AuthPages/CREATOR/Pages/Forms/UpdateTutorials";
 import GestAdminSubCategory from "@/Pages/AuthPages/ADMIN/Pages/GestAdminSubCategory";
+import StandardLikes from "@/Pages/AuthPages/STANDARD/Pages/StandardLikes";
+import StandardComments from "@/Pages/AuthPages/STANDARD/Pages/StandardComments";
+import Allcategory from "@/Pages/AuthPages/ALL_ACCES/AllCategory";
+import AllSubCategory from "@/Pages/AuthPages/ALL_ACCES/AllSubCategory";
+import StandardDashboard from "@/Pages/AuthPages/STANDARD/Pages/StandardDashboard";
+import ModerateurDashboard from "@/Pages/AuthPages/MODERATOR/Pages/ModerateurDashboard";
+import SignaledTutorials from "@/Pages/AuthPages/MODERATOR/Pages/SignaledTutorials";
+import AdminLikes from "@/Pages/AuthPages/ADMIN/Pages/AdminLikes";
+import AdminComments from "@/Pages/AuthPages/ADMIN/Pages/AdminComments";
+import AllTutorials from "@/Pages/AuthPages/ALL_ACCES/AllTutorials";
+import AllTutorialDetails from "@/Pages/AuthPages/ALL_ACCES/AllTutorialDetails";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -121,7 +132,15 @@ const DynamicRouter = () => {
                             path: '/admin/gestion-sub-category/:id',
                             element: <GestAdminSubCategory />
                         },
-                       
+                        { path: 'all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
+                        { path: '/admin/tutorials/mylikes', element: <AdminLikes /> },
+                        { path: '/admin/tutorials/mycomments', element: <AdminComments /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
+
                         // Other admin-specific routes
                     ]
                 };
@@ -129,7 +148,19 @@ const DynamicRouter = () => {
                 return {
                     element: <ModeratorLayout />,
                     children: [
-                        { path: '/moderator', element: <AuthAdmin /> }
+                        { path: '/moderator', element: <ModerateurDashboard /> },
+                        { path: '/moderator/dashboard', element: <ModerateurDashboard /> },
+                        { path: '/moderator/signals', element: <SignaledTutorials /> },
+                        { path: '/all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
+                        { path: '/moderator/tutorials/mylikes', element: <AllSubCategory /> },
+                        { path: '/moderator/tutorials/mycomments', element: <AllSubCategory /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
+
+
                         // Other moderator-specific routes
                     ]
                 };
@@ -149,7 +180,12 @@ const DynamicRouter = () => {
                         { path: '/creator/category', element: <CreatorCategory /> },
                         { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
                         { path: '/creator/update-tutorial/:id', element: <UpdateTutorials /> },
-                        { path: '/creator/category', element: <CreatorCategory /> },
+                        { path: '/all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
 
 
 
@@ -165,7 +201,17 @@ const DynamicRouter = () => {
                 return {
                     element: <StandarLayout />,
                     children: [
-                        { path: '/standard', element: <AuthAdmin /> }
+                        { path: '/standard', element: <StandardDashboard /> },
+                        { path: '/standard/dashboard', element: <StandardDashboard /> },
+                        { path: '/standard/tutorials/mylikes', element: <StandardLikes /> },
+                        { path: '/standard/tutorials/mycomment', element: <StandardComments /> },
+                        { path: '/all/category', element: <Allcategory /> },
+                        { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
+                        { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
+                        { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+
+
+
                         // Other standard user-specific routes
                     ]
                 };

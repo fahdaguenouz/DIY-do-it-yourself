@@ -216,7 +216,7 @@ if (!categories){
                       mt: 1,
                     }}
                   >
-                    {val.description}
+                    SubCategories : {val.subcategories.length}
                   </Typography>
                   <Button onClick={(e) => { e.stopPropagation(); handleEditClick(val); }} sx={{ mt: 1 }}>
                     Edit
