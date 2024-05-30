@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
-import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTutorials } from '@/Redux/authActions';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const AllTutorialDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [customReason, setCustomReason] = useState('');
 
     useEffect(() => {
         dispatch(getTutorials());
@@ -18,6 +22,31 @@ const AllTutorialDetails = () => {
 
     const handleUpdate = () => {
         navigate(`/creator/update-tutorial/${id}`);
+    };
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleMenuItemClick = (reason) => {
+        setCustomReason(reason);
+        setDialogOpen(true);
+        handleCloseMenu();
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+        setCustomReason('');
+    };
+
+    const handleSubmit = () => {
+        // Submit the reason (customReason) to the backend or handle it as needed
+        console.log('Submitted reason:', customReason);
+        handleCloseDialog();
     };
 
     if (!tutorial) {
@@ -34,6 +63,35 @@ const AllTutorialDetails = () => {
                 <Grid item xs={12} sm={8}>
                     <Typography variant="h4" align="center" gutterBottom color="primary">{tutorial.titre}</Typography>
                 </Grid>
+                <Grid item>
+                    <ErrorOutlineIcon onClick={handleClick} style={{ cursor: 'pointer' }} />
+                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+                        <MenuItem onClick={() => handleMenuItemClick('Inappropriate Content')}>Inappropriate Content</MenuItem>
+                        <MenuItem onClick={() => handleMenuItemClick('Spam')}>Spam</MenuItem>
+                        <MenuItem onClick={() => handleMenuItemClick('Other')}>Other</MenuItem>
+                    </Menu>
+                    <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                        <DialogTitle>Signal Tutorial</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Reason for signaling"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                multiline
+                                rows={4}
+                                value={customReason}
+                                onChange={(e) => setCustomReason(e.target.value)}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDialog} color="primary">Cancel</Button>
+                            <Button onClick={handleSubmit} color="primary">Submit</Button>
+                        </DialogActions>
+                    </Dialog>
+                </Grid>
             </Grid>
             <Card sx={{ mb: 4 }}>
                 <Grid container spacing={2}>
@@ -45,7 +103,6 @@ const AllTutorialDetails = () => {
                             <Typography variant="h5" gutterBottom>Category: {tutorial.sub_category.name}</Typography>
                             <Typography variant="h5" gutterBottom>Subcategory: {tutorial.sub_category.name}</Typography>
                             <Typography variant="body1" gutterBottom>Description: {tutorial.description}</Typography>
-        
                         </Box>
                     </Grid>
                 </Grid>
