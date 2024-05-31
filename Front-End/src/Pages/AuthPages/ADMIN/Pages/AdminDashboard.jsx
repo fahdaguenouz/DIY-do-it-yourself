@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import AnalyticEcommerce from './AnalyticEcommerce';
-import { getTutorials, getUsers,  getCategory } from '@/Redux/authActions';
+import { getTutorials, getUsers, getCategory } from '@/Redux/authActions';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const AdminDashboard = () => {
-    const { baseUrl, users, tutorials, categories, user, loading } = useSelector(state => state.auth);
+    const { users, tutorials, categories, loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     dispatch(getTutorials());
-    //     dispatch(getUsers());
-    //     dispatch(getCategory());
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(getTutorials());
+        dispatch(getUsers());
+        dispatch(getCategory());
+    }, [dispatch]);
 
     const [tutorialsPage, setTutorialsPage] = useState(0);
     const [creatorsPage, setCreatorsPage] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState(categories.length > 0 ? categories[0].id : '');
     const rowsPerPage = 5;
 
     const handleTutorialsPageChange = (event, newPage) => {
@@ -28,6 +29,10 @@ const AdminDashboard = () => {
 
     const handleCreatorsPageChange = (event, newPage) => {
         setCreatorsPage(newPage);
+    };
+
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value);
     };
 
     if (loading) {
@@ -47,27 +52,22 @@ const AdminDashboard = () => {
 
     const topCreators = Object.values(tutorialCreators).sort((a, b) => b.tutorialCount - a.tutorialCount);
 
-    const categoryData = categories.map(category => {
-        const subCategoryData = category.subcategories.map(subcategory => {
-            const tutorialCount = tutorials.filter(tutorial => tutorial.sub_category.id === subcategory.id).length;
-            return tutorialCount;
-        });
+    const categoryData = selectedCategory ? categories.find(category => category.id === selectedCategory) : null;
 
-        return {
-            label: category.name,
-            data: subCategoryData,
-            backgroundColor: 'rgba(33, 150, 243, 0.6)', // Primary blue background color
-            borderColor: 'rgba(33, 150, 243, 1)', // Primary blue border color
-            borderWidth: 1,
-        };
-    });
-
-    const categoryLabels = categories.flatMap(category => category.subcategories.map(subcategory => subcategory.name));
-
-    const tutorialDataByCategory = {
-        labels: categoryLabels,
-        datasets: categoryData,
-    };
+    const tutorialDataByCategory = categoryData ? {
+        labels: categoryData.subcategories.map(subcategory => subcategory.name),
+        datasets: [
+            {
+                label: `Number of Tutorials in ${categoryData.name}`,
+                data: categoryData.subcategories.map(subcategory => {
+                    return tutorials.filter(tutorial => tutorial.sub_category.id === subcategory.id).length;
+                }),
+                backgroundColor: 'rgba(33, 150, 243, 0.6)', // Primary blue background color
+                borderColor: 'rgba(33, 150, 243, 1)', // Primary blue border color
+                borderWidth: 1,
+            },
+        ],
+    } : null;
 
     const userData = {
         labels: Object.values(tutorialCreators).map(creator => `${creator.nom} ${creator.prenom}`),
@@ -98,6 +98,74 @@ const AdminDashboard = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <AnalyticEcommerce title="Total Blogs" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+                <Typography variant="h6" mb="5px">Tutorials by Category and Subcategory</Typography>
+                <FormControl fullWidth>
+                    <InputLabel id="category-select-label">Select Category</InputLabel>
+                    <Select
+                        labelId="category-select-label"
+                        id="category-select"
+                        value={selectedCategory}
+                        label="Select Category"
+                        onChange={handleCategoryChange}
+                    >
+                        {categories.map(category => (
+                            <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {tutorialDataByCategory && (
+                    <Box sx={{ height: 400, marginTop: 4 }}>
+                        <Bar
+                            data={tutorialDataByCategory}
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+                                        maxBarThickness: 50,
+                                    },
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                                plugins: {
+                                    legend: { position: 'top' },
+                                    title: { display: true, text: `Number of Tutorials by Subcategory in ${categoryData.name}` }
+                                }
+                            }}
+                        />
+                    </Box>
+                )}
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+                <Typography variant="h6">Tutorials by Creator</Typography>
+                <Box sx={{ height: 400, marginTop: 4 }}>
+                    <Bar
+                        data={userData}
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    maxBarThickness: 50,
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                },
+                            },
+                            plugins: {
+                                legend: { position: 'top' },
+                                title: { display: true, text: 'Number of Tutorials Created by Users' }
+                            }
+                        }}
+                    />
+                </Box>
             </Grid>
 
             <Grid item xs={12}>
@@ -171,18 +239,8 @@ const AdminDashboard = () => {
                     </Grid>
                 </Grid>
             </Grid>
-
-            <Grid item xs={12} md={6}>
-                <Typography variant="h6">Tutorials by Category and Subcategory</Typography>
-                <Bar data={tutorialDataByCategory} options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Number of Tutorials by Category and Subcategory' } } }} />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-                <Typography variant="h6">Tutorials by Creator</Typography>
-                <Bar data={userData} options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Number of Tutorials Created by Users' } } }} />
-            </Grid>
         </Grid>
     );
-}
+};
 
 export default AdminDashboard;

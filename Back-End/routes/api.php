@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SignalController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TutorialController;
 use App\Http\Controllers\UserController;
@@ -19,8 +20,8 @@ Route::get('/test-csnrf', function () {
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
-
+Route::post('/add-signals', [SignalController::class, 'store']);
+Route::post('/confirm-signal/{signal_id}', [SignalController::class, 'confirm']);
 
 
 
@@ -32,6 +33,7 @@ Route::get('/get-levels', [LevelController::class, 'index']);
 Route::get('/get-roles', [RoleController::class, 'index']);
 Route::get('/get-categories', [CategoryController::class, 'index']);
 Route::get('/get-tutorials', [TutorialController::class, 'index']);
+Route::get('/get-signals', [SignalController::class, 'index']);
 
 
 // Route::post('/add-user', [UserController::class, 'store']);

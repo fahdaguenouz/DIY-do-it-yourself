@@ -121,9 +121,6 @@ const AllSubCategory = () => {
                   >
                     {sub.description}
                   </Typography>
-                  <Button onClick={(e) => { e.stopPropagation(); handleEditClick(sub); }} sx={{ mt: 1 }}>
-                    Edit
-                  </Button>
                 </Box>
               </Grid>
             ))

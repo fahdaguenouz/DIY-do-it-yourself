@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->string('cover')->nullable();
             $table->text('description');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

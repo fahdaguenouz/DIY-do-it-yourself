@@ -401,3 +401,46 @@ export const AddSubCategory = (SubCategoryData,onSuccess) => async dispatch  => 
     dispatch({ type: 'SET_LOADING', payload: false });
   }
 }
+
+export const AddSignal = (signalData,onSuccess) => async dispatch  => { 
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.addSignals(signalData);
+    // dispatch({
+    //   type: 'ADD_USERE',
+    //   payload: response.data
+    // });
+    toast.success('Signal send successfully!');
+    if (onSuccess) {
+        onSuccess(); 
+        
+         dispatch(getCategory());
+         dispatch(getSignal());
+
+         // Reset form on success
+    }
+    
+  } catch (error) {
+    toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+    console.error("Error fetching sending Signal :", error);
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+}
+
+export const getSignal = () => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.getSignals(); // Ensure UserApi.getUsers() is correctly implemented
+    dispatch({
+      type: 'SET_SIGNALS',
+      payload: response.data
+    });
+  } catch (error) {
+    console.error("Error fetching SIGNALS:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_SIGNALS_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};

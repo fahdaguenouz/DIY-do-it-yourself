@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTutorials } from '@/Redux/authActions';
+import { AddSignal, getTutorials } from '@/Redux/authActions';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const AllTutorialDetails = () => {
@@ -19,10 +19,6 @@ const AllTutorialDetails = () => {
 
     const { tutorials, baseUrl } = useSelector(state => state.auth);
     const tutorial = tutorials.find(t => t.id === parseInt(id));
-
-    const handleUpdate = () => {
-        navigate(`/creator/update-tutorial/${id}`);
-    };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -44,9 +40,7 @@ const AllTutorialDetails = () => {
     };
 
     const handleSubmit = () => {
-        // Submit the reason (customReason) to the backend or handle it as needed
-        console.log('Submitted reason:', customReason);
-        handleCloseDialog();
+        dispatch(AddSignal({ tutorial_id: id, reason: customReason }, handleCloseDialog));
     };
 
     if (!tutorial) {
@@ -59,6 +53,11 @@ const AllTutorialDetails = () => {
 
     return (
         <Container>
+            {tutorial.status === 'suspended' && (
+                <Box sx={{ mb: 2, p: 2, backgroundColor: 'red', color: 'white', borderRadius: '8px' }}>
+                    <Typography variant="h6">This tutorial is suspended due to inappropriate content or spam.</Typography>
+                </Box>
+            )}
             <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ marginBottom: "20px" }}>
                 <Grid item xs={12} sm={8}>
                     <Typography variant="h4" align="center" gutterBottom color="primary">{tutorial.titre}</Typography>

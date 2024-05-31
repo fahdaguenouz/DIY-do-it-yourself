@@ -15,6 +15,7 @@ class Tutorial extends Model
         'user_id',
         'cover',
         'description',
+        'status',
     ];
 
     // Define the relationship with the TutorialMedia model
@@ -33,5 +34,10 @@ class Tutorial extends Model
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class, 'Sub_Categorie_id');
+    }
+
+    public function signals()
+    {
+        return $this->hasMany(Signal::class);
     }
 }
