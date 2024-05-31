@@ -40,4 +40,8 @@ class Tutorial extends Model
     {
         return $this->hasMany(Signal::class);
     }
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }

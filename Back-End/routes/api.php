@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SignalController;
 use App\Http\Controllers\SubCategoryController;
@@ -22,7 +23,7 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 Route::post('/add-signals', [SignalController::class, 'store']);
 Route::post('/confirm-signal/{signal_id}', [SignalController::class, 'confirm']);
-
+Route::post('/tutorials/{id}/like', [LikeController::class, 'likeTutorial']);
 
 
 

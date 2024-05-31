@@ -9,7 +9,9 @@ const initialState = {
     baseUrl: 'http://localhost:8000/',
     categories:[],
     tutorials:[],
-    signals:[]
+    signals:[],
+    likes:[],
+    comments:[]
   };
   
   function authReducer(state = initialState, action) {
@@ -18,6 +20,18 @@ const initialState = {
         return {
           ...state,
           users: action.payload,
+          error: null  // Clear any previous errors
+        };
+        case 'SET_LIKES':
+        return {
+          ...state,
+          likes: action.payload,
+          error: null  // Clear any previous errors
+        };
+        case 'SET_COMMENTS':
+        return {
+          ...state,
+          comments: action.payload,
           error: null  // Clear any previous errors
         };
         case 'SET_CATEGORY':

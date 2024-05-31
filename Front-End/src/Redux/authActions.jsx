@@ -444,3 +444,81 @@ export const getSignal = () => async dispatch => {
     dispatch({ type: 'SET_LOADING', payload: false });
   }
 };
+
+export const likeTutorial = (tutoID,onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.likeTutorials(tutoID); // Ensure UserApi.getUsers() is correctly implemented
+    toast.success('Like send successfully!');
+    if (onSuccess) {
+        onSuccess(); 
+        
+         dispatch(getTutorials());
+         dispatch(getLike());
+
+         // Reset form on success
+    }
+  } catch (error) {
+    console.error("Error fetching LIKES:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_LIKES_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const getLike = () => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.getLikes(); // Ensure UserApi.getUsers() is correctly implemented
+    dispatch({
+      type: 'SET_LIKES',
+      payload: response.data
+    });
+  } catch (error) {
+    console.error("Error fetching LIKES:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_LIKES_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const CommentTutorial = (tutoID,onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.Commenter(tutoID); // Ensure UserApi.getUsers() is correctly implemented
+    toast.success('Comment send successfully!');
+    if (onSuccess) {
+        onSuccess(); 
+        
+         dispatch(getTutorials());
+         dispatch(getComments());
+
+         // Reset form on success
+    }
+  } catch (error) {
+    console.error("Error fetching LIKES:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_LIKES_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const getComment = () => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.getComments(); // Ensure UserApi.getUsers() is correctly implemented
+    dispatch({
+      type: 'SET_COMMENTS',
+      payload: response.data
+    });
+  } catch (error) {
+    console.error("Error fetching Comments:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH__FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
