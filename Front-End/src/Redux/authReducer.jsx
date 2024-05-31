@@ -8,7 +8,8 @@ const initialState = {
     roles: [],
     baseUrl: 'http://localhost:8000/',
     categories:[],
-    tutorials:[]
+    tutorials:[],
+    signals:[]
   };
   
   function authReducer(state = initialState, action) {
@@ -23,6 +24,12 @@ const initialState = {
         return {
           ...state,
           categories: action.payload,
+          error: null  // Clear any previous errors
+        };
+        case 'SET_SIGNALS':
+        return {
+          ...state,
+          signals: action.payload,
           error: null  // Clear any previous errors
         };
       case 'FETCH_USERS_FAILURE':

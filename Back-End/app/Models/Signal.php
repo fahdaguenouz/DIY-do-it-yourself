@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Signal extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'tutorial_id',
+        'date',
+        'reason',
+    ];
+
+
+    public function tutorial()
+    {
+        return $this->belongsTo(Tutorial::class);
+    }
 }

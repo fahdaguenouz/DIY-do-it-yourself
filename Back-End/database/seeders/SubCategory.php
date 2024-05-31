@@ -15,31 +15,31 @@ class SubCategory extends Seeder
     {
         $subcategories = [
             // Electronics
-            ['categorie_id' => 1, 'name' => 'Smartphones', 'description' => 'Tutorials for smartphones', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 1, 'name' => 'Laptops', 'description' => 'Tutorials for laptops', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 1, 'name' => 'Tablets', 'description' => 'Tutorials for tablets', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 1, 'name' => 'Televisions', 'description' => 'Tutorials for televisions', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 1, 'name' => 'Cameras', 'description' => 'Tutorials for cameras', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 1, 'name' => 'Speakers', 'description' => 'Tutorials for speakers', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 1, 'name' => 'Headphones', 'description' => 'Tutorials for headphones', 'SubCategory_picture' => 'path_to_picture'],
+            ['categorie_id' => 1, 'name' => 'Smartphones', 'description' => 'Tutorials for smartphones', 'SubCategory_picture' => 'subcategories/lg-optimus-3d.png'],
+            ['categorie_id' => 1, 'name' => 'Laptops', 'description' => 'Tutorials for laptops', 'SubCategory_picture' => 'subcategories/laptop-screen.png'],
+            ['categorie_id' => 1, 'name' => 'Tablets', 'description' => 'Tutorials for tablets', 'SubCategory_picture' => 'subcategories/digital-art.png'],
+            ['categorie_id' => 1, 'name' => 'Televisions', 'description' => 'Tutorials for televisions', 'SubCategory_picture' => 'subcategories/tv-show.png'],
+            ['categorie_id' => 1, 'name' => 'Cameras', 'description' => 'Tutorials for cameras', 'SubCategory_picture' => 'subcategories/camera.png'],
+            ['categorie_id' => 1, 'name' => 'Speakers', 'description' => 'Tutorials for speakers', 'SubCategory_picture' => 'subcategories/speaker-box.png'],
+            ['categorie_id' => 1, 'name' => 'Headphones', 'description' => 'Tutorials for headphones', 'SubCategory_picture' => 'subcategories/round-headphones.png'],
 
             // Computers
-            ['categorie_id' => 2, 'name' => 'Desktops', 'description' => 'Tutorials for desktop computers', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 2, 'name' => 'Monitors', 'description' => 'Tutorials for monitors', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 2, 'name' => 'Printers', 'description' => 'Tutorials for printers', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 2, 'name' => 'Hard Drives', 'description' => 'Tutorials for hard drives', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 2, 'name' => 'RAM', 'description' => 'Tutorials for RAM', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 2, 'name' => 'Motherboards', 'description' => 'Tutorials for motherboards', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 2, 'name' => 'Power Supplies', 'description' => 'Tutorials for power supplies', 'SubCategory_picture' => 'path_to_picture'],
+            ['categorie_id' => 2, 'name' => 'Desktops', 'description' => 'Tutorials for desktop computers', 'SubCategory_picture' => 'subcategories/computer-desktop.png'],
+            ['categorie_id' => 2, 'name' => 'Monitors', 'description' => 'Tutorials for monitors', 'SubCategory_picture' => 'subcategories/MicrosoftTeams-image.png'],
+            ['categorie_id' => 2, 'name' => 'Printers', 'description' => 'Tutorials for printers', 'SubCategory_picture' => 'subcategories/printer-machine.png'],
+            ['categorie_id' => 2, 'name' => 'Hard Drives', 'description' => 'Tutorials for hard drives', 'SubCategory_picture' => 'subcategories/hdd.png'],
+            ['categorie_id' => 2, 'name' => 'RAM', 'description' => 'Tutorials for RAM', 'SubCategory_picture' => 'subcategories/ram-memory.png'],
+            ['categorie_id' => 2, 'name' => 'Motherboards', 'description' => 'Tutorials for motherboards', 'SubCategory_picture' => 'subcategories/motherboard.png'],
+            ['categorie_id' => 2, 'name' => 'Power Supplies', 'description' => 'Tutorials for power supplies', 'SubCategory_picture' => 'subcategories/'],
 
             // Home Appliances
-            ['categorie_id' => 3, 'name' => 'Washing Machines', 'description' => 'Tutorials for washing machines', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 3, 'name' => 'Refrigerators', 'description' => 'Tutorials for refrigerators', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 3, 'name' => 'Microwaves', 'description' => 'Tutorials for microwaves', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 3, 'name' => 'Ovens', 'description' => 'Tutorials for ovens', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 3, 'name' => 'Dishwashers', 'description' => 'Tutorials for dishwashers', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 3, 'name' => 'Air Conditioners', 'description' => 'Tutorials for air conditioners', 'SubCategory_picture' => 'path_to_picture'],
-            ['categorie_id' => 3, 'name' => 'Vacuum Cleaners', 'description' => 'Tutorials for vacuum cleaners', 'SubCategory_picture' => 'path_to_picture'],
+            ['categorie_id' => 3, 'name' => 'Washing Machines', 'description' => 'Tutorials for washing machines', 'SubCategory_picture' => 'subcategories/washing-machine.png'],
+            ['categorie_id' => 3, 'name' => 'Refrigerators', 'description' => 'Tutorials for refrigerators', 'SubCategory_picture' => 'subcategories/MicrosoftTeams-image(1).png'],
+            ['categorie_id' => 3, 'name' => 'Microwaves', 'description' => 'Tutorials for microwaves', 'SubCategory_picture' => 'subcategories/microwave-oven.png'],
+            ['categorie_id' => 3, 'name' => 'Ovens', 'description' => 'Tutorials for ovens', 'SubCategory_picture' => 'subcategories/oven.png'],
+            ['categorie_id' => 3, 'name' => 'Dishwashers', 'description' => 'Tutorials for dishwashers', 'SubCategory_picture' => 'subcategories/dishwasher'],
+            ['categorie_id' => 3, 'name' => 'Air Conditioners', 'description' => 'Tutorials for air conditioners', 'SubCategory_picture' => 'subcategories/air-conditioner.png'],
+            ['categorie_id' => 3, 'name' => 'Vacuum Cleaners', 'description' => 'Tutorials for vacuum cleaners', 'SubCategory_picture' => 'subcategories/vacuum-cleaner.png'],
 
             // Hardware
             ['categorie_id' => 4, 'name' => 'Nails', 'description' => 'Tutorials for nails', 'SubCategory_picture' => 'path_to_picture'],

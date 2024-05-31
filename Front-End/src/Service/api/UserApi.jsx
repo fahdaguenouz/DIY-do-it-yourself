@@ -104,7 +104,19 @@ addSubCategory : async (formData) => {
   });
 },
 
+addSignals: async (tuto) => {
+  // Create FormData instance
+  
 
+  return axiosClient.post('/add-signals', tuto);
+},
+
+getSignals: async (tuto) => {
+  // Create FormData instance
+  
+
+  return axiosClient.get('/get-signals', tuto);
+},
 
 
 
