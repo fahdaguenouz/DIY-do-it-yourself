@@ -4,23 +4,32 @@ import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, T
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import AnalyticEcommerce from './AnalyticEcommerce';
-import { getTutorials, getUsers, getCategory } from '@/Redux/authActions';
+import { getTutorials, getUsers, getCategory, getSignal } from '@/Redux/authActions';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const AdminDashboard = () => {
-    const { users, tutorials, categories, loading } = useSelector(state => state.auth);
+    const { signals = [], users = [], tutorials = [], categories = [], loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
+
+    const [tutorialsPage, setTutorialsPage] = useState(0);
+    const [creatorsPage, setCreatorsPage] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getUsers());
         dispatch(getCategory());
+    
+        dispatch(getSignal());
     }, [dispatch]);
 
-    const [tutorialsPage, setTutorialsPage] = useState(0);
-    const [creatorsPage, setCreatorsPage] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState(categories.length > 0 ? categories[0].id : '');
+    useEffect(() => {
+        if (categories.length > 0) {
+            setSelectedCategory(categories[0].id);
+        }
+    }, [categories]);
+
     const rowsPerPage = 5;
 
     const handleTutorialsPageChange = (event, newPage) => {
@@ -36,9 +45,11 @@ const AdminDashboard = () => {
     };
 
     if (loading) {
-        return <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-            <CircularProgress />
-        </Box>;
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CircularProgress />
+            </Box>
+        );
     }
 
     const tutorialCreators = tutorials.reduce((acc, tutorial) => {
@@ -94,10 +105,7 @@ const AdminDashboard = () => {
                 <AnalyticEcommerce title="Total Users" count={users.length.toString()} percentage={70.5} extra={users.length.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Signals" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Blogs" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
+                <AnalyticEcommerce title="Total Signals" count={signals.length.toString()} percentage={27.4} isLoss color="warning" extra={signals.length.toString()} />
             </Grid>
 
             <Grid item xs={12} md={6}>

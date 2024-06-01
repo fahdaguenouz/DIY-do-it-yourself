@@ -44,13 +44,13 @@ const utilities = {
       url: '/creator/add-tutorial',
       icon: icons.AppstoreAddOutlined
     },
-    {
-      id: 'SubCategory',
-      title: 'Analytics',
-      type: 'item',
-      url: '/creator/creator-analytics',
-      icon: icons.ClusterOutlined
-    }
+    // {
+    //   id: 'SubCategory',
+    //   title: 'Analytics',
+    //   type: 'item',
+    //   url: '/creator/creator-analytics',
+    //   icon: icons.ClusterOutlined
+    // }
   ]
 };
 

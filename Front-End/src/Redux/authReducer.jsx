@@ -11,7 +11,8 @@ const initialState = {
     tutorials:[],
     signals:[],
     likes:[],
-    comments:[]
+    comments:[],
+    hasliked:false
   };
   
   function authReducer(state = initialState, action) {
@@ -22,6 +23,11 @@ const initialState = {
           users: action.payload,
           error: null  // Clear any previous errors
         };
+        case 'SET_HAS_LIKED': // Add this case
+            return {
+                ...state,
+                hasLiked: action.payload
+            };
         case 'SET_LIKES':
         return {
           ...state,

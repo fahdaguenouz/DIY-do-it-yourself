@@ -1,32 +1,37 @@
-// src/pages/SignaledTutorials.js
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Table, TableBody, TableCell, TableHead, TableRow, Button } from '@mui/material';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSignal } from '@/Redux/authActions';
+import { getSignal, confirmSignal } from '@/Redux/authActions';
 
 const SignaledTutorials = () => {
-    const signals = useSelector(state => state.auth.signals);    const navigate = useNavigate();
-    const dispatch =useDispatch()
+    const { signals } = useSelector(state => state.auth); // Ensure this points to the correct state
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        dispatch(getSignal())
+        dispatch(getSignal());
     }, [dispatch]);
 
     const handleVisit = (tutorialId) => {
         navigate(`/all/category/subcategory/tutorialsdeatail/${tutorialId}`);
     };
 
-    const handleConfirm = (signalId) => {
-       dispatch(AddSignal( signalId ))
-
-       
+    const handleConfirm = (signalId, tutorialId) => {
+        dispatch(confirmSignal(signalId, () => {
+            dispatch(getSignal()); // Refresh the signals after confirmation
+        }));
     };
+
+    const activeTutorials = signals.filter(signal => signal.tutorial.status === 'active');
+
+    if (!signals) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Container>
-            <h1>Moderator Dashboard</h1>
+            <h1>Active Signaled Tutorials</h1>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -37,14 +42,14 @@ const SignaledTutorials = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {signals.map((signal) => (
+                    {activeTutorials.map((signal) => (
                         <TableRow key={signal.id}>
                             <TableCell>{signal.id}</TableCell>
-                            <TableCell>{signal.tutorial.title}</TableCell>
+                            <TableCell>{signal.tutorial.titre}</TableCell>
                             <TableCell>{signal.reason}</TableCell>
                             <TableCell>
-                                <Button onClick={() => handleVisit(signal.tutorial_id)}>Visit</Button>
-                                <Button onClick={() => handleConfirm(signal.id)}>Confirm</Button>
+                                <Button className='btn btn-outline-primary' onClick={() => handleVisit(signal.tutorial_id)}>Visit</Button>
+                                <Button className='btn btn-outline-primary' onClick={() => handleConfirm(signal.id, signal.tutorial_id)}>Confirm</Button>
                             </TableCell>
                         </TableRow>
                     ))}

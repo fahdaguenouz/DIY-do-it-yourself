@@ -63,6 +63,10 @@ import AdminLikes from "@/Pages/AuthPages/ADMIN/Pages/AdminLikes";
 import AdminComments from "@/Pages/AuthPages/ADMIN/Pages/AdminComments";
 import AllTutorials from "@/Pages/AuthPages/ALL_ACCES/AllTutorials";
 import AllTutorialDetails from "@/Pages/AuthPages/ALL_ACCES/AllTutorialDetails";
+import SignalTutorials from "@/Pages/AuthPages/MODERATOR/Pages/SignalTutorials";
+import ModerateurLikes from "@/Pages/AuthPages/MODERATOR/Pages/ModerateurLikes";
+import ModerateurComments from "@/Pages/AuthPages/MODERATOR/Pages/ModerateurComments";
+import CreatorComments from "@/Pages/AuthPages/CREATOR/Pages/CreatorComments";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -153,10 +157,12 @@ const DynamicRouter = () => {
                         { path: '/moderator/signals', element: <SignaledTutorials /> },
                         { path: '/all/category', element: <Allcategory /> },
                         { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
-                        { path: '/moderator/tutorials/mylikes', element: <AllSubCategory /> },
-                        { path: '/moderator/tutorials/mycomments', element: <AllSubCategory /> },
+                        { path: '/moderator/tutorials/mylikes', element: <ModerateurLikes /> },
+                        { path: '/moderator/tutorials/mycomments', element: <ModerateurComments /> },
                         { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
                         { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+                        { path: '/moderator/signals/tutorials', element: <SignalTutorials /> },
+
 
 
 
@@ -176,7 +182,9 @@ const DynamicRouter = () => {
                         { path: '/creator/gestion-tutorials', element: <Tutorials /> },
                         { path: '/creator/add-tutorial', element: <AjouterTutorial /> },
                         { path: '/creator/creator-analytics', element: <CreatorAnalytics /> },
-                        { path: '/creator/creator-tutorials-likes', element: <CreatorLikesTuto /> },
+                        { path: '/creator/tutorials/mylikes', element: <CreatorLikesTuto /> },
+                        { path: '/creator/tutorials/mycomments', element: <CreatorComments /> },
+
                         { path: '/creator/category', element: <CreatorCategory /> },
                         { path: '/creator/tutorial-detail/:id/:titre', element: <TutorialDetails /> },
                         { path: '/creator/update-tutorial/:id', element: <UpdateTutorials /> },

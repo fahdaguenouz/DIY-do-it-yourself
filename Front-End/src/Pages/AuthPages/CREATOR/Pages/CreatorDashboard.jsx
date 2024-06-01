@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import AnalyticEcommerce from './AnalyticEcommerce';
-import { getTutorials, getUsers } from '@/Redux/authActions';
+import { getTutorials, getUsers, getComment, getLike, getSignal } from '@/Redux/authActions';
 
-const AdminDashboard = () => {
-    const { baseUrl, users, tutorials,categories ,user, loading } = useSelector(state => state.auth);
+const CreatorDashboard = () => {
+    const { baseUrl, signals = [], users = [], tutorials = [], comments = [], likes = [], user, loading } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    console.log(categories);
+
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getUsers());
+        dispatch(getComment());
+        dispatch(getLike());
+        dispatch(getSignal());
     }, [dispatch]);
 
     const [tutorialsPage, setTutorialsPage] = useState(0);
@@ -26,21 +29,34 @@ const AdminDashboard = () => {
     };
 
     if (loading) {
-        return <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-            <CircularProgress />
-        </Box>;
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CircularProgress />
+            </Box>
+        );
     }
 
-    const tutorialCreators = tutorials.reduce((acc, tutorial) => {
-        const creatorId = tutorial.user.id;
-        if (!acc[creatorId]) {
-            acc[creatorId] = { ...tutorial.user, tutorialCount: 0 };
-        }
-        acc[creatorId].tutorialCount++;
-        return acc;
-    }, {});
+    // Filter tutorials by the logged-in user
+    const userTutorials = tutorials.filter(tutorial => tutorial.user_id === user.id);
 
-    const topCreators = Object.values(tutorialCreators).sort((a, b) => b.tutorialCount - a.tutorialCount);
+    // Calculate counts
+    const tutorialCount = userTutorials.length;
+    const commentCount = comments.filter(comment => userTutorials.some(tutorial => tutorial.id === comment.tutorial_id)).length;
+    const likeCount = likes.length > 0 ? likes.filter(like => userTutorials.some(tutorial => tutorial.id === like.tutorial_id)).length : 0;
+    const signalCount = signals.length > 0 ? signals.filter(signal => userTutorials.some(tutorial => tutorial.id === signal.tutorial_id)).length : 0;
+
+    // Sort tutorials by likes and comments
+    const mostLikedTutorials = [...userTutorials].sort((a, b) => {
+        const aLikes = likes.length > 0 ? likes.filter(like => like.tutorial_id === a.id).length : 0;
+        const bLikes = likes.length > 0 ? likes.filter(like => like.tutorial_id === b.id).length : 0;
+        return bLikes - aLikes;
+    });
+
+    const mostCommentedTutorials = [...userTutorials].sort((a, b) => {
+        const aComments = comments.filter(comment => comment.tutorial_id === a.id).length;
+        const bComments = comments.filter(comment => comment.tutorial_id === b.id).length;
+        return bComments - aComments;
+    });
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -48,91 +64,71 @@ const AdminDashboard = () => {
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Tutorials" count={tutorials.length.toString()} percentage={59.3} extra={tutorials.length.toString()} />
+                <AnalyticEcommerce title="Total Tutorials" count={tutorialCount.toString()} percentage={59.3} extra={tutorialCount.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Users" count={users.length.toString()} percentage={70.5} extra={users.length.toString()} />
+                <AnalyticEcommerce title="Total Comments" count={commentCount.toString()} percentage={70.5} extra={commentCount.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Signals" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <AnalyticEcommerce title="Total Likes" count={likeCount.toString()} percentage={27.4}  extra={likeCount.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Blogs" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
+                <AnalyticEcommerce title="Total Signals" count={signalCount.toString()} percentage={27.4} isLoss color="warning" extra={signalCount.toString()} />
             </Grid>
 
             <Grid item xs={12}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                        <Typography variant="h6">Tutorials</Typography>
+                        <Typography variant="h6">Most Liked Tutorials</Typography>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>ID</TableCell>
                                         <TableCell>Title</TableCell>
-                                        <TableCell>Description</TableCell>
-                                        <TableCell>Created At</TableCell>
+                                        <TableCell>Likes</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {tutorials.slice(tutorialsPage * rowsPerPage, tutorialsPage * rowsPerPage + rowsPerPage).map((tutorial) => (
+                                    {mostLikedTutorials.slice(0, 5).map((tutorial) => (
                                         <TableRow key={tutorial.id}>
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
-                                            <TableCell>{tutorial.description}</TableCell>
-                                            <TableCell>{tutorial.created_at}</TableCell>
+                                            <TableCell>{likes.length > 0 ? likes.filter(like => like.tutorial_id === tutorial.id).length : 0}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5]}
-                            component="div"
-                            count={tutorials.length}
-                            rowsPerPage={rowsPerPage}
-                            page={tutorialsPage}
-                            onPageChange={handleTutorialsPageChange}
-                        />
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                        <Typography variant="h6">Top Creators</Typography>
+                        <Typography variant="h6">Most Commented Tutorials</Typography>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>ID</TableCell>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Tutorials Created</TableCell>
+                                        <TableCell>Title</TableCell>
+                                        <TableCell>Comments</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {topCreators.slice(creatorsPage * rowsPerPage, creatorsPage * rowsPerPage + rowsPerPage).map((creator) => (
-                                        <TableRow key={creator.id}>
-                                            <TableCell>{creator.id}</TableCell>
-                                            <TableCell>{creator.nom} {creator.prenom}</TableCell>
-                                            <TableCell>{creator.email}</TableCell>
-                                            <TableCell>{creator.tutorialCount}</TableCell>
+                                    {mostCommentedTutorials.slice(0, 5).map((tutorial) => (
+                                        <TableRow key={tutorial.id}>
+                                            <TableCell>{tutorial.id}</TableCell>
+                                            <TableCell>{tutorial.titre}</TableCell>
+                                            <TableCell>{comments.filter(comment => comment.tutorial_id === tutorial.id).length}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5]}
-                            component="div"
-                            count={topCreators.length}
-                            rowsPerPage={rowsPerPage}
-                            page={creatorsPage}
-                            onPageChange={handleCreatorsPageChange}
-                        />
                     </Grid>
                 </Grid>
             </Grid>
         </Grid>
     );
-}
+};
 
-export default AdminDashboard;
+export default CreatorDashboard;

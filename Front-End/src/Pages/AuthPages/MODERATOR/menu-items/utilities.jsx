@@ -34,6 +34,14 @@ const utilities = {
       url: '/moderator/signals',
       icon: icons.TeamOutlined
     },
+    {
+      id: 'Signals Tutorials',
+      title: 'Signals tutorials',
+      type: 'item',
+      url: '/moderator/signals/tutorials',
+      icon: icons.TeamOutlined
+    },
+    
     
   ]
 };

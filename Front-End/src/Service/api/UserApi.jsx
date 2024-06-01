@@ -117,27 +117,29 @@ getSignals: async (tuto) => {
 
   return axiosClient.get('/get-signals', tuto);
 },
-
-likeTutorials: async (tutorialId) => {
+confirmSignal: async (signalId) => {
+  return axiosClient.post(`/confirm-signal/${signalId}`);
+},
+likeTutorials: async (tutorialId,userID) => {
   // Create FormData instance
   
 
-  return axiosClient.post(`/tutorials/${tutorialId}/like`);
+  return axiosClient.post(`/tutorials/${tutorialId}/like`,userID);
 },
 
-getLikes: async (tuto) => {
+getLikes: async () => {
   // Create FormData instance
-  return axiosClient.get('/tutorials/likes', tuto);
+  return axiosClient.get(`/tutorials/likes`);
 },
 
-commenter: async (tutorialId) => {
+commenter: async (tutorialId,data) => {
   // Create FormData instance
-  return axiosClient.post(`/tutorials/${tutorialId}/comments`);
+  return axiosClient.post(`/tutorials/${tutorialId}/comments`,data);
 },
 
-getComments: async (tuto) => {
+getComments: async () => {
   // Create FormData instance
-  return axiosClient.get('/tutorials/comments', tuto);
+  return axiosClient.get(`/tutorials/comments`);
 },
 
 

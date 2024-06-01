@@ -4,7 +4,7 @@ import { Container, Table, TableBody, TableCell, TableHead, TableRow, Button } f
 import { Link } from 'react-router-dom';
 import { getComment } from '@/Redux/authActions';
 
-const AdminComments = () => {
+const CreatorComments = () => {
     const dispatch = useDispatch();
     const { comments, user } = useSelector(state => state.auth);
 
@@ -52,4 +52,4 @@ const AdminComments = () => {
     );
 };
 
-export default AdminComments;
+export default CreatorComments;

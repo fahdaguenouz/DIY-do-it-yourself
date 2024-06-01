@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\RoleController;
@@ -24,8 +25,11 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 Route::post('/add-signals', [SignalController::class, 'store']);
 Route::post('/confirm-signal/{signal_id}', [SignalController::class, 'confirm']);
 Route::post('/tutorials/{id}/like', [LikeController::class, 'likeTutorial']);
+Route::get('/tutorials/likes', [LikeController::class, 'getLikes']);
 
 
+
+Route::post('/confirm-signal/{signal_id}', [SignalController::class, 'confirm']);
 
 
 Route::get('/user',[UserController::class,"getUserData"]);
@@ -36,7 +40,8 @@ Route::get('/get-categories', [CategoryController::class, 'index']);
 Route::get('/get-tutorials', [TutorialController::class, 'index']);
 Route::get('/get-signals', [SignalController::class, 'index']);
 
-
+Route::post('/tutorials/{id}/comments', [CommentController::class, 'store']);
+Route::get('/tutorials/comments', [CommentController::class, 'index']);
 // Route::post('/add-user', [UserController::class, 'store']);
 
 
