@@ -6,12 +6,12 @@ import { getLike, getTutorials } from '@/Redux/authActions';
 
 const CreatorLikesTuto = () => {
     const { tutorials, likes, user } = useSelector(state => state.auth);
-    const baseUrl = "http://localhost:8000/"; // Replace with your actual base URL
+    const baseUrl = "http://localhost:8000/"; 
     const dispatch = useDispatch(); 
 
     useEffect(() => {
         dispatch(getTutorials());
-        dispatch(getLike()); // Fetch all likes
+        dispatch(getLike()); 
     }, [dispatch]);
 
     // Ensure likes is an array before attempting to use it
