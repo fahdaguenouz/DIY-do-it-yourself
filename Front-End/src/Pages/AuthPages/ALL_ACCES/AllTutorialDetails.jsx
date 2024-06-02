@@ -15,10 +15,11 @@ const AllTutorialDetails = () => {
     const [customReason, setCustomReason] = useState('');
     const [comment, setComment] = useState('');
 
-    const userId = useSelector(state => state.auth.user.id); // Assuming user ID is stored in auth state
-    const { tutorials, likes, hasLiked, comments, users, baseUrl,user } = useSelector(state => state.auth); // Ensure users are included in the state
+    const userId = useSelector(state => state.auth.user.id);
+    const { tutorials, likes, comments, users, baseUrl, user } = useSelector(state => state.auth);
     const tutorial = tutorials.find(t => t.id === parseInt(id));
-console.log(userId);
+    const tutorialLikes = likes.filter(like => like.tutorial_id === parseInt(id));
+    const userLike=tutorialLikes.find(like=>like.user_id===user.id)
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getLike(id));
@@ -61,7 +62,6 @@ console.log(userId);
             dispatch(getComment(id));
         }));
     };
-    console.log(tutorial);
 
     if (!tutorial) {
         return (
@@ -147,16 +147,20 @@ console.log(userId);
                     <Typography variant="h5">Like this tutorial</Typography>
                     <Button
                         variant="contained"
-                        color={hasLiked ? "secondary" : "primary"}
+                        color={userLike ? "secondary" : "primary"}
                         onClick={handleLike}
                         startIcon={<ThumbUpIcon />}
+                        sx={{ backgroundColor: userLike ? 'gray' : 'primary.main' }}
                     >
-                        {hasLiked ? "Unlike" : "Like"}
+                        {userLike ? "Unlike" : "Like"}
                     </Button>
                 </Box>
+                <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                    {tutorialLikes.length} {tutorialLikes.length === 1 ? 'like' : 'likes'}
+                </Typography>
                 <Box sx={{ mt: 4 }}>
                     <Typography variant="h5">Comments</Typography>
-                    {comments && comments.length > 0 && comments.map((comment, index) => {
+                    {comments && comments.filter(comment => comment.tutorial_id === parseInt(id)).map((comment, index) => {
                         const userComment = users.find(u => u.id === comment.user_id);
                         return (
                             <Box key={index} sx={{ mt: 4 }}>

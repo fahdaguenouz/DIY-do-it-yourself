@@ -41,6 +41,6 @@ public function getLikes()
     }
 
     $likes = Like::all(); // Fetch all likes
-    return response()->json(['likes' => $likes]);
+    return response()->json ($likes);
 }
 }

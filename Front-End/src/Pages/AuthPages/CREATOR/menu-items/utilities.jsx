@@ -29,13 +29,13 @@ const utilities = {
   title: 'Management ',
   type: 'group',
   children: [
+    
     {
-      id: 'tutorials',
-      title: 'tutorials',
+      id: 'SubCategory',
+      title: 'My tutorials',
       type: 'item',
-      url: '/all/category',
-      icon: icons.BookOutlined,
-      target: true
+      url: '/creator/gestion-tutorials',
+      icon: icons.ClusterOutlined
     },
     {
       id: 'Add Tutorial',
@@ -43,14 +43,7 @@ const utilities = {
       type: 'item',
       url: '/creator/add-tutorial',
       icon: icons.AppstoreAddOutlined
-    },
-    // {
-    //   id: 'SubCategory',
-    //   title: 'Analytics',
-    //   type: 'item',
-    //   url: '/creator/creator-analytics',
-    //   icon: icons.ClusterOutlined
-    // }
+    }
   ]
 };
 
