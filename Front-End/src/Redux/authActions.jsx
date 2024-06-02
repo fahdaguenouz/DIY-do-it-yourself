@@ -31,6 +31,7 @@ export const login = (email, password) => async dispatch => {
       dispatch(getRoles());
       dispatch(getTutorials())
       dispatch(getCategory());
+      dispatch(getSignal())
 
      // Fetch all users if the logged in user is an admin
     }
@@ -414,7 +415,7 @@ export const AddSignal = (signalData,onSuccess) => async dispatch  => {
     if (onSuccess) {
         onSuccess(); 
         
-         dispatch(getCategory());
+         
          dispatch(getSignal());
 
          // Reset form on success
@@ -440,6 +441,104 @@ export const getSignal = () => async dispatch => {
     console.error("Error fetching SIGNALS:", error);
     // You might want to handle errors, for example, showing an error message
     dispatch({ type: 'FETCH_SIGNALS_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+export const confirmSignal = (signalId, onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+      const response = await UserApi.confirmSignal(signalId);
+      toast.success(response.data.message);
+      if (onSuccess) {
+          onSuccess();
+          dispatch(getSignal()); // Refresh the signals
+      }
+  } catch (error) {
+      toast.error('Error confirming signal.');
+      console.error('Error confirming signal:', error);
+  } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const likeTutorial = (tutoID,userID,onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.likeTutorials(tutoID,userID); // Ensure UserApi.getUsers() is correctly implemented
+    toast.success('Like send successfully!');
+    if (onSuccess) {
+        onSuccess(); 
+        
+         dispatch(getTutorials());
+         dispatch(getLike());
+
+         // Reset form on success
+    }
+  } catch (error) {
+    console.error("Error fetching LIKES:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_LIKES_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const getLike = () => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.getLikes(); // Ensure UserApi.getUsers() is correctly implemented
+    dispatch({
+      type: 'SET_LIKES',
+      payload: response.data
+    });
+    dispatch({
+      type: 'SET_HAS_LIKED',
+      payload: response.data.hasLiked
+    });
+  } catch (error) {
+    console.error("Error fetching LIKES:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_LIKES_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const CommentTutorial = (tutoID, userId, description,onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.commenter(tutoID,{ userId, description }); // Ensure UserApi.getUsers() is correctly implemented
+    toast.success('Comment send successfully!');
+    if (onSuccess) {
+        onSuccess(); 
+        
+         dispatch(getTutorials());
+         dispatch(getComment());
+
+         // Reset form on success
+    }
+  } catch (error) {
+    console.error("Error fetching Comments:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH_Comment_FAILURE', error });
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const getComment = () => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.getComments(); // Ensure UserApi.getUsers() is correctly implemented
+    dispatch({
+      type: 'SET_COMMENTS',
+      payload: response.data.comments
+    });
+  } catch (error) {
+    console.error("Error fetching Comments:", error);
+    // You might want to handle errors, for example, showing an error message
+    dispatch({ type: 'FETCH__FAILURE', error });
   } finally {
     dispatch({ type: 'SET_LOADING', payload: false });
   }

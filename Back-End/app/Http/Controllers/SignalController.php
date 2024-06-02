@@ -34,7 +34,7 @@ class SignalController extends Controller
             $tutorial->save();
 
             // Optionally, delete the signal after confirmation
-            $signal->delete();
+            
 
             return response()->json(['message' => 'Signal confirmed and tutorial suspended.']);
         }

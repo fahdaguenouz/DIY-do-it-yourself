@@ -41,6 +41,15 @@ class User extends Authenticatable
         return $this->belongsTo(Level::class, 'level_id');
     }
 
+    public function likes()
+{
+    return $this->hasMany(Like::class);
+}
+public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
 
 
     /**

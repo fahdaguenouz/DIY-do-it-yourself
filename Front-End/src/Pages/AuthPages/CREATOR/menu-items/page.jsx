@@ -18,7 +18,7 @@ const pages = {
       id: 'tutorials',
       title: 'tutorials',
       type: 'item',
-      url: '/category',
+      url: '/all/category',
       icon: icons.HeartOutlined,
       target: true
     },

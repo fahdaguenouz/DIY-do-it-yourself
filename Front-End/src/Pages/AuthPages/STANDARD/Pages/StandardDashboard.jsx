@@ -23,7 +23,7 @@ const StandardDashboard = () => {
                 </Typography>
                 
                 {/* User Activity Summary */}
-                <Grid container spacing={3}>
+                {/* <Grid container spacing={3}>
                     <Grid item xs={4}>
                         <Card sx={{ textAlign: 'center' }}>
                             <CardContent>
@@ -48,7 +48,7 @@ const StandardDashboard = () => {
                             </CardContent>
                         </Card>
                     </Grid>
-                </Grid>
+                </Grid> */}
 
                 {/* Latest Tutorials */}
                 <Typography variant="h4" component="h2" sx={{ marginTop: 5, marginBottom: 4 }}>

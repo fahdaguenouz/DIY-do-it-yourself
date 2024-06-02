@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid } from '@mui/material';
+import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTutorials } from '@/Redux/authActions';

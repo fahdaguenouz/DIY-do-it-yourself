@@ -16,7 +16,7 @@ class TutorialController extends Controller
     public function index()
     {
         // Get all tutorials with related media, user, and subcategory
-        $tutorials = Tutorial::with(['media', 'user', 'subCategory'])->get();
+        $tutorials = Tutorial::with(['media', 'user', 'subCategory','likes','comments'])->get();
 
         // Return the tutorials as a JSON response
         return response()->json($tutorials);

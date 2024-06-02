@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { CircularProgress, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddSignal, getTutorials } from '@/Redux/authActions';
+import { AddSignal, getTutorials, likeTutorial, getLike, CommentTutorial, getComment, getUsers } from '@/Redux/authActions';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 const AllTutorialDetails = () => {
     const dispatch = useDispatch();
@@ -12,13 +13,25 @@ const AllTutorialDetails = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [customReason, setCustomReason] = useState('');
+    const [comment, setComment] = useState('');
 
+    const userId = useSelector(state => state.auth.user.id);
+    const { tutorials, likes, comments, users, baseUrl, user } = useSelector(state => state.auth);
+    const tutorial = tutorials.find(t => t.id === parseInt(id));
+    const tutorialLikes = likes.filter(like => like.tutorial_id === parseInt(id));
+    const userLike=tutorialLikes.find(like=>like.user_id===user.id)
     useEffect(() => {
         dispatch(getTutorials());
-    }, [dispatch]);
+        dispatch(getLike(id));
+        dispatch(getComment(id));
+        dispatch(getUsers());
+    }, [dispatch, id]);
 
-    const { tutorials, baseUrl } = useSelector(state => state.auth);
-    const tutorial = tutorials.find(t => t.id === parseInt(id));
+    const handleLike = () => {
+        dispatch(likeTutorial(id, userId, () => {
+            dispatch(getLike(id));
+        }));
+    };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -41,6 +54,13 @@ const AllTutorialDetails = () => {
 
     const handleSubmit = () => {
         dispatch(AddSignal({ tutorial_id: id, reason: customReason }, handleCloseDialog));
+    };
+
+    const handleCommentSubmit = () => {
+        dispatch(CommentTutorial(id, userId, comment, () => {
+            setComment('');
+            dispatch(getComment(id));
+        }));
     };
 
     if (!tutorial) {
@@ -123,24 +143,50 @@ const AllTutorialDetails = () => {
                 ))}
             </Grid>
             <Paper elevation={3} style={{ marginTop: "30px", padding: "20px" }}>
-                <Grid container spacing={2} alignItems="center" justifyContent="center">
-                    <Grid item xs={12} sm={8}>
-                        <Typography variant="h5" gutterBottom>Rate this tutorial:</Typography>
-                        <Rating name="rating" defaultValue={0} max={5} />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={2} justifyContent="center" style={{ marginTop: "30px" }}>
-                    <Grid item xs={12} sm={8} md={6}>
-                        <TextField
-                            label="Leave a comment"
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={4} md={2} style={{ display: "flex", justifyContent: "flex-end" }}>
-                        <Button variant="outlined">Submit</Button>
-                    </Grid>
-                </Grid>
+                <Box style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Typography variant="h5">Like this tutorial</Typography>
+                    <Button
+                        variant="contained"
+                        color={userLike ? "secondary" : "primary"}
+                        onClick={handleLike}
+                        startIcon={<ThumbUpIcon />}
+                        sx={{ backgroundColor: userLike ? 'gray' : 'primary.main' }}
+                    >
+                        {userLike ? "Unlike" : "Like"}
+                    </Button>
+                </Box>
+                <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                    {tutorialLikes.length} {tutorialLikes.length === 1 ? 'like' : 'likes'}
+                </Typography>
+                <Box sx={{ mt: 4 }}>
+                    <Typography variant="h5">Comments</Typography>
+                    {comments && comments.filter(comment => comment.tutorial_id === parseInt(id)).map((comment, index) => {
+                        const userComment = users.find(u => u.id === comment.user_id);
+                        return (
+                            <Box key={index} sx={{ mt: 4 }}>
+                                <Typography variant="body1"><b>{userComment ? userComment.nom : 'Unknown User'}:</b> {comment.description}</Typography>
+                            </Box>
+                        );
+                    })}
+                    <TextField
+                        label="Leave a comment"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        rows={4}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        sx={{ mt: 2 }}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleCommentSubmit}
+                        sx={{ mt: 2 }}
+                    >
+                        Submit
+                    </Button>
+                </Box>
             </Paper>
         </Container>
     );
