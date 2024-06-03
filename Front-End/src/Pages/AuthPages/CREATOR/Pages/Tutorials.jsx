@@ -1,20 +1,34 @@
-import React, { useEffect } from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Button, Grid, Avatar } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Card, CardContent, CardMedia, Typography, Button, Grid, Avatar, TextField, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTutorials } from '@/Redux/authActions';
+import { getCategory, getTutorials } from '@/Redux/authActions';
 
 const Tutorials = () => {
-    const { baseUrl, users, tutorials, user, authenticated, loading} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const { baseUrl, tutorials, categories, user } = useSelector(state => state.auth);
+    const [searchTitle, setSearchTitle] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubcategory, setSelectedSubcategory] = useState('');
 
-    const userTutorials = tutorials.filter(tutorial => tutorial.user_id === user.id);
-    const dispatch=useDispatch()
-    
-    useEffect(()=>{
-        dispatch(getTutorials())
+    useEffect(() => {
+        dispatch(getTutorials());
+        dispatch(getCategory());
+    }, [dispatch]);
 
-    },[dispatch])
+    // Filter tutorials by user and title
+    const filteredTutorials = tutorials.filter(tutorial =>
+        tutorial.user_id === user.id &&
+        tutorial.titre.toLowerCase().includes(searchTitle.toLowerCase())
+    );
 
+    // Get subcategories based on selected category
+    const subcategories = selectedCategory ? categories.find(cat => cat.id === selectedCategory)?.subcategories : [];
+
+    // Further filter tutorials by selected subcategory
+    const finalTutorials = selectedSubcategory ?
+        filteredTutorials.filter(tutorial => tutorial.Sub_Categorie_id === selectedSubcategory) :
+        filteredTutorials;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -30,20 +44,60 @@ const Tutorials = () => {
                     </Button>
                 </Grid>
             </Grid>
+            <Grid container spacing={2} sx={{ padding: '0 50px' }}>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Search by Title"
+                        variant="outlined"
+                        fullWidth
+                        value={searchTitle}
+                        onChange={(e) => setSearchTitle(e.target.value)}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <TextField
+                        select
+                        label="Category"
+                        value={selectedCategory}
+                        onChange={e => {
+                            setSelectedCategory(e.target.value);
+                            setSelectedSubcategory(''); // Reset subcategory when category changes
+                        }}
+                        fullWidth
+                    >
+                        {categories.map((category) => (
+                            <MenuItem key={category.id} value={category.id}>
+                                {category.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+                <Grid item xs={6}>
+                    <TextField
+                        select
+                        label="Subcategory"
+                        value={selectedSubcategory}
+                        onChange={e => setSelectedSubcategory(e.target.value)}
+                        fullWidth
+                        disabled={!selectedCategory} // Disable if no category is selected
+                    >
+                        {subcategories.map((subcat) => (
+                            <MenuItem key={subcat.id} value={subcat.id}>
+                                {subcat.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+            </Grid>
             <Grid container spacing={3} sx={{ padding: '0 50px' }}>
-                {userTutorials.map((tutorial, index) => (
+                {finalTutorials.map((tutorial, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card sx={{
-                            textAlign: 'center',
-                            padding: 3,
-                            backgroundColor: '#fff'
-                        }}>
+                        <Card sx={{ textAlign: 'center', padding: 3, backgroundColor: '#fff' }}>
                             <CardMedia
                                 component="img"
                                 height="200"
                                 image={`${baseUrl}storage/${tutorial.cover}`}
                                 alt={tutorial.titre}
-                               
                             />
                             <CardContent>
                                 <Typography variant="h5" component="div">{tutorial.titre}</Typography>
@@ -75,7 +129,7 @@ const Tutorials = () => {
                                 </Box>
                                 <Button 
                                     component={Link}
-                                    to={`/creator/tutorial-detail/${tutorial.id}/${encodeURIComponent(tutorial.titre)}`} // encode the titre to include special characters
+                                    to={`/creator/tutorial-detail/${tutorial.id}/${encodeURIComponent(tutorial.titre)}`}
                                     variant="outlined"
                                     sx={{
                                         '&:hover': {

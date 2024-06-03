@@ -1,32 +1,87 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Card, CardContent, CardMedia, Typography, Box, Avatar, Button, Container } from '@mui/material';
+import { Grid, Card, CardContent, CardMedia, Typography, Box, Avatar, Button, Container, TextField, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getLike, getTutorials } from '@/Redux/authActions';
+import { getLike, getTutorials, getCategory } from '@/Redux/authActions';
 
 const AdminLikes = () => {
-    const { tutorials, likes, user } = useSelector(state => state.auth);
-    const baseUrl = "http://localhost:8000/"; // Replace with your actual base URL
-    const dispatch = useDispatch(); 
+    const { tutorials, likes, user, categories } = useSelector(state => state.auth);
+    const baseUrl = "http://localhost:8000/";
+    const dispatch = useDispatch();
+
+    const [searchTitle, setSearchTitle] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubcategory, setSelectedSubcategory] = useState('');
 
     useEffect(() => {
         dispatch(getTutorials());
-        dispatch(getLike()); // Fetch all likes
+        dispatch(getLike());
+        dispatch(getCategory());
     }, [dispatch]);
 
-    // Ensure likes is an array before attempting to use it
     const userId = user ? user.id : null;
-    const userLikes = likes.likes ? likes.likes : []; // Extract the array from the likes object
-    const likedTutorials = Array.isArray(userLikes) ? tutorials.filter(tutorial => 
-        userLikes.find(like => like.tutorial_id === tutorial.id && like.user_id === userId)
-    ) : [];
+    const userLikes = Array.isArray(likes) ? likes : [];
 
-    console.log('Liked Tutorials:', likedTutorials);
-    console.log('Tutorials:', tutorials);
-    console.log('Likes:', likes);
+    // Filter tutorials initially by user likes
+    let likedTutorials = tutorials.filter(tutorial =>
+        userLikes.some(like => like.tutorial_id === tutorial.id && like.user_id === userId)
+    );
+
+    // Further filter by search title
+    likedTutorials = likedTutorials.filter(tutorial =>
+        tutorial.titre.toLowerCase().includes(searchTitle.toLowerCase())
+    );
+
+    // Filter by category and subcategory
+    if (selectedSubcategory) {
+        likedTutorials = likedTutorials.filter(tutorial => tutorial.Sub_Categorie_id === selectedSubcategory);
+    } else if (selectedCategory) {
+        const subcategories = categories.find(cat => cat.id === selectedCategory)?.subcategories || [];
+        const subcategoryIds = subcategories.map(sub => sub.id);
+        likedTutorials = likedTutorials.filter(tutorial => subcategoryIds.includes(tutorial.Sub_Categorie_id));
+    }
 
     return (
         <Container>
+            <TextField
+                fullWidth
+                label="Search by Title"
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                margin="normal"
+            />
+            <TextField
+                select
+                fullWidth
+                label="Category"
+                value={selectedCategory}
+                onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setSelectedSubcategory('');
+                }}
+                margin="normal"
+            >
+                {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.id}>
+                        {category.name}
+                    </MenuItem>
+                ))}
+            </TextField>
+            <TextField
+                select
+                fullWidth
+                label="Subcategory"
+                value={selectedSubcategory}
+                onChange={(e) => setSelectedSubcategory(e.target.value)}
+                margin="normal"
+                disabled={!selectedCategory}
+            >
+                {selectedCategory && categories.find(cat => cat.id === selectedCategory)?.subcategories.map((subcat) => (
+                    <MenuItem key={subcat.id} value={subcat.id}>
+                        {subcat.name}
+                    </MenuItem>
+                ))}
+            </TextField>
             <Grid container spacing={2}>
                 {likedTutorials.map((tutorial, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
@@ -54,7 +109,7 @@ const AdminLikes = () => {
                                 </Box>
                                 <Button
                                     component={Link}
-                                    to={`/all/category/subcategory/tutorialsdeatail/${tutorial.id}`} // encode the titre to include special characters
+                                    to={`/all/category/subcategory/tutorialsdeatail/${tutorial.id}`}
                                     variant="outlined"
                                     sx={{
                                         '&:hover': {
