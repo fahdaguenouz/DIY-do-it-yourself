@@ -38,6 +38,12 @@ const CreatorDashboard = () => {
     const [commentsRowsPerPage, setCommentsRowsPerPage] = useState(5);
     const [filteredTutorials, setFilteredTutorials] = useState([]);
 
+    // New states for chart-related data
+    const [chartTutorials, setChartTutorials] = useState([]);
+    const [chartCategory, setChartCategory] = useState('');
+    const [chartSubCategory, setChartSubCategory] = useState('');
+    const [chartSubCategories, setChartSubCategories] = useState([]);
+
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getUsers());
@@ -49,20 +55,29 @@ const CreatorDashboard = () => {
 
     useEffect(() => {
         setFilteredTutorials(
-            tutorials.filter(tutorial => tutorial.user_id === user.id && (!selectedSubCategory || tutorial.Sub_Categorie_id === selectedSubCategory))
+            tutorials.filter(tutorial => tutorial.user_id === user.id)
         );
-    }, [tutorials, selectedSubCategory, user.id]);
+    }, [tutorials, user.id]);
+
+    useEffect(() => {
+        setChartTutorials(
+            tutorials.filter(tutorial => tutorial.user_id === user.id && (!chartSubCategory || tutorial.Sub_Categorie_id === chartSubCategory))
+        );
+    }, [tutorials, chartSubCategory, user.id]);
 
     const handleCategoryChange = (event) => {
         const selectedCategoryId = event.target.value;
-        setSelectedCategory(selectedCategoryId);
-        setSelectedSubCategory('');
+        setChartCategory(selectedCategoryId);
+        setChartSubCategory('');
         const selectedCategoryData = categories.find(category => category.id === selectedCategoryId);
-        setSubCategories(selectedCategoryData ? selectedCategoryData.subcategories : []);
+        setChartSubCategories(selectedCategoryData ? selectedCategoryData.subcategories : []);
+        setChartTutorials(tutorials.filter(tutorial => tutorial.user_id === user.id && tutorial.Categorie_id === selectedCategoryId));
     };
 
     const handleSubCategoryChange = (event) => {
-        setSelectedSubCategory(event.target.value);
+        const selectedSubCategoryId = event.target.value;
+        setChartSubCategory(selectedSubCategoryId);
+        setChartTutorials(tutorials.filter(tutorial => tutorial.user_id === user.id && tutorial.Sub_Categorie_id === selectedSubCategoryId));
     };
 
     const handleTutorialsPageChange = (event, newPage) => {
@@ -91,39 +106,52 @@ const CreatorDashboard = () => {
         );
     }
 
-    // Calculate counts
-    const tutorialCount = filteredTutorials.length;
-    const commentCount = comments.filter(comment => filteredTutorials.some(tutorial => tutorial.id === comment.tutorial_id)).length;
-    const likeCount = likes.filter(like => filteredTutorials.some(tutorial => tutorial.id === like.tutorial_id)).length;
-    const signalCount = signals.filter(signal => filteredTutorials.some(tutorial => tutorial.id === signal.tutorial_id)).length;
+    // Calculate counts for filtered chart tutorials
+    const chartTutorialCount = chartTutorials.length;
+    const chartCommentCount = comments.filter(comment => chartTutorials.some(tutorial => tutorial.id === comment.tutorial_id)).length;
+    const chartLikeCount = likes.filter(like => chartTutorials.some(tutorial => tutorial.id === like.tutorial_id)).length;
+    const chartSignalCount = signals.filter(signal => chartTutorials.some(tutorial => tutorial.id === signal.tutorial_id)).length;
 
-    // Sort tutorials by likes and comments
-    const mostLikedTutorials = [...filteredTutorials].sort((a, b) => {
+    // Sort filtered chart tutorials by likes and comments
+    const mostLikedChartTutorials = [...chartTutorials].sort((a, b) => {
         const aLikes = likes.filter(like => like.tutorial_id === a.id).length;
         const bLikes = likes.filter(like => like.tutorial_id === b.id).length;
         return bLikes - aLikes;
     });
 
-    const mostCommentedTutorials = [...filteredTutorials].sort((a, b) => {
+    const mostCommentedChartTutorials = [...chartTutorials].sort((a, b) => {
         const aComments = comments.filter(comment => comment.tutorial_id === a.id).length;
         const bComments = comments.filter(comment => comment.tutorial_id === b.id).length;
         return bComments - aComments;
     });
 
-    // Chart data
+    // Sort filtered tutorials for tables by likes and comments
+    const sortedByLikes = [...filteredTutorials].sort((a, b) => {
+        const aLikes = likes.filter(like => like.tutorial_id === a.id).length;
+        const bLikes = likes.filter(like => like.tutorial_id === b.id).length;
+        return bLikes - aLikes;
+    });
+
+    const sortedByComments = [...filteredTutorials].sort((a, b) => {
+        const aComments = comments.filter(comment => comment.tutorial_id === a.id).length;
+        const bComments = comments.filter(comment => comment.tutorial_id === b.id).length;
+        return bComments - aComments;
+    });
+
+    // Chart data for filtered chart tutorials
     const chartData = {
-        labels: filteredTutorials.map(tutorial => tutorial.titre),
+        labels: chartTutorials.map(tutorial => tutorial.titre),
         datasets: [
             {
                 label: 'Likes',
-                data: filteredTutorials.map(tutorial => likes.filter(like => like.tutorial_id === tutorial.id).length),
+                data: chartTutorials.map(tutorial => likes.filter(like => like.tutorial_id === tutorial.id).length),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             },
             {
                 label: 'Comments',
-                data: filteredTutorials.map(tutorial => comments.filter(comment => comment.tutorial_id === tutorial.id).length),
+                data: chartTutorials.map(tutorial => comments.filter(comment => comment.tutorial_id === tutorial.id).length),
                 backgroundColor: 'rgba(153, 102, 255, 0.6)',
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 1
@@ -137,22 +165,22 @@ const CreatorDashboard = () => {
                 <Typography variant="h5" align="center">Dashboard</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Tutorials" count={tutorialCount.toString()} percentage={59.3} extra={tutorialCount.toString()} />
+                <AnalyticEcommerce title="Total Tutorials" count={filteredTutorials.length.toString()} percentage={59.3} extra={filteredTutorials.length.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Comments" count={commentCount.toString()} percentage={70.5} extra={commentCount.toString()} />
+                <AnalyticEcommerce title="Total Comments" count={comments.filter(comment => filteredTutorials.some(tutorial => tutorial.id === comment.tutorial_id)).length.toString()} percentage={70.5} extra={comments.filter(comment => filteredTutorials.some(tutorial => tutorial.id === comment.tutorial_id)).length.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Likes" count={likeCount.toString()} percentage={27.4} extra={likeCount.toString()} />
+                <AnalyticEcommerce title="Total Likes" count={likes.filter(like => filteredTutorials.some(tutorial => tutorial.id === like.tutorial_id)).length.toString()} percentage={27.4} extra={likes.filter(like => filteredTutorials.some(tutorial => tutorial.id === like.tutorial_id)).length.toString()} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Total Signals" count={signalCount.toString()} percentage={27.4} isLoss color="warning" extra={signalCount.toString()} />
+                <AnalyticEcommerce title="Total Signals" count={signals.filter(signal => filteredTutorials.some(tutorial => tutorial.id === signal.tutorial_id)).length.toString()} percentage={27.4} isLoss color="warning" extra={signals.filter(signal => filteredTutorials.some(tutorial => tutorial.id === signal.tutorial_id)).length.toString()} />
             </Grid>
 
             <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                     <InputLabel>Category</InputLabel>
-                    <Select value={selectedCategory} onChange={handleCategoryChange}>
+                    <Select value={chartCategory} onChange={handleCategoryChange}>
                         <MenuItem value="">
                             <em>All</em>
                         </MenuItem>
@@ -168,11 +196,11 @@ const CreatorDashboard = () => {
             <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                     <InputLabel>Subcategory</InputLabel>
-                    <Select value={selectedSubCategory} onChange={handleSubCategoryChange} disabled={!selectedCategory}>
+                    <Select value={chartSubCategory} onChange={handleSubCategoryChange} disabled={!chartCategory}>
                         <MenuItem value="">
                             <em>All</em>
                         </MenuItem>
-                        {subCategories.map(subcategory => (
+                        {chartSubCategories.map(subcategory => (
                             <MenuItem key={subcategory.id} value={subcategory.id}>
                                 {subcategory.name}
                             </MenuItem>
@@ -181,10 +209,10 @@ const CreatorDashboard = () => {
                 </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={8} lg={6}>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                    <Box width="80%">
-                        <Bar data={chartData} options={{ responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Tutorial Likes and Comments' } } }} />
+            <Grid item xs={12}>
+                <Box display="flex" justifyContent="center">
+                    <Box width="75%">
+                        <Bar data={chartData} />
                     </Box>
                 </Box>
             </Grid>
@@ -203,7 +231,7 @@ const CreatorDashboard = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {mostLikedTutorials.slice(tutorialsPage * tutorialsRowsPerPage, tutorialsPage * tutorialsRowsPerPage + tutorialsRowsPerPage).map((tutorial) => (
+                                    {sortedByLikes.slice(tutorialsPage * tutorialsRowsPerPage, tutorialsPage * tutorialsRowsPerPage + tutorialsRowsPerPage).map((tutorial) => (
                                         <TableRow key={tutorial.id}>
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
@@ -217,7 +245,7 @@ const CreatorDashboard = () => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={mostLikedTutorials.length}
+                                count={sortedByLikes.length}
                                 rowsPerPage={tutorialsRowsPerPage}
                                 page={tutorialsPage}
                                 onPageChange={handleTutorialsPageChange}
@@ -239,7 +267,7 @@ const CreatorDashboard = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {mostCommentedTutorials.slice(commentsPage * commentsRowsPerPage, commentsPage * commentsRowsPerPage + commentsRowsPerPage).map((tutorial) => (
+                                    {sortedByComments.slice(commentsPage * commentsRowsPerPage, commentsPage * commentsRowsPerPage + commentsRowsPerPage).map((tutorial) => (
                                         <TableRow key={tutorial.id}>
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
@@ -253,7 +281,7 @@ const CreatorDashboard = () => {
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25]}
                                 component="div"
-                                count={mostCommentedTutorials.length}
+                                count={sortedByComments.length}
                                 rowsPerPage={commentsRowsPerPage}
                                 page={commentsPage}
                                 onPageChange={handleCommentsPageChange}

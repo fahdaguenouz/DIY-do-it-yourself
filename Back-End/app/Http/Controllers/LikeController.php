@@ -40,7 +40,8 @@ public function getLikes()
         return response()->json(['message' => 'Unauthenticated'], 401);
     }
 
-    $likes = Like::all(); // Fetch all likes
+    $likes = Like::with(['tutorial','user'])->get();; // Fetch all likes
+
     return response()->json ($likes);
 }
 }

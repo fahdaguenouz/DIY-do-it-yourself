@@ -17,7 +17,7 @@ import {
 import { EditOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 
-export default function AdminProfile() {
+export default function CreatorProfile() {
 
     const { baseUrl, user, authenticated, loading } = useSelector((state) => state.auth);
 
