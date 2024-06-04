@@ -67,6 +67,12 @@ import SignalTutorials from "@/Pages/AuthPages/MODERATOR/Pages/SignalTutorials";
 import ModerateurLikes from "@/Pages/AuthPages/MODERATOR/Pages/ModerateurLikes";
 import ModerateurComments from "@/Pages/AuthPages/MODERATOR/Pages/ModerateurComments";
 import CreatorComments from "@/Pages/AuthPages/CREATOR/Pages/CreatorComments";
+import CreatorEditeProfile from "@/Pages/AuthPages/CREATOR/Pages/Forms/CreatorEditeProfile";
+import CreatorProfile from "@/Pages/AuthPages/CREATOR/Pages/CreatorProfile";
+import ModeratorEdteProfile from "@/Pages/AuthPages/MODERATOR/Pages/ModeratorEdteProfile";
+import ModeratorProfile from "@/Pages/AuthPages/MODERATOR/Pages/ModeratorProfile";
+import StandardEditeProfile from "@/Pages/AuthPages/STANDARD/Pages/StandardEditeProfile";
+import StandardProfile from "@/Pages/AuthPages/STANDARD/Pages/StandardProfile";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -162,6 +168,14 @@ const DynamicRouter = () => {
                         { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
                         { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
                         { path: '/moderator/signals/tutorials', element: <SignalTutorials /> },
+                        {
+                            path: '/moderator/edit-profile',
+                            element: <ModeratorEdteProfile />
+                        },
+                        {
+                            path: '/moderator/moderator-profile',
+                            element: <ModeratorProfile />
+                        }
 
 
 
@@ -192,6 +206,14 @@ const DynamicRouter = () => {
                         { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
                         { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
                         { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+                        {
+                            path: '/creator/edit-profile',
+                            element: <CreatorEditeProfile />
+                        },
+                        {
+                            path: '/creator/creator-profile',
+                            element: <CreatorProfile />
+                        }
 
 
 
@@ -217,6 +239,14 @@ const DynamicRouter = () => {
                         { path: '/all/category/subcategory/:id', element: <AllSubCategory /> },
                         { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
                         { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+                        {
+                            path: '/standard/edit-profile',
+                            element: <StandardEditeProfile />
+                        },
+                        {
+                            path: '/standard/standard-profile',
+                            element: <StandardProfile />
+                        }
 
 
 
