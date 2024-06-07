@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Box,
+    Button,
     CircularProgress,
     Grid,
     Typography,
@@ -18,6 +19,7 @@ import {
     FormControl,
     InputLabel
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { getTutorials, getUsers, getComment, getLike, getSignal, getCategory } from '@/Redux/authActions';
 import AnalyticEcommerce from './AnalyticEcommerce';
@@ -38,7 +40,6 @@ const CreatorDashboard = () => {
     const [commentsRowsPerPage, setCommentsRowsPerPage] = useState(5);
     const [filteredTutorials, setFilteredTutorials] = useState([]);
 
-    // New states for chart-related data
     const [chartTutorials, setChartTutorials] = useState([]);
     const [chartCategory, setChartCategory] = useState('');
     const [chartSubCategory, setChartSubCategory] = useState('');
@@ -106,13 +107,11 @@ const CreatorDashboard = () => {
         );
     }
 
-    // Calculate counts for filtered chart tutorials
     const chartTutorialCount = chartTutorials.length;
     const chartCommentCount = comments.filter(comment => chartTutorials.some(tutorial => tutorial.id === comment.tutorial_id)).length;
     const chartLikeCount = likes.filter(like => chartTutorials.some(tutorial => tutorial.id === like.tutorial_id)).length;
     const chartSignalCount = signals.filter(signal => chartTutorials.some(tutorial => tutorial.id === signal.tutorial_id)).length;
 
-    // Sort filtered chart tutorials by likes and comments
     const mostLikedChartTutorials = [...chartTutorials].sort((a, b) => {
         const aLikes = likes.filter(like => like.tutorial_id === a.id).length;
         const bLikes = likes.filter(like => like.tutorial_id === b.id).length;
@@ -125,7 +124,6 @@ const CreatorDashboard = () => {
         return bComments - aComments;
     });
 
-    // Sort filtered tutorials for tables by likes and comments
     const sortedByLikes = [...filteredTutorials].sort((a, b) => {
         const aLikes = likes.filter(like => like.tutorial_id === a.id).length;
         const bLikes = likes.filter(like => like.tutorial_id === b.id).length;
@@ -138,7 +136,6 @@ const CreatorDashboard = () => {
         return bComments - aComments;
     });
 
-    // Chart data for filtered chart tutorials
     const chartData = {
         labels: chartTutorials.map(tutorial => tutorial.titre),
         datasets: [
@@ -228,6 +225,7 @@ const CreatorDashboard = () => {
                                         <TableCell>ID</TableCell>
                                         <TableCell>Title</TableCell>
                                         <TableCell>Likes</TableCell>
+                                        <TableCell>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -236,6 +234,16 @@ const CreatorDashboard = () => {
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
                                             <TableCell>{likes.filter(like => like.tutorial_id === tutorial.id).length}</TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    component={Link}
+                                                    to={`/creator/tutorial-detail/${tutorial.id}/${encodeURIComponent(tutorial.titre)}`}
+                                                >
+                                                    View
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -264,6 +272,7 @@ const CreatorDashboard = () => {
                                         <TableCell>ID</TableCell>
                                         <TableCell>Title</TableCell>
                                         <TableCell>Comments</TableCell>
+                                        <TableCell>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -272,6 +281,16 @@ const CreatorDashboard = () => {
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
                                             <TableCell>{comments.filter(comment => comment.tutorial_id === tutorial.id).length}</TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    component={Link}
+                                                    to={`/creator/tutorial-detail/${tutorial.id}/${encodeURIComponent(tutorial.titre)}`}
+                                                >
+                                                    View
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

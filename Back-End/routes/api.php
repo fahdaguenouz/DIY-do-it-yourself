@@ -43,6 +43,8 @@ Route::get('/get-signals', [SignalController::class, 'index']);
 Route::post('/tutorials/{id}/comments', [CommentController::class, 'store']);
 Route::get('/tutorials/comments', [CommentController::class, 'index']);
 // Route::post('/add-user', [UserController::class, 'store']);
+// In api.php
+
 
 
 Route::apiResources([
@@ -59,7 +61,7 @@ Route::put('/users/update-user/{user}', [UserController::class, 'update']);
 Route::put('/tutorials/update-tutorial/{tutorialId}', [TutorialController::class, 'update']);
 Route::put('/category/update-category/{CategoryId}', [CategoryController::class, 'update']);
 Route::put('/subcategory/update-subcategory/{CategoryId}', [SubCategoryController::class, 'update']);
-
+Route::put('/category/update-picture/{id}', [CategoryController::class, 'updatePicture']);
 
 
 

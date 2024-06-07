@@ -6,7 +6,8 @@ import {
   ClusterOutlined,
   FontSizeOutlined,
   LoadingOutlined,
-  TeamOutlined
+  TeamOutlined,
+  FileTextOutlined
 } from '@ant-design/icons';
 
 // icons
@@ -17,7 +18,8 @@ const icons = {
   AntDesignOutlined,
   LoadingOutlined,
   AppstoreAddOutlined,
-  TeamOutlined
+  TeamOutlined,
+  FileTextOutlined
 };
 
 // ==============================|| MENU ITEMS - UTILITIES ||============================== //
@@ -33,6 +35,13 @@ const utilities = {
       type: 'item',
       url: '/admin/gestion-users',
       icon: icons.TeamOutlined
+    },
+    {
+      id: 'tutorial-info',
+      title: 'Tutorial Details',
+      type: 'item',
+      url: '/admin/tutorial-deatils',
+      icon: icons.FileTextOutlined
     },
     {
       id: 'Category',

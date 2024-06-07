@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryPictureRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResources;
 use App\Models\Category;
@@ -22,7 +23,10 @@ class CategoryController extends Controller
     }
 
     public function store(StoreCategoryRequest $request)
+
     {
+    Log::info('Received  request:', $request->all());
+
         // Handle the picture upload if a picture is provided
         if ($request->hasFile('Category_picture')) {
             $picturePath = $request->file('Category_picture')->store('categories', 'public');
@@ -47,18 +51,39 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $data = $request->only(['name', 'description']);
 
-        if ($request->hasFile('Category_picture')) {
-            if ($category->Category_picture) {
-                Storage::delete('public/' . $category->Category_picture);
-            }
-            $data['Category_picture'] = $request->file('Category_picture')->store('categories', 'public');
-        }
-
-        if ($data || $request->hasFile('Category_picture')) {
+        if (count($data) > 0) {
             $category->update($data);
             return new CategoryResources($category);
         } else {
-            return response()->json(['message' => 'Nothing to update'], 422);
+            return response()->json(['message' => 'At least one field must be updated.'], 422);
         }
     }
+
+    public function updatePicture(UpdateCategoryPictureRequest $request, $id)
+    {
+        Log::info('Received update picture request:', $request->all());
+
+        if ($request->hasFile('Category_picture')) {
+            Log::info('Category_picture file received:', [
+                'original_name' => $request->file('Category_picture')->getClientOriginalName(),
+                'size' => $request->file('Category_picture')->getSize(),
+            ]);
+
+            $category = Category::findOrFail($id);
+
+            if ($category->Category_picture) {
+                Storage::delete('public/' . $category->Category_picture);
+            }
+
+            $picturePath = $request->file('Category_picture')->store('categories', 'public');
+            $category->update(['Category_picture' => $picturePath]);
+
+            return new CategoryResources($category);
+        } else {
+            Log::error('No Category_picture file received.');
+            return response()->json(['error' => 'No Category_picture file received.'], 422);
+        }
+    }
+
+
 }

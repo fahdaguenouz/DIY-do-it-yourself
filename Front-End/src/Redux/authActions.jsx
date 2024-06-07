@@ -32,6 +32,8 @@ export const login = (email, password) => async dispatch => {
       dispatch(getTutorials())
       dispatch(getCategory());
       dispatch(getSignal())
+      dispatch(getLike())
+      dispatch(getComment())
 
      // Fetch all users if the logged in user is an admin
     }
@@ -44,10 +46,16 @@ export const login = (email, password) => async dispatch => {
           borderRadius: '8px',
         }
       });
-      dispatch(getCategory());
         dispatch(getTutorials())
         dispatch(getCategory());
-      dispatch(getTutorials())
+      dispatch(getLike())
+      dispatch(getComment())
+      dispatch(getSignal())
+      dispatch(getUsers());
+
+
+
+
 
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
@@ -61,10 +69,12 @@ export const login = (email, password) => async dispatch => {
           borderRadius: '8px',
         }
       });
-      dispatch(getCategory());
         dispatch(getTutorials())
         dispatch(getCategory());
-      dispatch(getTutorials())
+        dispatch(getLike())
+        dispatch(getComment())
+        dispatch(getSignal())
+      dispatch(getUsers());
 
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
@@ -78,11 +88,12 @@ export const login = (email, password) => async dispatch => {
           borderRadius: '8px',
         }
       });
-      dispatch(getCategory());
         dispatch(getTutorials())
         dispatch(getCategory());
-      dispatch(getTutorials())
-
+        dispatch(getLike())
+        dispatch(getComment())
+        dispatch(getSignal())
+      dispatch(getUsers());
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
     }
@@ -342,21 +353,39 @@ export const logout = () => async dispatch => {
     }
 };
 
-export const UpdateCategory = (CategId, CategData, onSuccess) => async dispatch => {
+
+
+export const UpdateCategory = (CategId, data, onSuccess) => async dispatch => {
   dispatch({ type: 'SET_LOADING', payload: true });
   try {
-      const response = await UserApi.update_Category(CategId, CategData);
-      toast.success('Category updated successfully!');
-      if (onSuccess) {
-          onSuccess();
-          dispatch(getCategory()); // Fetch updated list of tutorials
-           // Fetch updated list of tutorials
-      }
+    const response = await UserApi.update_Category(CategId, data);
+    toast.success('Category updated successfully!');
+    if (onSuccess) {
+      onSuccess();
+      dispatch(getCategory());
+    }
   } catch (error) {
-      toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
-      console.error("Error updating category:", error);
+    toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+    console.error("Error updating category:", error);
   } finally {
-      dispatch({ type: 'SET_LOADING', payload: false });
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+};
+
+export const UpdateCategoryPicture = (CategId, formData, onSuccess) => async dispatch => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const response = await UserApi.update_CategoryPicture(CategId, formData);
+    toast.success('Category picture updated successfully!');
+    if (onSuccess) {
+      onSuccess();
+      dispatch(getCategory());
+    }
+  } catch (error) {
+    toast.error(`Error: ${error.response ? error.response.data.message : error.message}`);
+    console.error("Error updating category picture:", error);
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
   }
 };
 

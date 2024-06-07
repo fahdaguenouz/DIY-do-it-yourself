@@ -84,6 +84,14 @@ update_Category: async (CategoId, formData) => {
     );
  
 },
+ update_CategoryPicture : async (CategId, formData) => {
+  console.log('Sending FormData:', formData);
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+
+  return await axiosClient.put(`/category/update-picture/${CategId}`, formData);
+},
 
 update_SubCategory: async (subCategoryId, formData) => {
   return await axiosClient.put(`/subcategory/update-subcategory/${subCategoryId}`, formData, {

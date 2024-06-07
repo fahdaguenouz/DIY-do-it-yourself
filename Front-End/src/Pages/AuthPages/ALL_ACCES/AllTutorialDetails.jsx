@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import { CircularProgress, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddSignal, getTutorials, likeTutorial, getLike, CommentTutorial, getComment, getUsers } from '@/Redux/authActions';
@@ -19,7 +19,8 @@ const AllTutorialDetails = () => {
     const { tutorials, likes, comments, users, baseUrl, user } = useSelector(state => state.auth);
     const tutorial = tutorials.find(t => t.id === parseInt(id));
     const tutorialLikes = likes.filter(like => like.tutorial_id === parseInt(id));
-    const userLike=tutorialLikes.find(like=>like.user_id===user.id)
+    const userLike = tutorialLikes.find(like => like.user_id === user.id);
+
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getLike(id));
@@ -122,6 +123,9 @@ const AllTutorialDetails = () => {
                             <Typography variant="h5" gutterBottom>Category: {tutorial.sub_category.name}</Typography>
                             <Typography variant="h5" gutterBottom>Subcategory: {tutorial.sub_category.name}</Typography>
                             <Typography variant="body1" gutterBottom>Description: {tutorial.description}</Typography>
+                            <Typography variant="body2" color="textSecondary">Created on: {new Date(tutorial.created_at).toLocaleDateString()}</Typography>
+
+
                         </Box>
                     </Grid>
                 </Grid>
@@ -136,6 +140,7 @@ const AllTutorialDetails = () => {
                                 <video src={`${baseUrl}storage/${media.media_url}`} controls style={{ width: '40%', height: 'auto', marginRight: '10px', borderRadius: '8px' }} />
                             )}
                             <CardContent style={{ flex: 1 }}>
+                                <Typography variant="h6">Etape: {index + 1}</Typography>
                                 <Typography variant="body1"><b>Description:</b> {media.description}</Typography>
                             </CardContent>
                         </Card>
@@ -165,6 +170,7 @@ const AllTutorialDetails = () => {
                         return (
                             <Box key={index} sx={{ mt: 4 }}>
                                 <Typography variant="body1"><b>{userComment ? userComment.nom : 'Unknown User'}:</b> {comment.description}</Typography>
+                                <Typography variant="body2" color="textSecondary">Commented on: {new Date(comment.created_at).toLocaleDateString()}</Typography>
                             </Box>
                         );
                     })}

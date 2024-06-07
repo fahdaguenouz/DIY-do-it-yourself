@@ -21,9 +21,9 @@ const Header = () => {
             <li>
               <Link to='/about' style={{textDecorationLine:'none'}}>About</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to='/team' style={{textDecorationLine:'none'}}>Team</Link>
-            </li>
+            </li> */}
             <li>
               <Link to='/pricing' style={{textDecorationLine:'none'}}>Pricing</Link>
             </li>

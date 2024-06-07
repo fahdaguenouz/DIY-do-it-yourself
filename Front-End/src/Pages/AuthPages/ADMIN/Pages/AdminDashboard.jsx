@@ -20,7 +20,6 @@ const AdminDashboard = () => {
         dispatch(getTutorials());
         dispatch(getUsers());
         dispatch(getCategory());
-    
         dispatch(getSignal());
     }, [dispatch]);
 
@@ -93,6 +92,23 @@ const AdminDashboard = () => {
         ],
     };
 
+    const tutorialsByCategoryData = {
+        labels: categories.map(category => category.name),
+        datasets: [
+            {
+                label: 'Number of Tutorials by Category',
+                data: categories.map(category => {
+                    return category.subcategories.reduce((count, subcategory) => {
+                        return count + tutorials.filter(tutorial => tutorial.sub_category.id === subcategory.id).length;
+                    }, 0);
+                }),
+                backgroundColor: 'rgba(255, 99, 132, 0.6)', // Red background color
+                borderColor: 'rgba(255, 99, 132, 1)', // Red border color
+                borderWidth: 1,
+            },
+        ],
+    };
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} sx={{ mb: -2.25 }}>
@@ -151,7 +167,7 @@ const AdminDashboard = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-                <Typography variant="h6">Tutorials by Creator</Typography>
+                <Typography variant="h6">Tutorials by Top 10 Creator</Typography>
                 <Box sx={{ height: 400, marginTop: 4 }}>
                     <Bar
                         data={userData}
@@ -176,76 +192,30 @@ const AdminDashboard = () => {
                 </Box>
             </Grid>
 
-            <Grid item xs={12}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <Typography variant="h6">Tutorials</Typography>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Title</TableCell>
-                                        <TableCell>Description</TableCell>
-                                        <TableCell>Created At</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {tutorials.slice(tutorialsPage * rowsPerPage, tutorialsPage * rowsPerPage + rowsPerPage).map((tutorial) => (
-                                        <TableRow key={tutorial.id}>
-                                            <TableCell>{tutorial.id}</TableCell>
-                                            <TableCell>{tutorial.titre}</TableCell>
-                                            <TableCell>{tutorial.description}</TableCell>
-                                            <TableCell>{tutorial.created_at}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5]}
-                            component="div"
-                            count={tutorials.length}
-                            rowsPerPage={rowsPerPage}
-                            page={tutorialsPage}
-                            onPageChange={handleTutorialsPageChange}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
-                        <Typography variant="h6">Top Creators</Typography>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Tutorials Created</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {topCreators.slice(creatorsPage * rowsPerPage, creatorsPage * rowsPerPage + rowsPerPage).map((creator) => (
-                                        <TableRow key={creator.id}>
-                                            <TableCell>{creator.id}</TableCell>
-                                            <TableCell>{creator.nom} {creator.prenom}</TableCell>
-                                            <TableCell>{creator.email}</TableCell>
-                                            <TableCell>{creator.tutorialCount}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5]}
-                            component="div"
-                            count={topCreators.length}
-                            rowsPerPage={rowsPerPage}
-                            page={creatorsPage}
-                            onPageChange={handleCreatorsPageChange}
-                        />
-                    </Grid>
-                </Grid>
+            <Grid item xs={12} md={6}>
+                <Typography variant="h6">Number of Tutorials by Category</Typography>
+                <Box sx={{ height: 400, marginTop: 4 }}>
+                    <Bar
+                        data={tutorialsByCategoryData}
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    maxBarThickness: 50,
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                },
+                            },
+                            plugins: {
+                                legend: { position: 'top' },
+                                title: { display: true, text: 'Number of Tutorials by Category' }
+                            }
+                        }}
+                    />
+                </Box>
             </Grid>
         </Grid>
     );
