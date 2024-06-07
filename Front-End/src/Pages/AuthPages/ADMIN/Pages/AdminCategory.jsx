@@ -4,7 +4,7 @@ import {
   DialogContent, DialogTitle, TextField, CircularProgress
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { AddCategory, UpdateCategory, getCategory } from "@/Redux/authActions";
+import { AddCategory, UpdateCategory, getCategory, UpdateCategoryPicture } from "@/Redux/authActions";
 import toast from "react-hot-toast";
 
 const AdminCategory = () => {
@@ -42,38 +42,6 @@ const AdminCategory = () => {
     setOriginalValues({});
   };
 
-  const handleSave = async () => {
-    if (isEdit && !hasChanges()) {
-      toast.error("At least one field must be updated.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('name', categoryName);
-    formData.append('description', description);
-    if (picture) {
-      formData.append('Category_picture', picture);
-    }
-
-    try {
-      if (isEdit) {
-        if (Object.keys(getChangedFields()).length > 0) {
-          await dispatch(UpdateCategory(selectedCategory.id, formData));
-        } else {
-          toast.error("At least one field must be updated.");
-          return;
-        }
-      } else {
-        await dispatch(AddCategory(formData));
-      }
-      setOpen(false);
-      resetForm();
-      dispatch(getCategory());
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   const hasChanges = () => {
     if (selectedCategory) {
       return (
@@ -85,27 +53,59 @@ const AdminCategory = () => {
     return categoryName || description || picture;
   };
 
-  const getChangedFields = () => {
-    const changedFields = {};
-    if (selectedCategory) {
-      if (categoryName !== selectedCategory.name) {
-        changedFields.name = categoryName;
-      }
-      if (description !== selectedCategory.description) {
-        changedFields.description = description;
-      }
-      if (picture !== null) {
-        changedFields.Category_picture = picture;
-      }
+  const handleSave = async () => {
+    if (isEdit && !hasChanges()) {
+      toast.error("At least one field must be updated.");
+      return;
     }
-    return changedFields;
+  
+    try {
+      if (isEdit) {
+        if (categoryName !== selectedCategory.name || description !== selectedCategory.description) {
+          const data = { name: categoryName, description: description };
+          await dispatch(UpdateCategory(selectedCategory.id, data));
+        }
+        if (picture) {
+          const formData = new FormData();
+          formData.append('Category_picture', picture);
+  
+          // Log the FormData entries
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
+  
+          await dispatch(UpdateCategoryPicture(selectedCategory.id, formData));
+        }
+      } else {
+        const formData = new FormData();
+        formData.append('name', categoryName);
+        formData.append('description', description);
+        if (picture) {
+          formData.append('Category_picture', picture);
+        }
+  
+        // Log the FormData entries
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+  
+        await dispatch(AddCategory(formData));
+      }
+      setOpen(false);
+      resetForm();
+      dispatch(getCategory());
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
-console.log(
-  categories
-);
+  
+  
+  
+
   const handlePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      console.log('Selected file:', file); // Log the selected file details
       setPicture(file);
       setPreview(URL.createObjectURL(file));
     } else {
@@ -113,9 +113,10 @@ console.log(
       setPreview(null);
     }
   };
+  
 
   const handleCategoryClick = (category) => {
-    alert(`Category: ${category.name}\nDescription: ${category.description} \n url:${baseUrl}${category.Category_picture} `);
+    alert(`Category: ${category.name}\nDescription: ${category.description}\nURL: ${baseUrl}storage/${category.Category_picture}`);
   };
 
   const handleEditClick = (category) => {
@@ -132,13 +133,15 @@ console.log(
     });
     setOpen(true);
   };
-if (!categories){
-  return(
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+
+  if (!categories) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
-    </Box>
-  )
-}
+      </Box>
+    );
+  }
+
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
@@ -153,8 +156,7 @@ if (!categories){
         <Box sx={{ textAlign: 'center', mt: 4 }}>
           <Grid container spacing={3}>
             {categories.map((val) => (
-              
-              <Grid item xs={12} sm={6} md={3} lg={2} key={val.name}>
+              <Grid item xs={12} sm={6} md={3} lg={2} key={val.id}>
                 <Box
                   onClick={() => handleCategoryClick(val)}
                   sx={{
@@ -183,7 +185,6 @@ if (!categories){
                       alt={val.name}
                       sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
-                    
                     <Box
                       component="img"
                       src={`${baseUrl}storage/${val.Category_picture}`} 
@@ -216,7 +217,7 @@ if (!categories){
                       mt: 1,
                     }}
                   >
-                    SubCategories : {val.subcategories.length}
+                    SubCategories: {val.subcategories.length}
                   </Typography>
                   <Button onClick={(e) => { e.stopPropagation(); handleEditClick(val); }} sx={{ mt: 1 }}>
                     Edit
@@ -256,7 +257,7 @@ if (!categories){
             />
           </Button>
           {preview && (
-            <img src={`${baseUrl}storage/${preview}`} alt="Preview" style={{ maxWidth: "100px", marginTop: "10px" }} />
+            <img src={preview ? preview : `${baseUrl}storage/${preview}`} alt="Preview" style={{ maxWidth: "100px", marginTop: "10px" }} />
           )}
         </DialogContent>
         <DialogActions>

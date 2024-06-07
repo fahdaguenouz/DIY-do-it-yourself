@@ -86,7 +86,7 @@ const dispatch =useDispatch()
             level_id: 1  // Default level id
           };
           console.log('Submission data:', submissionData);
-          alert(JSON.stringify(submissionData, null, 2));
+          // alert(JSON.stringify(submissionData, null, 2));
           try {
             await dispatch(register(submissionData));  // Wait for the register action to complete
             navigate("/standard");  // Navigate after registration completes

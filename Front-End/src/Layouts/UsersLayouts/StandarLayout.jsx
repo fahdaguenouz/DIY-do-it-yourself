@@ -20,18 +20,14 @@ const StandarLayout = () => {
         <Box sx={{ display: 'flex', width: '100%' }}>
 
 
-            
-        <Header />
-        <MainDrawer />
-        <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-        <Toolbar />
-            <Outlet />
+
+            <Header />
+            <MainDrawer />
+            <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+                <Toolbar />
+                <Outlet />
+            </Box>
         </Box>
-
-
-    
-
-</Box>
     );
 }
 
