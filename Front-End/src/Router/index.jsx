@@ -73,6 +73,7 @@ import ModeratorEdteProfile from "@/Pages/AuthPages/MODERATOR/Pages/ModeratorEdt
 import ModeratorProfile from "@/Pages/AuthPages/MODERATOR/Pages/ModeratorProfile";
 import StandardEditeProfile from "@/Pages/AuthPages/STANDARD/Pages/StandardEditeProfile";
 import StandardProfile from "@/Pages/AuthPages/STANDARD/Pages/StandardProfile";
+import TutorialsInfo from "@/Pages/AuthPages/ADMIN/Pages/TutorialsInfo";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -148,6 +149,8 @@ const DynamicRouter = () => {
                         { path: '/admin/tutorials/mycomments', element: <AdminComments /> },
                         { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
                         { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
+                        { path: '/admin/tutorial-deatils', element: <TutorialsInfo /> },
+
 
 
 

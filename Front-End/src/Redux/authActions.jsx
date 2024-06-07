@@ -32,6 +32,8 @@ export const login = (email, password) => async dispatch => {
       dispatch(getTutorials())
       dispatch(getCategory());
       dispatch(getSignal())
+      dispatch(getLike())
+      dispatch(getComment())
 
      // Fetch all users if the logged in user is an admin
     }
@@ -44,12 +46,14 @@ export const login = (email, password) => async dispatch => {
           borderRadius: '8px',
         }
       });
-      dispatch(getCategory());
         dispatch(getTutorials())
         dispatch(getCategory());
-      dispatch(getTutorials())
       dispatch(getLike())
       dispatch(getComment())
+      dispatch(getSignal())
+      dispatch(getUsers());
+
+
 
 
 
@@ -65,10 +69,12 @@ export const login = (email, password) => async dispatch => {
           borderRadius: '8px',
         }
       });
-      dispatch(getCategory());
         dispatch(getTutorials())
         dispatch(getCategory());
-      dispatch(getTutorials())
+        dispatch(getLike())
+        dispatch(getComment())
+        dispatch(getSignal())
+      dispatch(getUsers());
 
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
@@ -82,11 +88,12 @@ export const login = (email, password) => async dispatch => {
           borderRadius: '8px',
         }
       });
-      dispatch(getCategory());
         dispatch(getTutorials())
         dispatch(getCategory());
-      dispatch(getTutorials())
-
+        dispatch(getLike())
+        dispatch(getComment())
+        dispatch(getSignal())
+      dispatch(getUsers());
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
     }
