@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CircularProgress, Rating, TextField, Button, Card, CardContent, Typography, Container, Grid, Box, Paper } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLike, getTutorials, likeTutorial } from '@/Redux/authActions';
- 
+import { getComment, getLike, getTutorials, getUsers, likeTutorial } from '@/Redux/authActions';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+
 const TutorialDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

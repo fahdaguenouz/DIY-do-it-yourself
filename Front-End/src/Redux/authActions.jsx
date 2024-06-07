@@ -48,6 +48,10 @@ export const login = (email, password) => async dispatch => {
         dispatch(getTutorials())
         dispatch(getCategory());
       dispatch(getTutorials())
+      dispatch(getLike())
+      dispatch(getComment())
+
+
 
         // dispatch(getRoles());
      // Fetch all users if the logged in user is an admin
