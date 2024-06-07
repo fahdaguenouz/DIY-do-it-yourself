@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const GestAdminSubCategory = () => {
   const { id } = useParams();
-  const { categories, baseUrl, loading } = useSelector(state => state.auth);
+  const { categories, baseUrl, loading, tutorials } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -19,6 +19,8 @@ const GestAdminSubCategory = () => {
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [subcategoryDetails, setSubcategoryDetails] = useState(null);
 
   useEffect(() => {
     dispatch(getCategory());
@@ -71,6 +73,7 @@ const GestAdminSubCategory = () => {
       toast.error(error.response?.data?.message || "Error updating SubCategory");
     }
   };
+
   const hasChanges = () => {
     if (selectedSubCategory) {
       return (
@@ -93,6 +96,17 @@ const GestAdminSubCategory = () => {
     }
   };
 
+  const handleSubCategoryClick = (sub) => {
+    const tutorialsCount = tutorials.filter(tutorial => tutorial.Sub_Categorie_id === sub.id).length;
+    setSubcategoryDetails({ ...sub, tutorialsCount, categoryName: category.name });
+    setDetailDialogOpen(true);
+  };
+
+  const handleDetailDialogClose = () => {
+    setDetailDialogOpen(false);
+    setSubcategoryDetails(null);
+  };
+
   const handleEditClick = (sub) => {
     setIsEdit(true);
     setSelectedSubCategory(sub);
@@ -103,12 +117,12 @@ const GestAdminSubCategory = () => {
     setOpen(true);
   };
 
-  if (!category){
-    return(
+  if (!category) {
+    return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-          <CircularProgress />
+        <CircularProgress />
       </Box>
-    )
+    );
   }
 
   return (
@@ -134,6 +148,7 @@ const GestAdminSubCategory = () => {
             category.subcategories.map(sub => (
               <Grid item xs={12} sm={6} md={3} lg={2} key={sub.id}>
                 <Box
+                  onClick={() => handleSubCategoryClick(sub)}
                   sx={{
                     boxShadow: '0 5px 25px -2px rgb(0 0 0 / 6%)',
                     backgroundColor: '#fff',
@@ -232,7 +247,7 @@ const GestAdminSubCategory = () => {
             />
           </Button>
           {preview && (
-            <img src={`${baseUrl}storage/${preview}`} alt="Preview" style={{ maxWidth: "100px", marginTop: "10px" }} />
+            <img src={preview ? preview : `${baseUrl}storage/${preview}`} alt="Preview" style={{ maxWidth: "100px", marginTop: "10px" }} />
           )}
         </DialogContent>
         <DialogActions>
@@ -241,6 +256,32 @@ const GestAdminSubCategory = () => {
           </Button>
           <Button onClick={handleSave} color="primary" disabled={loading}>
             {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={detailDialogOpen} onClose={handleDetailDialogClose}>
+        <DialogTitle>Subcategory Details</DialogTitle>
+        <DialogContent>
+          {subcategoryDetails && (
+            <>
+              <Typography variant="h6">Name: {subcategoryDetails.name}</Typography>
+              <Typography variant="h6">Category: {subcategoryDetails.categoryName}</Typography>
+              <Typography variant="h6">Description: {subcategoryDetails.description}</Typography>
+              <Typography variant="h6">Number of Tutorials: {subcategoryDetails.tutorialsCount}</Typography>
+              <Box
+                component="img"
+                src={`${baseUrl}storage/${subcategoryDetails.SubCategory_picture}` }
+                alt={subcategoryDetails.name}
+                style={{ maxWidth: "100px", marginTop: "10px" }}
+                sx={{ width: '100%', height: 'auto', objectFit: 'cover', mt: 2 }}
+              />
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDetailDialogClose} color="primary">
+            Close
           </Button>
         </DialogActions>
       </Dialog>

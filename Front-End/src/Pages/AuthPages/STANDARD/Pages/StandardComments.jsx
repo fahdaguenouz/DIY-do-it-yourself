@@ -23,7 +23,7 @@ const StandardComments = () => {
                     <TableRow>
                         <TableCell>ID</TableCell>
                         <TableCell>Comment</TableCell>
-                        <TableCell>User</TableCell>
+                        <TableCell>Date</TableCell>
                         <TableCell>Tutorial</TableCell>
                         <TableCell>Actions</TableCell>
                     </TableRow>
@@ -33,7 +33,7 @@ const StandardComments = () => {
                         <TableRow key={comment.id}>
                             <TableCell>{comment.id}</TableCell>
                             <TableCell>{comment.description}</TableCell>
-                            <TableCell>{comment.user ? comment.user.nom : 'Unknown'}</TableCell>
+                            <TableCell> {new Date(comment.created_at).toLocaleDateString()}</TableCell>
                             <TableCell>{comment.tutorial ? comment.tutorial.titre : 'Unknown'}</TableCell>
                             <TableCell>
                                 <Button

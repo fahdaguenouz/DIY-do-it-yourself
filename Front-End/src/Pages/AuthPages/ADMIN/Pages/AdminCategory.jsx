@@ -16,8 +16,10 @@ const AdminCategory = () => {
   const [picture, setPicture] = useState(null);
   const [preview, setPreview] = useState(null);
   const [originalValues, setOriginalValues] = useState({});
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [categoryDetails, setCategoryDetails] = useState(null);
   const dispatch = useDispatch();
-  const { loading, categories, baseUrl } = useSelector(state => state.auth);
+  const { loading, categories, baseUrl, tutorials } = useSelector(state => state.auth);
 
   useEffect(() => {
     dispatch(getCategory());
@@ -58,7 +60,7 @@ const AdminCategory = () => {
       toast.error("At least one field must be updated.");
       return;
     }
-  
+
     try {
       if (isEdit) {
         if (categoryName !== selectedCategory.name || description !== selectedCategory.description) {
@@ -68,12 +70,6 @@ const AdminCategory = () => {
         if (picture) {
           const formData = new FormData();
           formData.append('Category_picture', picture);
-  
-          // Log the FormData entries
-          for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-          }
-  
           await dispatch(UpdateCategoryPicture(selectedCategory.id, formData));
         }
       } else {
@@ -83,12 +79,6 @@ const AdminCategory = () => {
         if (picture) {
           formData.append('Category_picture', picture);
         }
-  
-        // Log the FormData entries
-        for (let [key, value] of formData.entries()) {
-          console.log(`${key}: ${value}`);
-        }
-  
         await dispatch(AddCategory(formData));
       }
       setOpen(false);
@@ -98,14 +88,10 @@ const AdminCategory = () => {
       toast.error(error.message);
     }
   };
-  
-  
-  
 
   const handlePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log('Selected file:', file); // Log the selected file details
       setPicture(file);
       setPreview(URL.createObjectURL(file));
     } else {
@@ -113,10 +99,16 @@ const AdminCategory = () => {
       setPreview(null);
     }
   };
-  
 
   const handleCategoryClick = (category) => {
-    alert(`Category: ${category.name}\nDescription: ${category.description}\nURL: ${baseUrl}storage/${category.Category_picture}`);
+    const tutorialsCount = tutorials.filter(tutorial => tutorial.Sub_Categorie_id === category.id).length;
+    setCategoryDetails({ ...category, tutorialsCount });
+    setDetailDialogOpen(true);
+  };
+
+  const handleDetailDialogClose = () => {
+    setDetailDialogOpen(false);
+    setCategoryDetails(null);
   };
 
   const handleEditClick = (category) => {
@@ -269,6 +261,24 @@ const AdminCategory = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {categoryDetails && (
+        <Dialog open={detailDialogOpen} onClose={handleDetailDialogClose}>
+          <DialogTitle>Category Details</DialogTitle>
+          <DialogContent>
+            <Typography variant="h6">Name: {categoryDetails.name}</Typography>
+            <Typography variant="body1">Description: {categoryDetails.description}</Typography>
+            <Typography variant="body1">Number of Subcategories: {categoryDetails.subcategories.length}</Typography>
+            <Typography variant="body1">Number of Tutorials: {categoryDetails.tutorialsCount}</Typography>
+            <img src={`${baseUrl}storage/${categoryDetails.Category_picture}`} alt={categoryDetails.name} style={{ maxWidth: "100px", marginTop: "10px" }} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDetailDialogClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 };
