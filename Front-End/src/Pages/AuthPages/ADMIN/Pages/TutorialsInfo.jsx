@@ -3,17 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Box,
     Grid,
-    Card,
-    CardMedia,
-    CardContent,
-    Typography,
-    Avatar,
-    Button,
     TextField,
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { getTutorials, getUsers, getCategory } from '@/Redux/authActions';
@@ -103,6 +105,11 @@ const TutorialsInfo = () => {
         setSelectedSubCategory(''); // Reset subcategory when category changes
     };
 
+    const getCategoryName = (categoryId) => {
+        const category = categories.find(cat => cat.id === categoryId);
+        return category ? category.name : 'Unknown';
+    };
+
     return (
         <div>
             <Box mb={4}>
@@ -187,54 +194,40 @@ const TutorialsInfo = () => {
                 </Grid>
             </Box>
 
-            <Grid container spacing={2}>
-                {filteredTutorials.map((tutorial, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card sx={{ textAlign: 'center', padding: 3, backgroundColor: '#fff' }}>
-                            <CardMedia
-                                component="img"
-                                height="200"
-                                image={`${baseUrl}storage/${tutorial.cover}`}
-                                alt={tutorial.titre}
-                            />
-                            <CardContent>
-                                <Typography variant="h5" component="div">{tutorial.titre}</Typography>
-                                <Box sx={{ display: 'flex', justifyContent: 'center', my: 2, color: '#039ee3' }}>
-                                    {[...Array(5)].map((_, i) => (
-                                        <i key={i} className="fa fa-star" />
-                                    ))}
-                                    <Typography component="label" sx={{ ml: 0.5 }}>(5.0)</Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', color: 'grey', margin: '20px 0' }}>
-                                    <Avatar
-                                        src={`${baseUrl}${tutorial.user.profile_picture}`}
-                                        alt={tutorial.user.nom}
-                                        sx={{ width: 50, height: 50, mr: 2 }}
-                                    />
-                                    <Typography variant="body1">{`${tutorial.user.prenom} ${tutorial.user.nom}`}</Typography>
-                                </Box>
-                                <Box sx={{ backgroundColor: '#f8f8f8', padding: 1, margin: '30px 0' }}>
-                                    <Typography variant="h6" color="primary">{tutorial.priceAll}</Typography>
-                                </Box>
-                                <Button
-                                    component={Link}
-                                    to={`/all/category/subcategory/tutorialsdeatail/${tutorial.id}`}
-                                    variant="outlined"
-                                    sx={{
-                                        '&:hover': {
-                                            backgroundColor: '#039ee3',
-                                            color: '#fff',
-                                            borderColor: '#039ee3',
-                                        }
-                                    }}
-                                >
-                                    Visit Now!
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>Title</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Subcategory</TableCell>
+                            <TableCell>Creator</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filteredTutorials.map((tutorial) => (
+                            <TableRow key={tutorial.id}>
+                                <TableCell>{tutorial.id}</TableCell>
+                                <TableCell>{tutorial.titre}</TableCell>
+                                <TableCell>{getCategoryName(tutorial.sub_category?.categorie_id)}</TableCell>
+                                <TableCell>{tutorial.sub_category?.name}</TableCell>
+                                <TableCell>{`${tutorial.user.prenom} ${tutorial.user.nom}`}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        component={Link}
+                                        to={`/all/category/subcategory/tutorialsdeatail/${tutorial.id}`}
+                                        variant="outlined"
+                                    >
+                                        View
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }
