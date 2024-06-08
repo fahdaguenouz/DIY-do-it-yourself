@@ -15,20 +15,20 @@ export default function AuthFooter() {
         spacing={2}
         textAlign={{ xs: 'center', sm: 'inherit' }}
       >
-        <Typography variant="subtitle2" color="secondary">
+        {/* <Typography variant="subtitle2" color="secondary">
           This site is protected by{' '}
-          <Typography component={Link} variant="subtitle2" href="#mantis-privacy" target="_blank" underline="hover">
+          <Typography component={Link} variant="subtitle2" href="#"  underline="hover">
             Privacy Policy
           </Typography>
-        </Typography>
+        </Typography> */}
 
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 3 }} textAlign={{ xs: 'center', sm: 'inherit' }}>
+        {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 3 }} textAlign={{ xs: 'center', sm: 'inherit' }}>
           <Typography
             variant="subtitle2"
             color="secondary"
             component={Link}
-            href="https://codedthemes.com"
-            target="_blank"
+            href="#"
+          
             underline="hover"
           >
             Terms and Conditions
@@ -37,8 +37,8 @@ export default function AuthFooter() {
             variant="subtitle2"
             color="secondary"
             component={Link}
-            href="https://codedthemes.com"
-            target="_blank"
+            href="#"
+            
             underline="hover"
           >
             Privacy Policy
@@ -53,7 +53,7 @@ export default function AuthFooter() {
           >
             CA Privacy Notice
           </Typography>
-        </Stack>
+        </Stack> */}
       </Stack>
     </Container>
   );

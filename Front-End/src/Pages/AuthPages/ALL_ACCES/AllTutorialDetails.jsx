@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddSignal, getTutorials, likeTutorial, getLike, CommentTutorial, getComment, getUsers } from '@/Redux/authActions';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import WarningIcon from '@mui/icons-material/Warning';
 
 const AllTutorialDetails = () => {
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const AllTutorialDetails = () => {
     const [comment, setComment] = useState('');
 
     const userId = useSelector(state => state.auth.user.id);
-    const { tutorials, likes, comments, users, baseUrl, user } = useSelector(state => state.auth);
+    const { tutorials, likes, comments, users, baseUrl, user, loading } = useSelector(state => state.auth);
     const tutorial = tutorials.find(t => t.id === parseInt(id));
     const tutorialLikes = likes.filter(like => like.tutorial_id === parseInt(id));
     const userLike = tutorialLikes.find(like => like.user_id === user.id);
@@ -64,7 +65,7 @@ const AllTutorialDetails = () => {
         }));
     };
 
-    if (!tutorial) {
+    if (loading || !tutorial) {
         return (
             <Container style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
                 <CircularProgress />
@@ -72,13 +73,19 @@ const AllTutorialDetails = () => {
         );
     }
 
+    if (tutorial.status === 'suspended') {
+        return (
+            <Container style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "50vh" }}>
+                <Typography variant="h6" color="error" gutterBottom>
+                    This tutorial is suspended due to inappropriate content or spam.
+                </Typography>
+                <WarningIcon color="error" style={{ fontSize: "4rem" }} />
+            </Container>
+        );
+    }
+
     return (
         <Container>
-            {tutorial.status === 'suspended' && (
-                <Box sx={{ mb: 2, p: 2, backgroundColor: 'red', color: 'white', borderRadius: '8px' }}>
-                    <Typography variant="h6">This tutorial is suspended due to inappropriate content or spam.</Typography>
-                </Box>
-            )}
             <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ marginBottom: "20px" }}>
                 <Grid item xs={12} sm={8}>
                     <Typography variant="h4" align="center" gutterBottom color="primary">{tutorial.titre}</Typography>
@@ -124,8 +131,6 @@ const AllTutorialDetails = () => {
                             <Typography variant="h5" gutterBottom>Subcategory: {tutorial.sub_category.name}</Typography>
                             <Typography variant="body1" gutterBottom>Description: {tutorial.description}</Typography>
                             <Typography variant="body2" color="textSecondary">Created on: {new Date(tutorial.created_at).toLocaleDateString()}</Typography>
-
-
                         </Box>
                     </Grid>
                 </Grid>

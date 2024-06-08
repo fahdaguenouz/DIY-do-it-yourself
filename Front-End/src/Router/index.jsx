@@ -74,6 +74,7 @@ import ModeratorProfile from "@/Pages/AuthPages/MODERATOR/Pages/ModeratorProfile
 import StandardEditeProfile from "@/Pages/AuthPages/STANDARD/Pages/StandardEditeProfile";
 import StandardProfile from "@/Pages/AuthPages/STANDARD/Pages/StandardProfile";
 import TutorialsInfo from "@/Pages/AuthPages/ADMIN/Pages/TutorialsInfo";
+import MySignals from "@/Pages/AuthPages/CREATOR/Pages/MySignals";
 
 const DynamicRouter = () => {
     //   const { user,setUser } = Usercontext();
@@ -150,11 +151,10 @@ const DynamicRouter = () => {
                         { path: '/all/category/subcategory/tutorials/:id', element: <AllTutorials /> },
                         { path: '/all/category/subcategory/tutorialsdeatail/:id', element: <AllTutorialDetails /> },
                         { path: '/admin/tutorial-deatils', element: <TutorialsInfo /> },
-
-
-
-
+                        { path: '/admin/signals', element: <SignaledTutorials />},
+                        { path: '/admin/signals/tutorials', element: <SignalTutorials /> },
                         // Other admin-specific routes
+
                     ]
                 };
             case 2: // Moderator
@@ -216,6 +216,10 @@ const DynamicRouter = () => {
                         {
                             path: '/creator/creator-profile',
                             element: <CreatorProfile />
+                        },
+                        {
+                            path: '/creator/mysignals',
+                            element: <MySignals />
                         }
 
 

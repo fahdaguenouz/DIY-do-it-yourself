@@ -13,7 +13,6 @@ import {
     TableHead,
     TableRow,
     Paper,
-    TablePagination,
     Select,
     MenuItem,
     FormControl,
@@ -34,12 +33,7 @@ const CreatorDashboard = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [subCategories, setSubCategories] = useState([]);
-    const [tutorialsPage, setTutorialsPage] = useState(0);
-    const [tutorialsRowsPerPage, setTutorialsRowsPerPage] = useState(5);
-    const [commentsPage, setCommentsPage] = useState(0);
-    const [commentsRowsPerPage, setCommentsRowsPerPage] = useState(5);
     const [filteredTutorials, setFilteredTutorials] = useState([]);
-
     const [chartTutorials, setChartTutorials] = useState([]);
     const [chartCategory, setChartCategory] = useState('');
     const [chartSubCategory, setChartSubCategory] = useState('');
@@ -81,24 +75,6 @@ const CreatorDashboard = () => {
         setChartTutorials(tutorials.filter(tutorial => tutorial.user_id === user.id && tutorial.Sub_Categorie_id === selectedSubCategoryId));
     };
 
-    const handleTutorialsPageChange = (event, newPage) => {
-        setTutorialsPage(newPage);
-    };
-
-    const handleTutorialsRowsPerPageChange = (event) => {
-        setTutorialsRowsPerPage(parseInt(event.target.value, 10));
-        setTutorialsPage(0);
-    };
-
-    const handleCommentsPageChange = (event, newPage) => {
-        setCommentsPage(newPage);
-    };
-
-    const handleCommentsRowsPerPageChange = (event) => {
-        setCommentsRowsPerPage(parseInt(event.target.value, 10));
-        setCommentsPage(0);
-    };
-
     if (loading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -116,25 +92,13 @@ const CreatorDashboard = () => {
         const aLikes = likes.filter(like => like.tutorial_id === a.id).length;
         const bLikes = likes.filter(like => like.tutorial_id === b.id).length;
         return bLikes - aLikes;
-    });
+    }).slice(0, 10);
 
     const mostCommentedChartTutorials = [...chartTutorials].sort((a, b) => {
         const aComments = comments.filter(comment => comment.tutorial_id === a.id).length;
         const bComments = comments.filter(comment => comment.tutorial_id === b.id).length;
         return bComments - aComments;
-    });
-
-    const sortedByLikes = [...filteredTutorials].sort((a, b) => {
-        const aLikes = likes.filter(like => like.tutorial_id === a.id).length;
-        const bLikes = likes.filter(like => like.tutorial_id === b.id).length;
-        return bLikes - aLikes;
-    });
-
-    const sortedByComments = [...filteredTutorials].sort((a, b) => {
-        const aComments = comments.filter(comment => comment.tutorial_id === a.id).length;
-        const bComments = comments.filter(comment => comment.tutorial_id === b.id).length;
-        return bComments - aComments;
-    });
+    }).slice(0, 10);
 
     const chartData = {
         labels: chartTutorials.map(tutorial => tutorial.titre),
@@ -151,6 +115,13 @@ const CreatorDashboard = () => {
                 data: chartTutorials.map(tutorial => comments.filter(comment => comment.tutorial_id === tutorial.id).length),
                 backgroundColor: 'rgba(153, 102, 255, 0.6)',
                 borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Signals',
+                data: chartTutorials.map(tutorial => signals.filter(signal => signal.tutorial_id === tutorial.id).length),
+                backgroundColor: 'rgba(255, 165, 0, 0.6)',
+                borderColor: 'rgba(255, 165, 0, 1)',
                 borderWidth: 1
             }
         ]
@@ -217,7 +188,7 @@ const CreatorDashboard = () => {
             <Grid item xs={12}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                        <Typography variant="h6">Most Liked Tutorials</Typography>
+                        <Typography variant="h6">Top 10 Liked Tutorials</Typography>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
@@ -229,7 +200,7 @@ const CreatorDashboard = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {sortedByLikes.slice(tutorialsPage * tutorialsRowsPerPage, tutorialsPage * tutorialsRowsPerPage + tutorialsRowsPerPage).map((tutorial) => (
+                                    {mostLikedChartTutorials.map((tutorial) => (
                                         <TableRow key={tutorial.id}>
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
@@ -249,22 +220,10 @@ const CreatorDashboard = () => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
-                                component="div"
-                                count={sortedByLikes.length}
-                                rowsPerPage={tutorialsRowsPerPage}
-                                page={tutorialsPage}
-                                onPageChange={handleTutorialsPageChange}
-                                onRowsPerPageChange={handleTutorialsRowsPerPageChange}
-                                labelRowsPerPage="Rows per page"
-                            />
-                        </Box>
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                        <Typography variant="h6">Most Commented Tutorials</Typography>
+                        <Typography variant="h6">Top 10 Commented Tutorials</Typography>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
@@ -276,7 +235,7 @@ const CreatorDashboard = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {sortedByComments.slice(commentsPage * commentsRowsPerPage, commentsPage * commentsRowsPerPage + commentsRowsPerPage).map((tutorial) => (
+                                    {mostCommentedChartTutorials.map((tutorial) => (
                                         <TableRow key={tutorial.id}>
                                             <TableCell>{tutorial.id}</TableCell>
                                             <TableCell>{tutorial.titre}</TableCell>
@@ -296,18 +255,6 @@ const CreatorDashboard = () => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
-                                component="div"
-                                count={sortedByComments.length}
-                                rowsPerPage={commentsRowsPerPage}
-                                page={commentsPage}
-                                onPageChange={handleCommentsPageChange}
-                                onRowsPerPageChange={handleCommentsRowsPerPageChange}
-                                labelRowsPerPage="Rows per page"
-                            />
-                        </Box>
                     </Grid>
                 </Grid>
             </Grid>

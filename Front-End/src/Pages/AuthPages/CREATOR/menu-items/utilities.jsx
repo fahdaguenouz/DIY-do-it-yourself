@@ -7,7 +7,7 @@ import {
   FontSizeOutlined,
   LoadingOutlined,
   TeamOutlined,
-  BookOutlined
+  AlertOutlined
 } from '@ant-design/icons';
 
 // icons
@@ -19,7 +19,7 @@ const icons = {
   LoadingOutlined,
   AppstoreAddOutlined,
   TeamOutlined,
-  BookOutlined
+  AlertOutlined
 };
 
 // ==============================|| MENU ITEMS - UTILITIES ||============================== //
@@ -31,7 +31,7 @@ const utilities = {
   children: [
     
     {
-      id: 'SubCategory',
+      id: 'My Tutorials',
       title: 'My tutorials',
       type: 'item',
       url: '/creator/gestion-tutorials',
@@ -43,6 +43,13 @@ const utilities = {
       type: 'item',
       url: '/creator/add-tutorial',
       icon: icons.AppstoreAddOutlined
+    },
+    {
+      id: 'Signal',
+      title: 'My Signals',
+      type: 'item',
+      url: '/creator/mysignals',
+      icon: icons.AlertOutlined
     }
   ]
 };
