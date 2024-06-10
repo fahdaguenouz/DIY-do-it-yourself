@@ -30,6 +30,7 @@ const TutorialsInfo = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [selectedCreator, setSelectedCreator] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all'); // New state for status filtering
 
     useEffect(() => {
         dispatch(getTutorials());
@@ -39,10 +40,10 @@ const TutorialsInfo = () => {
 
     useEffect(() => {
         applyFilters();
-    }, [tutorials, titleFilter, dateFilter, selectedCategory, selectedSubCategory, selectedCreator]);
+    }, [tutorials, titleFilter, dateFilter, selectedCategory, selectedSubCategory, selectedCreator, statusFilter]);
 
     const applyFilters = () => {
-        let filtered = tutorials;
+        let filtered = tutorials.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sort tutorials by date descending
 
         if (titleFilter) {
             filtered = filtered.filter(tutorial =>
@@ -97,6 +98,12 @@ const TutorialsInfo = () => {
             );
         }
 
+        if (statusFilter !== 'all') {
+            filtered = filtered.filter(tutorial =>
+                tutorial.status === statusFilter
+            );
+        }
+
         setFilteredTutorials(filtered);
     };
 
@@ -114,6 +121,7 @@ const TutorialsInfo = () => {
         <div>
             <Box mb={4}>
                 <Grid container spacing={2}>
+                    {/* Filter Fields */}
                     <Grid item xs={12} sm={6} md={4}>
                         <TextField
                             label="Search by Title"
@@ -123,6 +131,8 @@ const TutorialsInfo = () => {
                             onChange={(e) => setTitleFilter(e.target.value)}
                         />
                     </Grid>
+                    
+                    
                     <Grid item xs={12} sm={6} md={4}>
                         <FormControl fullWidth>
                             <InputLabel id="date-filter-label">Filter by Date</InputLabel>
@@ -188,6 +198,20 @@ const TutorialsInfo = () => {
                                 {users.filter(user => user.role_id === 3).map(user => (
                                     <MenuItem key={user.id} value={user.id}>{`${user.prenom} ${user.nom}`}</MenuItem>
                                 ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <FormControl fullWidth>
+                            <InputLabel id="status-filter-label">Filter by Status</InputLabel>
+                            <Select
+                                labelId="status-filter-label"
+                                value={statusFilter}
+                                label="Filter by Status"
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                            >
+                                <MenuItem value="all">All</MenuItem>
+                                <MenuItem value="suspended">Suspended</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>

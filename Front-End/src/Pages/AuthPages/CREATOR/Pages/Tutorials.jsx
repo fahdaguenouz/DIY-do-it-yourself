@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Button, Grid, Avatar, TextField, MenuItem } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Typography, Button, Grid, Avatar, TextField, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategory, getTutorials } from '@/Redux/authActions';
@@ -10,25 +10,46 @@ const Tutorials = () => {
     const [searchTitle, setSearchTitle] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubcategory, setSelectedSubcategory] = useState('');
+    const [dateFilter, setDateFilter] = useState('');
 
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getCategory());
     }, [dispatch]);
 
-    // Filter tutorials by user and title
-    const filteredTutorials = tutorials.filter(tutorial =>
-        tutorial.user_id === user.id &&
-        tutorial.titre.toLowerCase().includes(searchTitle.toLowerCase())
-    );
+    const handleDateFilter = (tutorial) => {
+        const tutorialDate = new Date(tutorial.created_at);
+        const now = new Date();
+        switch (dateFilter) {
+            case 'today':
+                return tutorialDate.toDateString() === now.toDateString();
+            case 'yesterday':
+                const yesterday = new Date(now.setDate(now.getDate() - 1));
+                return tutorialDate.toDateString() === yesterday.toDateString();
+            case 'thisMonth':
+                return tutorialDate.getMonth() === now.getMonth() && tutorialDate.getFullYear() === now.getFullYear();
+            case 'lastMonth':
+                const lastMonth = new Date(now.setMonth(now.getMonth() - 1));
+                return tutorialDate.getMonth() === lastMonth.getMonth() && tutorialDate.getFullYear() === lastMonth.getFullYear();
+            case 'thisYear':
+                return tutorialDate.getFullYear() === now.getFullYear();
+            default:
+                return true;
+        }
+    };
 
-    // Get subcategories based on selected category
-    const subcategories = selectedCategory ? categories.find(cat => cat.id === selectedCategory)?.subcategories : [];
+    const filteredTutorials = tutorials
+        .filter(tutorial => 
+            tutorial.user_id === user.id &&
+            tutorial.titre.toLowerCase().includes(searchTitle.toLowerCase())
+        )
+        .filter(handleDateFilter);
 
-    // Further filter tutorials by selected subcategory
+    const sortedTutorials = filteredTutorials.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
     const finalTutorials = selectedSubcategory ?
-        filteredTutorials.filter(tutorial => tutorial.Sub_Categorie_id === selectedSubcategory) :
-        filteredTutorials;
+        sortedTutorials.filter(tutorial => tutorial.Sub_Categorie_id === parseInt(selectedSubcategory)) :
+        sortedTutorials;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -40,7 +61,7 @@ const Tutorials = () => {
                 </Grid>
                 <Grid item>
                     <Button component={Link} to="/creator/add-tutorial" variant="contained" color="primary">
-                        Ajouter
+                        Add Tutorial
                     </Button>
                 </Grid>
             </Grid>
@@ -59,7 +80,7 @@ const Tutorials = () => {
                         select
                         label="Category"
                         value={selectedCategory}
-                        onChange={e => {
+                        onChange={(e) => {
                             setSelectedCategory(e.target.value);
                             setSelectedSubcategory(''); // Reset subcategory when category changes
                         }}
@@ -77,16 +98,33 @@ const Tutorials = () => {
                         select
                         label="Subcategory"
                         value={selectedSubcategory}
-                        onChange={e => setSelectedSubcategory(e.target.value)}
+                        onChange={(e) => setSelectedSubcategory(e.target.value)}
                         fullWidth
-                        disabled={!selectedCategory} // Disable if no category is selected
+                        disabled={!selectedCategory}
                     >
-                        {subcategories.map((subcat) => (
+                        {selectedCategory ? categories.find(cat => cat.id === parseInt(selectedCategory))?.subcategories.map(subcat => (
                             <MenuItem key={subcat.id} value={subcat.id}>
                                 {subcat.name}
                             </MenuItem>
-                        ))}
+                        )) : []}
                     </TextField>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth>
+                        <InputLabel>Date Filter</InputLabel>
+                        <Select
+                            value={dateFilter}
+                            onChange={(e) => setDateFilter(e.target.value)}
+                            label="Date Filter"
+                        >
+                            <MenuItem value="">Any Time</MenuItem>
+                            <MenuItem value="today">Today</MenuItem>
+                            <MenuItem value="yesterday">Yesterday</MenuItem>
+                            <MenuItem value="thisMonth">This Month</MenuItem>
+                            <MenuItem value="lastMonth">Last Month</MenuItem>
+                            <MenuItem value="thisYear">This Year</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
             </Grid>
             <Grid container spacing={3} sx={{ padding: '0 50px' }}>
