@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, CircularProgress, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import AnalyticEcommerce from './AnalyticEcommerce';
@@ -109,6 +109,32 @@ const AdminDashboard = () => {
         ],
     };
 
+    // Signal Chart Data
+    const suspendedTutorials = tutorials.filter(tutorial => tutorial.status === 'suspended');
+    const chartData = {
+        labels: suspendedTutorials.map(tutorial => tutorial.titre),
+        datasets: [
+            {
+                label: 'Number of Signals',
+                data: suspendedTutorials.map(tutorial => {
+                    const tutorialSignals = signals.filter(signal => signal.tutorial_id === tutorial.id);
+                    return tutorialSignals.length;
+                }),
+                backgroundColor: 'rgba(255, 165, 0, 0.6)', // Orange background color with 60% opacity
+                borderColor: 'rgba(255, 165, 0, 1)' ,
+                borderWidth: 1
+            }
+        ]
+    };
+
+    const chartOptions = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} sx={{ mb: -2.25 }}>
@@ -192,7 +218,7 @@ const AdminDashboard = () => {
                 </Box>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
                 <Typography variant="h6">Number of Tutorials by Category</Typography>
                 <Box sx={{ height: 400, marginTop: 4 }}>
                     <Bar
@@ -214,6 +240,16 @@ const AdminDashboard = () => {
                                 title: { display: true, text: 'Number of Tutorials by Category' }
                             }
                         }}
+                    />
+                </Box>
+            </Grid>
+
+            <Grid item xs={12} md={8}>
+                <Typography variant="h6">Suspended Tutorials and their Signals</Typography>
+                <Box sx={{ height: 400, marginTop: 4 }}>
+                    <Bar
+                        data={chartData}
+                        options={chartOptions}
                     />
                 </Box>
             </Grid>

@@ -32,7 +32,7 @@ export default function FirebaseSocial() {
       justifyContent={{ xs: 'space-around', sm: 'space-between' }}
       sx={{ '& .MuiButton-startIcon': { mr: { xs: 0, sm: 1 }, ml: { xs: 0, sm: -0.5 } } }}
     >
-      <Button
+      {/* <Button
         variant="outlined"
         color="secondary"
         fullWidth={!downSM}
@@ -58,7 +58,7 @@ export default function FirebaseSocial() {
         onClick={facebookHandler}
       >
         {!downSM && 'Facebook'}
-      </Button>
+      </Button> */}
     </Stack>
   );
 }

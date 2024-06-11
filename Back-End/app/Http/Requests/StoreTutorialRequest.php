@@ -28,7 +28,7 @@ class StoreTutorialRequest extends FormRequest
             'cover' => 'nullable|image',
             'description' => 'required|string',
             'media' => 'array',
-            'media.*.file' => 'required|file|mimes:jpeg,png,jpg,gif,svg,mp4,mov,avi,flv|max:20480', // Adjust max size as needed
+            'media.*.file' => 'required|file|max:20480', // Adjust max size as needed
             'media.*.description' => 'required|string',
             'media.*.order' => 'required|integer',
         ];

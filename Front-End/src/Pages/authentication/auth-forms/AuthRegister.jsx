@@ -267,7 +267,7 @@ const dispatch =useDispatch()
                   )}
                 </Stack>
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Typography variant="body2">
                   By Signing up, you agree to our &nbsp;
                   <Link variant="subtitle2" component={RouterLink} to="#">
@@ -278,7 +278,7 @@ const dispatch =useDispatch()
                     Privacy Policy
                   </Link>
                 </Typography>
-              </Grid>
+              </Grid> */}
               {errors.submit && (
                 <Grid item xs={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>

@@ -1,19 +1,27 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Avatar, Paper } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getTutorials, getCategory } from '@/Redux/authActions';
+import { getTutorials, getCategory, getLike, getComment } from '@/Redux/authActions';
+import AnalyticEcommerce from '../../ADMIN/Pages/AnalyticEcommerce';
 
 const StandardDashboard = () => {
     const dispatch = useDispatch();
-    const { tutorials, categories, baseUrl, loading } = useSelector(state => state.auth);
+    const { tutorials, categories, baseUrl, user, likes, comments } = useSelector(state => state.auth);
 
     useEffect(() => {
         dispatch(getTutorials());
         dispatch(getCategory());
+        dispatch(getLike());
+        dispatch(getComment());
     }, [dispatch]);
 
-    const latestTutorials = tutorials.slice(0, 3);
+    // Calculate total likes and comments by the logged-in user
+    const totalLikes = likes.filter(like => like.user_id === user.id).length;
+    const totalComments = comments.filter(comment => comment.user_id === user.id).length;
+
+    // Sort tutorials by creation date from newest to oldest and take the top 3
+    const newestTutorials = tutorials.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
 
     return (
         <div>
@@ -23,39 +31,35 @@ const StandardDashboard = () => {
                 </Typography>
                 
                 {/* User Activity Summary */}
-                {/* <Grid container spacing={3}>
-                    <Grid item xs={4}>
-                        <Card sx={{ textAlign: 'center' }}>
-                            <CardContent>
-                                <Typography variant="h6">Tutorials Completed</Typography>
-                                <Typography variant="h4">5</Typography>
-                            </CardContent>
-                        </Card>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <AnalyticEcommerce
+                            title="Total Likes"
+                            count={totalLikes.toString()}
+                            percentage={12.5}  // Example percentage
+                            isLoss={false}
+                            color="success"
+                            extra={totalLikes.toString()}
+                        />
                     </Grid>
-                    <Grid item xs={4}>
-                        <Card sx={{ textAlign: 'center' }}>
-                            <CardContent>
-                                <Typography variant="h6">Projects Ongoing</Typography>
-                                <Typography variant="h4">2</Typography>
-                            </CardContent>
-                        </Card>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <AnalyticEcommerce
+                            title="Total Comments"
+                            count={totalComments.toString()}
+                            percentage={5.0}  // Example percentage
+                            isLoss={false}
+                            color="info"
+                            extra={totalComments.toString()}
+                        />
                     </Grid>
-                    <Grid item xs={4}>
-                        <Card sx={{ textAlign: 'center' }}>
-                            <CardContent>
-                                <Typography variant="h6">Bookmarks</Typography>
-                                <Typography variant="h4">8</Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid> */}
+                </Grid>
 
-                {/* Latest Tutorials */}
+                {/* Newest Tutorials */}
                 <Typography variant="h4" component="h2" sx={{ marginTop: 5, marginBottom: 4 }}>
-                    New Tutorials
+                    Newest Tutorials
                 </Typography>
                 <Grid container spacing={3}>
-                    {latestTutorials.map((tutorial, index) => (
+                    {newestTutorials.map((tutorial, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <Card sx={{ textAlign: 'center', padding: 3, backgroundColor: '#fff', '&:hover': { transform: 'scale(1.05)', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' } }}>
                                 <CardMedia
@@ -103,8 +107,8 @@ const StandardDashboard = () => {
                     ))}
                 </Grid>
 
-                {/* Categories Section */}
-                <Typography variant="h4" component="h2" sx={{ marginTop: 5, marginBottom: 4 }}>
+                 {/* Categories Section */}
+                 <Typography variant="h4" component="h2" sx={{ marginTop: 5, marginBottom: 4 }}>
                     Categories
                 </Typography>
                 <Grid container spacing={3}>

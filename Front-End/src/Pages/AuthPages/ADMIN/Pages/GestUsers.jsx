@@ -24,6 +24,9 @@ const GestUsers = () => {
   const { users, authenticated, loading } = useSelector(state => state.auth);
   const [details, setDetails] = useState([]);
   const navigate=useNavigate()
+  useEffect(()=>{
+    dispatch(getUsers())
+  },[dispatch])
   console.log(users);
   const columns = [
     {
@@ -158,10 +161,7 @@ const HandleAjouter=()=>{
                       <h4>{item.name}</h4>
                       <p className="text-muted">User since: {item.createdAt}</p>
                       <CButton size="sm" color="info" onClick={() => navigate(`/admin/gestion-users/update-user/${item.id}`)}>
-                        Update
-                      </CButton>
-                      <CButton size="sm" color="danger" className="ml-1">
-                        Delete
+                        Gestion du role
                       </CButton>
                     </CCardBody>
                   </CCollapse>

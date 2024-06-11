@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SignalTutorials = () => {
     const dispatch = useDispatch();
-    const { signals } = useSelector(state => state.auth);
+    const { signals, tutorials } = useSelector(state => state.auth);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,7 +14,7 @@ const SignalTutorials = () => {
         dispatch(getTutorials());
     }, [dispatch]);
 
-    if (!signals) {
+    if (!signals || !tutorials) {
         return <div>Loading...</div>;
     }
 
@@ -23,12 +23,18 @@ const SignalTutorials = () => {
     };
 
     // Filter tutorials with status 'suspended'
-    const suspendedTutorials = signals.filter(signal => signal.tutorial.status === 'suspended');
+    const suspendedSignals = signals.filter(signal => {
+        const tutorial = tutorials.find(tutorial => tutorial.id === signal.tutorial_id);
+        return tutorial && tutorial.status === 'suspended';
+    });
 
-    // Group reasons by tutorial ID
-    const tutorialMap = suspendedTutorials.reduce((acc, signal) => {
+    // Group reasons by tutorial ID and include user information
+    const tutorialMap = suspendedSignals.reduce((acc, signal) => {
+        const tutorial = tutorials.find(tutorial => tutorial.id === signal.tutorial_id);
+        const user = tutorial ? tutorial.user : null;
+
         if (!acc[signal.tutorial_id]) {
-            acc[signal.tutorial_id] = { ...signal.tutorial, reasons: [] };
+            acc[signal.tutorial_id] = { ...tutorial, reasons: [], user };
         }
         acc[signal.tutorial_id].reasons.push(signal.reason);
         return acc;
@@ -44,6 +50,7 @@ const SignalTutorials = () => {
                     <TableRow>
                         <TableCell>ID</TableCell>
                         <TableCell>Title</TableCell>
+                        <TableCell>User</TableCell>
                         <TableCell>Reasons</TableCell>
                         <TableCell>Actions</TableCell>
                     </TableRow>
@@ -53,6 +60,7 @@ const SignalTutorials = () => {
                         <TableRow key={tutorial.id}>
                             <TableCell>{tutorial.id}</TableCell>
                             <TableCell>{tutorial.titre}</TableCell>
+                            <TableCell>{tutorial.user ? `${tutorial.user.nom} ${tutorial.user.prenom}` : 'Unknown'}</TableCell>
                             <TableCell>
                                 <ul>
                                     {tutorial.reasons.map((reason, index) => (

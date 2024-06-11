@@ -1,36 +1,50 @@
-// assets
-import { ChromeOutlined, QuestionOutlined } from '@ant-design/icons';
+import {
+  AppstoreAddOutlined,
+  AntDesignOutlined,
+  BarcodeOutlined,
+  ClusterOutlined,
+  FontSizeOutlined,
+  LoadingOutlined,
+  TeamOutlined,
+  AlertOutlined,
+  ExclamationCircleOutlined
+} from '@ant-design/icons';
 
 // icons
 const icons = {
-  ChromeOutlined,
-  QuestionOutlined
+  FontSizeOutlined,
+  ClusterOutlined,
+  BarcodeOutlined,
+  AntDesignOutlined,
+  LoadingOutlined,
+  AppstoreAddOutlined,
+  TeamOutlined,
+  AlertOutlined,
+  ExclamationCircleOutlined
 };
 
-// ==============================|| MENU ITEMS - SAMPLE PAGE & DOCUMENTATION ||============================== //
+// ==============================|| MENU ITEMS - signal ||============================== //
 
-const support = {
-  id: 'support',
-  title: 'Support',
+const Signal = {
+  id: 'Signals',
+  title: 'Signals',
   type: 'group',
   children: [
     {
-      id: 'sample-page',
-      title: 'Sample Page',
+      id: 'Signals',
+      title: 'Signals',
       type: 'item',
-      url: '/sample-page',
-      icon: icons.ChromeOutlined
+      url: '/admin/signals',
+      icon: icons.AlertOutlined
     },
     {
-      id: 'documentation',
-      title: 'Documentation',
+      id: 'Signals Tutorials',
+      title: 'Signals Tutorials',
       type: 'item',
-      url: 'https://codedthemes.gitbook.io/mantis/',
-      icon: icons.QuestionOutlined,
-      external: true,
-      target: true
-    }
+      url: '/admin/signals/tutorials',
+      icon: icons.ExclamationCircleOutlined
+    },
   ]
 };
 
-export default support;
+export default Signal;
