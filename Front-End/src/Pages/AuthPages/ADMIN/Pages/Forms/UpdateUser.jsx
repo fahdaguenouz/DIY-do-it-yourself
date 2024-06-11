@@ -14,7 +14,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getLevels, getRoles, updateUser } from '@/Redux/authActions';
+import { getLevels, getRoles, getUsers, updateUser } from '@/Redux/authActions';
 import toast, { Toaster } from 'react-hot-toast';
 
 const UpdateUser = () => {
@@ -36,6 +36,7 @@ const UpdateUser = () => {
     const [formData, setFormData] = useState(initialFormData);
 
     useEffect(() => {
+        
         const user = users.find(user => user.id.toString() === userId);
         if (user) {
             const userData = {

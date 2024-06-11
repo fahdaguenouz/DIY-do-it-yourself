@@ -15,7 +15,8 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Button
+    Button,
+    CircularProgress
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { getTutorials, getUsers, getCategory } from '@/Redux/authActions';
@@ -116,7 +117,17 @@ const TutorialsInfo = () => {
         const category = categories.find(cat => cat.id === categoryId);
         return category ? category.name : 'Unknown';
     };
-
+if(loading){
+    return(<Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        style={{ minHeight: '60vh' }}
+    >
+        <CircularProgress />
+    </Grid>)
+}
     return (
         <div>
             <Box mb={4}>

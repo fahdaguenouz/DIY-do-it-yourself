@@ -24,6 +24,9 @@ const GestUsers = () => {
   const { users, authenticated, loading } = useSelector(state => state.auth);
   const [details, setDetails] = useState([]);
   const navigate=useNavigate()
+  useEffect(()=>{
+    dispatch(getUsers())
+  },[dispatch])
   console.log(users);
   const columns = [
     {
