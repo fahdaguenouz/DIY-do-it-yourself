@@ -82,7 +82,7 @@ export const coursesCard = [
     coursesName: "How to repaire Door lock",
     courTeacher: [
       {
-        dcover: "../public/images/team/t3.webp",
+        dcover: "../public/team/t3.webp",
         name: "by Saroj Nepal",
         totalTime: "360 views",
       },
@@ -166,7 +166,7 @@ export const coursesCard = [
     coursesName: "How to Fix a Stripped Crank",
     courTeacher: [
       {
-        dcover: "../public/images/team/t3.webp",
+        dcover: "../public/team/t3.webp",
         name: "by Petter",
         totalTime: "150 views",
       },

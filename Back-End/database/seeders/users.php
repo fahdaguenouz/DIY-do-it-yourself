@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 class users extends Seeder
 {
     /**
@@ -32,5 +33,25 @@ class users extends Seeder
         ];
 
         DB::table('users')->insert($users);
+
+        $faker = Faker::create();
+
+        for ($i = 2; $i <= 10; $i++) {
+            DB::table('users')->insert([
+                'nom' => $faker->lastName,
+                'prenom' => $faker->firstName,
+                'email' => $faker->unique()->safeEmail,
+                'adresse' => $faker->address,
+                'password' => Hash::make('password'),
+                'role_id' => rand(1, 3),
+                'level_id' => rand(1, 10),
+                'email_verified_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+                'remember_token' => Str::random(10),
+                'profile_picture' => 'storage/profile_pictures/default.png',
+            ]);
+        }
+        
     }
 }
